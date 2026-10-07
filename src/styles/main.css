@@ -321,7 +321,12 @@ h4 {
 }
 
 .table-wrap {
-  overflow-x: auto;
+  /* overflow-x:auto made this box a scroll container, so position:sticky
+     thead cells stuck relative to THIS box (top:57px) instead of the
+     viewport and slid over the tbody rows. clip clips without creating
+     a scroll container, keeping the header glued to the page top bar.
+     Fallback: unknown value drops the declaration -> visible, fine too. */
+  overflow-x: clip;
   border: 1px solid var(--border);
   border-radius: 8px;
   margin: 1rem 0;
