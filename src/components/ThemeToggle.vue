@@ -47,6 +47,7 @@ onMounted(() => {
 <style scoped>
 .theme-toggle {
   display: inline-flex;
+  flex: 0 0 32px;
   align-items: center;
   justify-content: center;
   width: 32px;
