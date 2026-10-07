@@ -147,5 +147,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=ManimCE-tutorial
+          command: pages deploy dist --project-name=manimce-tutorial --commit-dirty=true
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
