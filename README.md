@@ -21,10 +21,10 @@ Manim Community Edition v0.21.0 的完整中文交互式教程站：
 ├── examples/                 # 示例场景源码（一文件一场景）
 │   └── _shared/              #   共享辅助代码（渲染时跳过）
 ├── scripts/
-│   ├── build_content.py      #   Markdown → src/data/*.json
+│   ├── build_content.py      #   Markdown → public/data/*.json
 │   ├── render_examples.py    #   增量渲染 examples/ → media/*.mp4
 │   └── merge_media.py        #   media/ → dist/media/（部署前合并）
-├── src/                      # Vue 3 前端（views/components/composables/data）
+├── src/                      # Vue 3 前端（views/components/composables）
 ├── .github/workflows/build.yml  # CI：增量渲染 + 部署 Cloudflare Pages
 ├── media/                    # 渲染产物（gitignore，由 CI 生成/缓存）
 └── dist/                     # 构建产物（gitignore）
@@ -47,7 +47,7 @@ npm ci
 # 2. 安装 Python 依赖
 pip install -r requirements.txt
 
-# 3. 生成内容数据（Markdown → src/data/*.json）
+# 3. 生成内容数据（Markdown → public/data/*.json）
 py -3 scripts/build_content.py
 
 # 4. 启动开发服务器

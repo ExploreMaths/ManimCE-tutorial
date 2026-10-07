@@ -6,3 +6,5 @@ __pycache__/
 *.pyc
 .DS_Store
 .env
+# 内容数据是构建产物（build_content.py 生成到 public/data，勿提交）
+/public/data/

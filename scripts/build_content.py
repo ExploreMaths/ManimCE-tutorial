@@ -3,9 +3,10 @@
 
 Reads content/chapters/<part>/<section>.md, parses the directive syntax
 described in the repo docs, and emits one JSON file per section into
-src/data/chapters/<part>/<section>.json, plus chapters.json,
+public/data/chapters/<part>/<section>.json, plus chapters.json,
 search-index.json and api-index.json. Copies glossary.json and
-inheritance.json verbatim from the content directory.
+inheritance.json verbatim from the content directory. The output lives
+in public/ so both `vite dev` and `vite build` serve it at /data/.
 """
 
 from __future__ import annotations
@@ -515,7 +516,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--content", default="content", help="content directory")
     ap.add_argument("--media-dir", default="media", help="media directory (for demo videos)")
-    ap.add_argument("--out", default="src/data", help="output directory")
+    ap.add_argument("--out", default="public/data", help="output directory")
     ap.add_argument("--strict", action="store_true", help="exit 1 on MISSING covers")
     args = ap.parse_args()
     sys.exit(build(args))
