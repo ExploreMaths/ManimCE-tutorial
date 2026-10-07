@@ -1,7 +1,31 @@
 /* ============ 设计变量 ============ */
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* 顶栏定高：sticky 表头/侧栏以此为准，零缝隙 */
   --header-h: 57px;
+  /* 代码统一用 JetBrains Mono（自托管 latin 子集 ~21KB），安卓不再
+     落到 Courier New（过宽，一行长代码就顶出屏幕） */
+  --mono-font:
+    'JetBrains Mono',
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
   --bg: #ffffff;
   --surface: #f6f7f9;
   --text: #1f2329;
@@ -72,7 +96,7 @@ a:hover {
 
 code,
 pre {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Courier New', monospace;
+  font-family: var(--mono-font);
 }
 
 code {
@@ -453,6 +477,31 @@ table.data-table tbody tr:last-child td {
   line-height: 1.6;
 }
 
+/* markdown 直出 HTML（v-html）没有组件壳，pre/table 裸奔会顶出屏：
+   容器 clip 防裸溢出（不建 scrollport），pre 自己当滚动壳 */
+.html-block {
+  overflow-x: clip;
+  min-width: 0;
+}
+
+.html-block pre {
+  overflow-x: auto;
+  padding: 0.9rem 1rem;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.html-block table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  max-width: 100%;
+}
+
 /* ============ 提示框 ============ */
 .notice {
   border-left: 4px solid var(--notice-tip);
@@ -618,7 +667,7 @@ table.data-table tbody tr:last-child td {
   border-radius: 999px;
   padding: 0.15rem 0.8rem;
   font-size: 0.85rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--mono-font);
 }
 
 .chip-sep {
@@ -652,7 +701,7 @@ table.data-table tbody tr:last-child td {
   border: 1px solid var(--border);
   color: var(--muted);
   margin-right: 0.5rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--mono-font);
 }
 
 .badge.kind-class {

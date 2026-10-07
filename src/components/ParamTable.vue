@@ -28,12 +28,16 @@ defineProps<{ rows: ParamRow[] }>()
 </template>
 
 <style scoped>
+.card {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 .param-table {
   width: 100%;
   border-collapse: collapse;
 }
 .mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--mono-font);
   font-size: 0.85em;
   white-space: nowrap;
 }
