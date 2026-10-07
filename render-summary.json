@@ -1,398 +1,120 @@
 {
-  "rendered": [],
+  "rendered": [
+    "ch01/scene_basics",
+    "ch01/sections_demo",
+    "ch01/square_to_circle",
+    "ch02/angle_marks",
+    "ch02/annotations_demo",
+    "ch02/arcs_showcase",
+    "ch02/boolean_ops_demo",
+    "ch02/braces_demo",
+    "ch02/circle_ellipse",
+    "ch02/circle_intro",
+    "ch02/colors_demo",
+    "ch02/dashed_demo",
+    "ch02/dots_demo",
+    "ch02/groups_demo",
+    "ch02/hull_cutout",
+    "ch02/image_array_demo",
+    "ch02/lines_arrows_demo",
+    "ch02/mobject_methods",
+    "ch02/point_cloud_demo",
+    "ch02/polygon_family",
+    "ch02/polygram_star",
+    "ch02/rect_family",
+    "ch02/svg_mobject_demo",
+    "ch02/vdict_demo",
+    "ch02/vectorized_point_demo",
+    "ch02/vmobject_styles",
+    "ch03/code_demo",
+    "ch03/code_formatter_style",
+    "ch03/decimal_number_demo",
+    "ch03/markup_text_demo",
+    "ch03/mathtex_groups",
+    "ch03/mathtypst_groups",
+    "ch03/paragraph_demo",
+    "ch03/text_basics",
+    "ch03/text_index_slice",
+    "ch03/typst_demo",
+    "ch03/variable_demo",
+    "ch04/axes_basic",
+    "ch04/bar_chart",
+    "ch04/complex_plane",
+    "ch04/decimal_table",
+    "ch04/function_graph",
+    "ch04/integer_matrix",
+    "ch04/integer_table",
+    "ch04/linear_transformation",
+    "ch04/log_scale",
+    "ch04/math_table",
+    "ch04/matrix_det",
+    "ch04/matrix_tex_helpers",
+    "ch04/mobject_matrix",
+    "ch04/mobject_table",
+    "ch04/number_line",
+    "ch04/number_plane",
+    "ch04/parametric_implicit",
+    "ch04/polar_plane",
+    "ch04/sample_space",
+    "ch04/table_highlight",
+    "ch04/three_d_axes",
+    "ch04/unit_interval",
+    "ch04/vector_scene",
+    "ch05/anim_mechanism",
+    "ch05/change_speed",
+    "ch05/composition",
+    "ch05/creation_family",
+    "ch05/creation_subsets",
+    "ch05/creation_text",
+    "ch05/creation_typing",
+    "ch05/fade_transform",
+    "ch05/fade_variants",
+    "ch05/grow_variants",
+    "ch05/indication_advanced",
+    "ch05/indication_basics",
+    "ch05/matching_shapes",
+    "ch05/matching_tex",
+    "ch05/motion",
+    "ch05/number_animations",
+    "ch05/rate_functions",
+    "ch05/rotation",
+    "ch05/tracing",
+    "ch05/transform_basics",
+    "ch05/transform_path_func",
+    "ch05/updater_helpers",
+    "ch05/updater_value_tracker",
+    "ch06/camera_pixel_coords",
+    "ch06/convex_hull_3d",
+    "ch06/moving_camera_walk",
+    "ch06/polyhedra_showcase",
+    "ch06/three_d_lines_surface",
+    "ch06/three_d_scene_orbit",
+    "ch06/three_d_solids",
+    "ch06/zoomed_scene_demo",
+    "ch07/color_jitter",
+    "ch07/custom_gauge"
+  ],
   "reused": [],
   "failed": [
     {
-      "key": "ch01/scene_basics",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch01/sections_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch01/square_to_circle",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/angle_marks",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/annotations_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/arcs_showcase",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/boolean_ops_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/braces_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/circle_ellipse",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/circle_intro",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/colors_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/dashed_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/dots_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/groups_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/hull_cutout",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/image_array_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/lines_arrows_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/mobject_methods",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/point_cloud_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/polygon_family",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/polygram_star",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/rect_family",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/svg_mobject_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/vdict_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/vectorized_point_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch02/vmobject_styles",
-      "error": "manim exited 2"
-    },
-    {
       "key": "ch03/bulleted_list_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch03/code_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch03/code_formatter_style",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch03/decimal_number_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch03/markup_text_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch03/mathtex_groups",
-      "error": "manim exited 2"
+      "error": "manim exited 1"
     },
     {
       "key": "ch03/mathtex_labels",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch03/mathtypst_groups",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch03/paragraph_demo",
-      "error": "manim exited 2"
+      "error": "manim exited 1"
     },
     {
       "key": "ch03/tex_basic",
-      "error": "manim exited 2"
+      "error": "manim exited 1"
     },
     {
       "key": "ch03/tex_template_ctex",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch03/text_basics",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch03/text_index_slice",
-      "error": "manim exited 2"
+      "error": "manim exited 1"
     },
     {
       "key": "ch03/title_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch03/typst_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch03/variable_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/axes_basic",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/bar_chart",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/complex_plane",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/decimal_table",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/function_graph",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/integer_matrix",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/integer_table",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/linear_transformation",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/log_scale",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/math_table",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/matrix_det",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/matrix_tex_helpers",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/mobject_matrix",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/mobject_table",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/number_line",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/number_plane",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/parametric_implicit",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/polar_plane",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/sample_space",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/table_highlight",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/three_d_axes",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/unit_interval",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch04/vector_scene",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/anim_mechanism",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/change_speed",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/composition",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/creation_family",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/creation_subsets",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/creation_text",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/creation_typing",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/fade_transform",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/fade_variants",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/grow_variants",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/indication_advanced",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/indication_basics",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/matching_shapes",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/matching_tex",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/motion",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/number_animations",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/rate_functions",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/rotation",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/tracing",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/transform_basics",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/transform_path_func",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/updater_helpers",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch05/updater_value_tracker",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch06/camera_pixel_coords",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch06/convex_hull_3d",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch06/moving_camera_walk",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch06/polyhedra_showcase",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch06/three_d_lines_surface",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch06/three_d_scene_orbit",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch06/three_d_solids",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch06/zoomed_scene_demo",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch07/color_jitter",
-      "error": "manim exited 2"
-    },
-    {
-      "key": "ch07/custom_gauge",
-      "error": "manim exited 2"
+      "error": "manim exited 1"
     }
   ]
 }
