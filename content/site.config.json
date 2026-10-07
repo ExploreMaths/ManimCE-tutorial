@@ -1,0 +1,667 @@
+{
+  "version": "0.21.0",
+  "parts": [
+    {
+      "id": "ch01",
+      "title": "入门",
+      "sections": [
+        {
+          "id": "installation",
+          "title": "安装与运行环境",
+          "covers": [
+            "ManimMagic"
+          ]
+        },
+        {
+          "id": "first-scene",
+          "title": "你的第一个场景",
+          "covers": [
+            "Scene",
+            "play",
+            "wait"
+          ]
+        },
+        {
+          "id": "render-pipeline",
+          "title": "渲染流程与输出结构",
+          "covers": [
+            "SceneFileWriter",
+            "QUALITIES"
+          ]
+        },
+        {
+          "id": "cli-and-sections",
+          "title": "CLI 基础与章节分段",
+          "covers": [
+            "Section",
+            "next_section",
+            "DefaultSectionType"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch02",
+      "title": "基础图形",
+      "sections": [
+        {
+          "id": "mobject-core",
+          "title": "Mobject 核心",
+          "covers": [
+            "Mobject"
+          ]
+        },
+        {
+          "id": "vmobject",
+          "title": "VMobject",
+          "covers": [
+            "VMobject",
+            "DashedVMobject",
+            "CurvesAsSubmobjects",
+            "VectorizedPoint"
+          ]
+        },
+        {
+          "id": "groups",
+          "title": "组合容器",
+          "covers": [
+            "Group",
+            "VGroup",
+            "VDict"
+          ]
+        },
+        {
+          "id": "basic-shapes",
+          "title": "基本形状",
+          "covers": [
+            "Circle",
+            "Ellipse",
+            "Square",
+            "Rectangle",
+            "RoundedRectangle",
+            "Polygon",
+            "RegularPolygon",
+            "Triangle",
+            "Polygram",
+            "RegularPolygram",
+            "Star",
+            "ConvexHull",
+            "Cutout"
+          ]
+        },
+        {
+          "id": "lines-and-arrows",
+          "title": "线与箭头",
+          "covers": [
+            "Line",
+            "DashedLine",
+            "Arrow",
+            "DoubleArrow",
+            "Vector",
+            "Elbow",
+            "RightAngle",
+            "Angle",
+            "TangentLine",
+            "TangentialArc",
+            "ArrowTip",
+            "ArrowTriangleTip",
+            "ArrowTriangleFilledTip",
+            "ArrowCircleTip",
+            "ArrowCircleFilledTip",
+            "ArrowSquareTip",
+            "ArrowSquareFilledTip",
+            "StealthTip"
+          ]
+        },
+        {
+          "id": "arcs-and-curves",
+          "title": "圆弧与曲线",
+          "covers": [
+            "Arc",
+            "ArcBetweenPoints",
+            "Sector",
+            "AnnularSector",
+            "Annulus",
+            "AnnotationDot",
+            "CubicBezier",
+            "CurvedArrow",
+            "CurvedDoubleArrow",
+            "TipableVMobject"
+          ]
+        },
+        {
+          "id": "dots-and-clouds",
+          "title": "点与点云",
+          "covers": [
+            "Dot",
+            "LabeledDot",
+            "Point",
+            "PointCloudDot",
+            "PMobject",
+            "Mobject1D",
+            "Mobject2D",
+            "PGroup"
+          ]
+        },
+        {
+          "id": "boolean-ops",
+          "title": "布尔运算",
+          "covers": [
+            "Union",
+            "Intersection",
+            "Difference",
+            "Exclusion"
+          ]
+        },
+        {
+          "id": "annotations",
+          "title": "标注与装饰",
+          "covers": [
+            "SurroundingRectangle",
+            "BackgroundRectangle",
+            "Cross",
+            "Underline",
+            "Label",
+            "LabeledLine",
+            "LabeledArrow",
+            "LabeledPolygram",
+            "Brace",
+            "BraceBetweenPoints",
+            "BraceLabel",
+            "BraceText",
+            "ArcBrace"
+          ]
+        },
+        {
+          "id": "images-and-svg",
+          "title": "位图与 SVG",
+          "covers": [
+            "AbstractImageMobject",
+            "ImageMobject",
+            "SVGMobject",
+            "VMobjectFromSVGPath"
+          ]
+        },
+        {
+          "id": "colors",
+          "title": "颜色系统",
+          "covers": [
+            "ManimColor",
+            "HSV",
+            "RGBA",
+            "RandomColorGenerator"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch03",
+      "title": "文本与公式",
+      "sections": [
+        {
+          "id": "text-and-paragraph",
+          "title": "Text 与段落",
+          "covers": [
+            "Text",
+            "Paragraph",
+            "register_font",
+            "remove_invisible_chars"
+          ]
+        },
+        {
+          "id": "markup-text",
+          "title": "MarkupText",
+          "covers": [
+            "MarkupText"
+          ]
+        },
+        {
+          "id": "tex-and-mathtex",
+          "title": "Tex 与 MathTex",
+          "covers": [
+            "Tex",
+            "MathTex",
+            "SingleStringMathTex",
+            "MathTexPart"
+          ]
+        },
+        {
+          "id": "typst",
+          "title": "Typst 与 MathTypst (v0.21.0 新增)",
+          "covers": [
+            "Typst",
+            "MathTypst"
+          ]
+        },
+        {
+          "id": "text-compare",
+          "title": "文本方案对比",
+          "covers": []
+        },
+        {
+          "id": "numbers",
+          "title": "数字与变量",
+          "covers": [
+            "DecimalNumber",
+            "Integer",
+            "Variable"
+          ]
+        },
+        {
+          "id": "lists-and-title",
+          "title": "列表与标题",
+          "covers": [
+            "BulletedList",
+            "Title"
+          ]
+        },
+        {
+          "id": "code-highlight",
+          "title": "Code 代码高亮",
+          "covers": [
+            "Code"
+          ]
+        },
+        {
+          "id": "tex-templates",
+          "title": "TeX 模板定制",
+          "covers": [
+            "TexTemplate",
+            "TexTemplateLibrary",
+            "TexFontTemplates"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch04",
+      "title": "坐标系与数据可视化",
+      "sections": [
+        {
+          "id": "number-line",
+          "title": "NumberLine",
+          "covers": [
+            "NumberLine",
+            "UnitInterval"
+          ]
+        },
+        {
+          "id": "scales",
+          "title": "缩放基",
+          "covers": [
+            "LinearBase",
+            "LogBase"
+          ]
+        },
+        {
+          "id": "axes-family",
+          "title": "坐标系家族",
+          "covers": [
+            "CoordinateSystem",
+            "Axes",
+            "NumberPlane",
+            "ComplexPlane",
+            "PolarPlane",
+            "ThreeDAxes"
+          ]
+        },
+        {
+          "id": "function-graphs",
+          "title": "函数绘图",
+          "covers": [
+            "FunctionGraph",
+            "ParametricFunction",
+            "ImplicitFunction"
+          ]
+        },
+        {
+          "id": "probability-and-charts",
+          "title": "概率与图表",
+          "covers": [
+            "SampleSpace",
+            "BarChart"
+          ]
+        },
+        {
+          "id": "matrices",
+          "title": "矩阵",
+          "covers": [
+            "Matrix",
+            "IntegerMatrix",
+            "DecimalMatrix",
+            "MobjectMatrix",
+            "get_det_text",
+            "matrix_to_mobject",
+            "matrix_to_tex_string"
+          ]
+        },
+        {
+          "id": "tables",
+          "title": "表格",
+          "covers": [
+            "Table",
+            "IntegerTable",
+            "DecimalTable",
+            "MathTable",
+            "MobjectTable"
+          ]
+        },
+        {
+          "id": "vector-space-scenes",
+          "title": "向量空间场景",
+          "covers": [
+            "VectorScene",
+            "LinearTransformationScene"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ch05",
+      "title": "动画进阶",
+      "sections": [
+        {
+          "id": "animation-mechanism",
+          "title": "Animation 机制",
+          "covers": [
+            "Animation",
+            "Add",
+            "Wait",
+            "prepare_animation",
+            "override_animation"
+          ]
+        },
+        {
+          "id": "creation",
+          "title": "创建家族",
+          "covers": [
+            "Create",
+            "Uncreate",
+            "Write",
+            "Unwrite",
+            "DrawBorderThenFill",
+            "ShowIncreasingSubsets",
+            "ShowSubmobjectsOneByOne",
+            "AddTextLetterByLetter",
+            "RemoveTextLetterByLetter",
+            "AddTextWordByWord",
+            "TypeWithCursor",
+            "UntypeWithCursor",
+            "SpiralIn",
+            "ShowPartial"
+          ]
+        },
+        {
+          "id": "grow-and-fade",
+          "title": "生长与淡入淡出",
+          "covers": [
+            "GrowFromPoint",
+            "GrowFromCenter",
+            "GrowFromEdge",
+            "GrowArrow",
+            "SpinInFromNothing",
+            "FadeIn",
+            "FadeOut"
+          ]
+        },
+        {
+          "id": "transforms",
+          "title": "Transform 家族",
+          "covers": [
+            "Transform",
+            "ReplacementTransform",
+            "TransformFromCopy",
+            "ClockwiseTransform",
+            "CounterclockwiseTransform",
+            "MoveToTarget",
+            "Restore",
+            "ApplyMethod",
+            "ApplyFunction",
+            "ApplyMatrix",
+            "ApplyComplexFunction",
+            "ApplyPointwiseFunction",
+            "ApplyPointwiseFunctionToCenter",
+            "CyclicReplace",
+            "Swap",
+            "ScaleInPlace",
+            "ShrinkToCenter",
+            "TransformAnimations",
+            "FadeTransform",
+            "FadeTransformPieces",
+            "FadeToColor"
+          ]
+        },
+        {
+          "id": "matching-transforms",
+          "title": "匹配变换",
+          "covers": [
+            "TransformMatchingAbstractBase",
+            "TransformMatchingShapes",
+            "TransformMatchingTex"
+          ]
+        },
+        {
+          "id": "composition",
+          "title": "组合与编排",
+          "covers": [
+            "AnimationGroup",
+            "Succession",
+            "LaggedStart",
+            "LaggedStartMap"
+          ]
+        },
+        {
+          "id": "updaters",
+          "title": "Updater 系统",
+          "covers": [
+            "ValueTracker",
+            "add_updater",
+            "remove_updater",
+            "clear_updaters",
+            "always_redraw",
+            "always_shift",
+            "always_rotate",
+            "f_always",
+            "cycle_animation",
+            "turn_animation_into_updater",
+            "UpdateFromFunc",
+            "UpdateFromAlphaFunc",
+            "MaintainPositionRelativeTo"
+          ]
+        },
+        {
+          "id": "number-animations",
+          "title": "数值动画",
+          "covers": [
+            "ChangingDecimal",
+            "ChangeDecimalToValue"
+          ]
+        },
+        {
+          "id": "tracing",
+          "title": "追踪与边界",
+          "covers": [
+            "TracedPath",
+            "AnimatedBoundary"
+          ]
+        },
+        {
+          "id": "motion",
+          "title": "运动变形",
+          "covers": [
+            "Homotopy",
+            "SmoothedVectorizedHomotopy",
+            "ComplexHomotopy",
+            "MoveAlongPath",
+            "PhaseFlow"
+          ]
+        },
+        {
+          "id": "rotation",
+          "title": "旋转",
+          "covers": [
+            "Rotating",
+            "Rotate"
+          ]
+        },
+        {
+          "id": "indication",
+          "title": "强调与指示",
+          "covers": [
+            "FocusOn",
+            "Indicate",
+            "Flash",
+            "Circumscribe",
+            "ShowPassingFlash",
+            "ShowPassingFlashWithThinningStrokeWidth",
+            "ApplyWave",
+            "Wiggle",
+            "Blink",
+            "Broadcast"
+          ]
+        },
+        {
+          "id": "speed",
+          "title": "变速",
+          "covers": [
+            "ChangeSpeed"
+          ]
+        },
+        {
+          "id": "rate-functions",
+          "title": "Rate Functions 全解",
+          "covers": []
+        }
+      ]
+    },
+    {
+      "id": "ch06",
+      "title": "3D 与摄像机",
+      "sections": [
+        {
+          "id": "three-d-scene",
+          "title": "ThreeDScene",
+          "covers": [
+            "ThreeDScene",
+            "SpecialThreeDScene"
+          ]
+        },
+        {
+          "id": "three-d-mobjects",
+          "title": "3D 几何",
+          "covers": [
+            "Cone",
+            "Cube",
+            "Cylinder",
+            "Sphere",
+            "Torus",
+            "Prism",
+            "Dot3D",
+            "Line3D",
+            "Arrow3D",
+            "Surface",
+            "ThreeDVMobject"
+          ]
+        },
+        {
+          "id": "polyhedra",
+          "title": "多面体",
+          "covers": [
+            "Polyhedron",
+            "Tetrahedron",
+            "Octahedron",
+            "Icosahedron",
+            "Dodecahedron",
+            "ConvexHull3D"
+          ]
+        },
+        {
+          "id": "moving-camera",
+          "title": "移动摄像机",
+          "covers": [
+            "MovingCameraScene",
+            "MovingCamera"
+          ]
+        },
+        {
+          "id": "zoomed-scene",
+          "title": "局部放大",
+          "covers": [
+            "ZoomedScene",
+            "MultiCamera",
+            "ImageMobjectFromCamera"
+          ]
+        },
+        {
+          "id": "camera-internals",
+          "title": "Camera 基类与扩展",
+          "covers": [
+            "Camera",
+            "MappingCamera",
+            "SplitScreenCamera",
+            "OldMultiCamera"
+          ]
+        },
+        {
+          "id": "renderers",
+          "title": "渲染器",
+          "covers": []
+        }
+      ]
+    },
+    {
+      "id": "ch07",
+      "title": "高级主题",
+      "sections": [
+        {
+          "id": "custom-mobjects",
+          "title": "自定义 Mobject",
+          "covers": []
+        },
+        {
+          "id": "custom-animations",
+          "title": "自定义 Animation",
+          "covers": []
+        },
+        {
+          "id": "plugins",
+          "title": "插件机制",
+          "covers": []
+        },
+        {
+          "id": "config-deep-dive",
+          "title": "配置系统深度",
+          "covers": []
+        },
+        {
+          "id": "performance",
+          "title": "性能与缓存",
+          "covers": []
+        },
+        {
+          "id": "cli-deep-dive",
+          "title": "CLI 深度",
+          "covers": []
+        },
+        {
+          "id": "scripting",
+          "title": "脚本化调用",
+          "covers": []
+        },
+        {
+          "id": "utils-overview",
+          "title": "实用工具速览",
+          "covers": []
+        },
+        {
+          "id": "misc",
+          "title": "杂项",
+          "covers": [
+            "add_sound",
+            "interactive_embed"
+          ]
+        }
+      ]
+    }
+  ]
+}

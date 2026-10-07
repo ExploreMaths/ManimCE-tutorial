@@ -1,0 +1,237 @@
+{
+  "part": "ch03",
+  "id": "lists-and-title",
+  "title": "列表与标题",
+  "partTitle": "文本与公式",
+  "prev": {
+    "part": "ch03",
+    "id": "numbers",
+    "title": "数字与变量",
+    "path": "/ch/ch03/numbers"
+  },
+  "next": {
+    "part": "ch03",
+    "id": "code-highlight",
+    "title": "Code 代码高亮",
+    "path": "/ch/ch03/code-highlight"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p><code>BulletedList</code> 快速生成圆点列表，<code>Title</code> 生成带分割线的页首标题。两者都继承自 <code>Tex</code>，因此默认走 LaTeX 排版（圆点本身也是 <code>MathTex(r\"\\cdot\")</code> 渲染的）。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>本节示例依赖 LaTeX，由 CI 渲染。中文条目建议配合 <code>TexTemplateLibrary.ctex</code> 模板，见「TeX 模板定制」一节。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "BulletedList",
+      "text": "BulletedList"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>BulletedList</code> 把每个位置参数排成一行，行首自动加圆点并左对齐纵向排列。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "BulletedList",
+        "Tex",
+        "MathTex",
+        "SingleStringMathTex"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">BulletedList(\n    *items: str,\n    buff: float = 0.5,\n    dot_scale_factor: float = 2,\n    tex_environment: str | None = None,\n    dot_buff: float = 0.1,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>*items</code>",
+          "type": "str",
+          "default": "—",
+          "desc": "每一行一个位置参数"
+        },
+        {
+          "name": "<code>buff</code>",
+          "type": "float",
+          "default": "0.5",
+          "desc": "行间距"
+        },
+        {
+          "name": "<code>dot_scale_factor</code>",
+          "type": "float",
+          "default": "2",
+          "desc": "圆点相对默认尺寸的比例"
+        },
+        {
+          "name": "<code>dot_buff</code>",
+          "type": "float",
+          "default": "0.1",
+          "desc": "圆点与文字之间的间距"
+        },
+        {
+          "name": "<code>tex_environment</code>",
+          "type": "str \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>其中 <code>buff</code> 与 <code>dot_buff</code> 取自常量 <code>MED_LARGE_BUFF</code>、<code>SMALL_BUFF</code>，随默认度量体系微调。</p>\n<p>每个条目是 <code>bl[i]</code> 一个子对象（圆点 + 文字的组合），<code>fade_all_but()</code> 可以快速做“聚焦某一条”的效果：</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch03/bulleted_list_demo",
+      "scene": "BulletedListDemo",
+      "caption": "<p>三条列表整体淡入，<code>fade_all_but(\"第二条要点\", opacity=0.3)</code> 只保持目标条目全亮，适合讲解时的逐项聚焦。本示例由 CI 渲染。</p>",
+      "code": "\"\"\"BulletedListDemo: BulletedList 默认样式与 dot_buff。（需要 LaTeX，由 CI 渲染）\"\"\"\n\nfrom manim import *\n\n\nclass BulletedListDemo(Scene):\n    def construct(self):\n        bl = BulletedList(\"第一条要点\", \"第二条要点\", \"第三条要点\", buff=0.5)\n\n        self.play(FadeIn(bl))\n        self.play(bl.fade_all_but(\"第二条要点\", opacity=0.3))\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>BulletedList</code> 的条目走 TeX 文本模式，条目里可以直接写 <code>$...$</code> 行内公式；中文条目需通过 <code>tex_template=TexTemplateLibrary.ctex</code> 传入。需要 Pango 字体的项目符号列表，更灵活的做法是 <code>VGroup</code> + <code>Text</code> + <code>Dot</code> 手工拼。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Title",
+      "text": "Title"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Title</code> 生成置于画面顶部的标题，默认在标题下方带一条<strong>贯穿画面的分割线</strong>。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Title",
+        "Tex",
+        "MathTex",
+        "SingleStringMathTex"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Title(\n    *text_parts: str,\n    include_underline: bool = True,\n    match_underline_width_to_text: bool = False,\n    underline_buff: float = 0.25,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>*text_parts</code>",
+          "type": "str",
+          "default": "—",
+          "desc": "标题文本，多个参数按 TeX 拼接"
+        },
+        {
+          "name": "<code>include_underline</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "是否绘制下划线"
+        },
+        {
+          "name": "<code>match_underline_width_to_text</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "True 时下划线宽度匹配文字，False 时贯穿画面"
+        },
+        {
+          "name": "<code>underline_buff</code>",
+          "type": "float",
+          "default": "0.25",
+          "desc": "标题与下划线间距"
+        }
+      ]
+    },
+    {
+      "type": "demo",
+      "example": "ch03/title_demo",
+      "scene": "TitleDemo",
+      "caption": "<p>第一个标题用默认的全宽下划线；<code>match_underline_width_to_text=True</code> 让第二个标题的下划线跟随文字宽度。本示例由 CI 渲染。</p>",
+      "code": "\"\"\"TitleDemo: Title 与下划线宽度行为。（需要 LaTeX，由 CI 渲染）\"\"\"\n\nfrom manim import *\n\n\nclass TitleDemo(Scene):\n    def construct(self):\n        title = Title(\"第三节：文本与公式\")\n        narrow = Title(\"窄标题\", match_underline_width_to_text=True)\n\n        self.add(title)\n        self.wait(0.5)\n        self.play(FadeIn(narrow))\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "html",
+      "html": "<p>关于 <code>Title</code> 的缩放行为：标题本身是一个整体 Mobject，<code>animate.scale(...)</code> 会把文字和下划线一起缩放；但下划线宽度是<strong>构造时</strong>按当时文字宽度计算的，之后再改变文字内容不会自动跟随。要“文字变了、线跟着变”，需手动 <code>title.underline.match_width(title)</code> 或重建 <code>Title</code>。</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "",
+        "BulletedList",
+        "Title"
+      ],
+      "rows": [
+        [
+          "-",
+          "<hr />",
+          "<hr />"
+        ],
+        [
+          "继承",
+          "Tex",
+          "Tex"
+        ],
+        [
+          "子对象",
+          "每条目一个（圆点 + 文字）",
+          "文字 + 下划线"
+        ],
+        [
+          "定位",
+          "原点附近纵向排列",
+          "自动贴 <code>UP</code> 边缘"
+        ],
+        [
+          "便捷方法",
+          "<code>fade_all_but</code>",
+          "无（<code>underline</code> 属性）"
+        ]
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>Title</code> 构造后自动 <code>to_edge(UP)</code>，再用 <code>shift</code> 会基于已经贴边的位置偏移，容易超出画面。想自定义位置请用 <code>title.to_edge(UP, buff=...)</code> 重新贴边，而不是叠加大偏移。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>如何只让第三条列表项保持高亮，其余淡出到 30% 透明度？</p>",
+      "answerHtml": "<pre><code class=\"language-python\">bl = BulletedList(&quot;一&quot;, &quot;二&quot;, &quot;三&quot;)\nbl.fade_all_but(2, opacity=0.3)  # 按索引\n# 或 bl.fade_all_but(&quot;三&quot;, opacity=0.3)  # 按文本匹配\n</code></pre>\n<p><code>fade_all_but</code> 接受整数索引或条目文本字符串。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>为什么 <code>title = Title(\"A\")</code> 之后 <code>title.become(Title(\"更长的一段标题\"))</code> 会让下划线错位？</p>",
+      "answerHtml": "<p><code>become</code> 只对齐了子对象点集；下划线宽度在构造 <code>Title(\"A\")</code> 时已固定为当时的文字宽度，<code>become</code> 不会重新计算它。正确做法是重建：<code>title_new = Title(\"更长的一段标题\")</code> 后用 <code>Transform(title, title_new)</code>，或改文字后手动 <code>title.underline.match_width(title)</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>最后一类结构化文本是代码——下一节看 <code>Code</code> 如何用 Pygments 做语法高亮，以及 v0.21.0 的配色机制变更。</p>"
+    }
+  ]
+}

@@ -1,0 +1,232 @@
+{
+  "part": "ch07",
+  "id": "performance",
+  "title": "性能与缓存",
+  "partTitle": "高级主题",
+  "prev": {
+    "part": "ch07",
+    "id": "config-deep-dive",
+    "title": "配置系统深度",
+    "path": "/ch/ch07/config-deep-dive"
+  },
+  "next": {
+    "part": "ch07",
+    "id": "cli-deep-dive",
+    "title": "CLI 深度",
+    "path": "/ch/ch07/cli-deep-dive"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>Manim 渲染慢的根源通常不在“画一帧”本身，而在逐帧执行的 Python 逻辑。本节给出一份按收益排序的优化清单，并解释缓存机制的内在原理，让你知道每个开关到底省下了什么。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "优化清单按收益排序",
+      "text": "优化清单（按收益排序）"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "手段",
+        "做法",
+        "收益"
+      ],
+      "rows": [
+        [
+          "降画质调试",
+          "日常用 <code>-ql</code> / <code>-qm</code>，发布才上 <code>-qh</code>",
+          "帧数随分辨率×帧率线性增长，<code>-ql</code> 比 <code>-qh</code> 少约 11 倍像素、4 倍帧率"
+        ],
+        [
+          "缩短 run_time",
+          "调试期把 <code>run_time</code> 调小、删掉冗余 <code>wait</code>",
+          "总帧数 = Σ(run_time × fps)，最直接"
+        ],
+        [
+          "利用部分视频缓存",
+          "不重写已渲染过的动画",
+          "重复渲染场景时只有改动过的片段重新计算"
+        ],
+        [
+          "并行编码",
+          "<code>--max-inflight-encoders 4</code>",
+          "编码与渲染重叠，多动画场景显著提速"
+        ],
+        [
+          "控制 updater 数量",
+          "合并 updater、删掉不再需要的、wait 用 <code>frozen_frame=True</code>",
+          "每个 updater 每帧都执行，数量×帧数就是总调用次数"
+        ],
+        [
+          "换 OpenGL 渲染器",
+          "<code>--renderer opengl</code>",
+          "GPU 光栅化，预览类场景可以实时"
+        ],
+        [
+          "减少 mobject 点数",
+          "降低 <code>Circle</code> 等图形的分段数、避免对巨大点数组逐帧操作",
+          "点数组操作都是 NumPy 级的开销"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "画质与帧率",
+      "text": "画质与帧率"
+    },
+    {
+      "type": "html",
+      "html": "<p>五档画质（与 ch01 相同，这里从性能视角再看一次）：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "档位",
+        "分辨率",
+        "帧率",
+        "每秒动画帧数"
+      ],
+      "rows": [
+        [
+          "<code>-ql</code>",
+          "854×480",
+          "15",
+          "调试首选，比 <code>-qh</code> 快约一个数量级"
+        ],
+        [
+          "<code>-qm</code>",
+          "1280×720",
+          "30",
+          "日常与教程默认值"
+        ],
+        [
+          "<code>-qh</code>",
+          "1920×1080",
+          "60",
+          "发布质量"
+        ],
+        [
+          "<code>-qp</code>",
+          "2560×1440",
+          "60",
+          "2K"
+        ],
+        [
+          "<code>-qk</code>",
+          "3840×2160",
+          "60",
+          "4K"
+        ]
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>调试循环里一个常见的做法是固定用 <code>-ql</code>，确认效果后再用 <code>-qm</code> 出样片。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "部分视频文件与缓存机制",
+      "text": "部分视频文件与缓存机制"
+    },
+    {
+      "type": "html",
+      "html": "<p>Cairo 渲染管道下，每个 <code>play()</code> 的动画被单独渲染成一个<strong>部分视频文件</strong>（partial movie file，存于 <code>partial_movie_dir</code>），场景结束时再按顺序拼接成完整视频。</p>\n<p>缓存的判定单位是<strong>单次 play 调用</strong>：Manim 对这次调用的场景状态、摄像机参数、动画参数做哈希，得到一个指纹；指纹命中已存在的部分视频文件时，该段动画直接复用、跳过全部逐帧计算。日志中会出现 <code>Animation N : Using cached data (hash : ...)</code>。</p>\n<p>相关开关：</p>\n<ul>\n<li><code>--disable_caching</code>：不使用缓存（日志注明：缓存文件仍会被生成，只是不再参与命中判定）。用于排查“缓存导致画面没更新”的诡异问题。</li>\n<li><code>--flush_cache</code>：渲染前删除已缓存的部分视频文件。</li>\n<li><code>max_files_cached</code>（默认 100）：缓存目录中保留的部分视频文件数上限，超出时自动清理最旧的。</li>\n<li><code>--dry_run</code>：只跑逻辑不产出文件，也不渲染帧——验证代码逻辑时比任何画质档都快。</li>\n</ul>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>“改了代码画面却没变”九成是缓存命中了旧指纹：改动没有影响哈希的内容（例如改了纯视觉外的东西、或 updater 依赖系统时间）。先 <code>--disable_caching</code> 重渲确认，再考虑是不是哈希没覆盖到你的变化。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>v0.21.0 改进了缓存哈希对 NumPy 数组的处理：<code>_hash_ndarray</code> 先将数组规范化为小端字节序，再用 SHA-256 压缩内容，替代旧的序列化路径。效果是点数组较大的对象（密集曲线、高分辨率 <code>ImageMobject</code>）哈希显著更快、跨平台更稳定，缓存命中判定本身不再是性能瓶颈。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "并行编码",
+      "text": "并行编码"
+    },
+    {
+      "type": "html",
+      "html": "<p>每个部分视频文件渲染完后要交给 ffmpeg 编码。默认 <code>--max-inflight-encoders 1</code>：一个动画的编码完成后才开始下一个动画的渲染，CPU 在编码期间可能空闲。v0.21.0 引入并行编码：</p>\n<pre><code class=\"language-bash\">manim -qm --max-inflight-encoders 4 scene.py MyScene\n</code></pre>\n<p><code>--max-inflight-encoders N</code> 允许最多 N 个部分视频文件同时处于编码中，渲染主循环与编码重叠进行；官方提示典型硬件上 4 是合理值。配套参数 <code>--encoder-queue-size</code>（默认 8）控制每个编码器积压的帧缓冲上限，仅在并行编码开启时生效。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p><code>--max-inflight-encoders</code> 与 <code>--encoder-queue-size</code> 是 v0.21.0 新增的选项；更早版本没有并行编码能力。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "updater-的成本控制",
+      "text": "updater 的成本控制"
+    },
+    {
+      "type": "html",
+      "html": "<p>每个 updater 每帧都被调用一次。10 个 updater × 60fps × 5 秒动画 = 3000 次调用，每次调用若触发 <code>always_redraw</code> 的完整重绘，开销会非常大。实践建议：</p>\n<ul>\n<li>用 <code>add_updater</code> 做局部属性修改，避免 <code>always_redraw</code> 重建整个对象。</li>\n<li>动画结束后及时 <code>remove_updater</code>，不要留着空转的 updater。</li>\n<li>纯停顿用 <code>self.wait(t, frozen_frame=True)</code>：按静止帧处理，跳过逐帧模拟。</li>\n<li>合并多个 updater：一个对象上每帧要改三处，写成一个函数比挂三个 updater 便宜。</li>\n</ul>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "opengl-渲染器",
+      "text": "OpenGL 渲染器"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>--renderer opengl</code> 切换到基于 moderngl 的 GPU 渲染器：光栅化在显卡上完成，支持窗口实时预览（<code>-p</code> 时弹出交互窗口，见“杂项”一节的 <code>interactive_embed</code>），很多场景能达到接近实时的速度。</p>\n<p>代价是兼容性：个别特性只实现了 Cairo 版本（某些文字渲染路径、部分特效），输出色彩与抗锯齿效果也可能与 Cairo 略有差异。用法是先确认你的场景用到的功能在 OpenGL 下表现一致，再切换；正式发布前建议用 Cairo 出最终成片。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>--flush_cache</code> 和 <code>--disable_caching</code> 名字相近但行为不同：前者清空缓存目录再正常用缓存渲染；后者保留缓存文件、本次渲染完全不命中。想“重来一遍”用前者，想“排查缓存 bug”用后者。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>渲染慢先 profile 再优化：把 <code>play</code> 逐个注释定位耗时段，检查该段是否有 updater、<code>always_redraw</code>、大点数组操作或 <code>Tex</code> 重建。多数瓶颈都在这四类里。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>一个场景渲染到一半修改了其中一段动画的代码，重新渲染会发生什么？哪些部分会被重新计算？</p>",
+      "answerHtml": "<p>按 play 调用逐段判定：改动影响到的那个动画（及其后续依赖场景状态的动画）指纹变化，重新逐帧渲染；其余动画指纹命中已有的部分视频文件，直接复用缓存。这就是“改一处、重渲一段”的部分视频缓存机制。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>机器 CPU 核数不少，但渲染一个含 20 个动画的场景时 CPU 占用忽高忽低。哪个 v0.21.0 新选项可能改善？</p>",
+      "answerHtml": "<p><code>--max-inflight-encoders 4</code>：默认串行编码时，渲染主线程在一个动画的编码期间会等待；开启并行编码后编码与渲染重叠，CPU 利用更充分。可用 <code>--encoder-queue-size</code> 微调积压缓冲。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>性能调优离不开对命令行各选项的精确理解——下一节把 <code>manim render</code> 的全部选项按类别一次讲透，包括几个容易被误导的弃用标志。</p>"
+    }
+  ]
+}

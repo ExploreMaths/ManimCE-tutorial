@@ -1,0 +1,236 @@
+{
+  "part": "ch07",
+  "id": "custom-animations",
+  "title": "自定义 Animation",
+  "partTitle": "高级主题",
+  "prev": {
+    "part": "ch07",
+    "id": "custom-mobjects",
+    "title": "自定义 Mobject",
+    "path": "/ch/ch07/custom-mobjects"
+  },
+  "next": {
+    "part": "ch07",
+    "id": "plugins",
+    "title": "插件机制",
+    "path": "/ch/ch07/plugins"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p><code>FadeIn</code>、<code>Transform</code>、<code>Rotate</code> 都继承自同一个基类 <code>Animation</code>（见 ch05 的“Animation 机制”一节）。本节讲解这个基类的工作机制，以及如何继承它写出自己的动画。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "animation-基类",
+      "text": "Animation 基类"
+    },
+    {
+      "type": "html",
+      "html": "<p>一个 <code>Animation</code> 的生命周期由渲染器驱动，核心步骤：</p>\n<ol>\n<li><code>begin()</code>：动画开始前调用。基类在这里把目标 mobject 拷贝为 <code>self.starting_mobject</code>（起始状态快照），并暂停目标对象自身的 updater，最后调用 <code>interpolate(0)</code>。</li>\n<li>每一帧渲染器调用 <code>interpolate(alpha)</code>，<code>alpha ∈ [0, 1]</code> 表示动画进度（已经过 <code>rate_func</code> 处理），内部转交给 <code>interpolate_mobject</code>。</li>\n<li><code>finish()</code>：动画结束后的收尾（默认恢复 updater 状态）。</li>\n</ol>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Animation",
+        "object"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Animation(\n    mobject, lag_ratio=0.0, run_time=1.0, rate_func=smooth,\n    reverse_rate_function=False, name=None, remover=False,\n    suspend_mobject_updating=True, introducer=False, ...\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>mobject</code>",
+          "type": "Mobject \\",
+          "default": "None",
+          "desc": "—"
+        },
+        {
+          "name": "<code>lag_ratio</code>",
+          "type": "float",
+          "default": "0.0",
+          "desc": "子对象之间的错峰比例（见 <code>AnimationGroup</code>）"
+        },
+        {
+          "name": "<code>run_time</code>",
+          "type": "float",
+          "default": "1.0",
+          "desc": "动画时长（秒）"
+        },
+        {
+          "name": "<code>rate_func</code>",
+          "type": "callable",
+          "default": "<code>smooth</code>",
+          "desc": "速率函数，把线性时间映射为动画进度"
+        },
+        {
+          "name": "<code>reverse_rate_function</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "播放时反转 rate_func 的方向"
+        },
+        {
+          "name": "<code>remover</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "结束后把目标对象移出场景（如 <code>FadeOut</code>）"
+        },
+        {
+          "name": "<code>suspend_mobject_updating</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "动画期间暂停目标对象自身的 updater"
+        },
+        {
+          "name": "<code>introducer</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "标记该动画会把目标对象引入场景"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "两个插值钩子",
+      "text": "两个插值钩子"
+    },
+    {
+      "type": "html",
+      "html": "<p>自定义动画的本质就是重写插值钩子。有两层：</p>\n<ul>\n<li><strong><code>interpolate_mobject(alpha)</code></strong>：接收整个对象的进度，负责驱动目标 mobject。想整体生效（颜色、透明度、整体形变）时重写它。</li>\n<li><strong><code>interpolate_submobject(submobject, starting_submobject, alpha)</code></strong>：基类按 <code>get_all_families_zipped()</code> 把目标与起始快照的子对象两两配对，对每个子对象调用一次。想让子对象<strong>逐个</strong>响应动画（错落、各自插值）时重写它。</li>\n</ul>\n<p>基类的 <code>interpolate_mobject</code> 只做一件事：遍历子对象对并调用 <code>interpolate_submobject</code>；而基类的 <code>interpolate_submobject</code> 是空实现（<code>pass</code>）。所以重写任意一个即可，另一个保持默认。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "完整示例变色-抖动",
+      "text": "完整示例：变色 + 抖动"
+    },
+    {
+      "type": "html",
+      "html": "<p>下面是一个自定义动画 <code>ColorJitter</code>：颜色从起始色渐变到目标色，同时叠加一个“中间大、两端为零”的随机抖动（用 <code>4α(1−α)</code> 作权重，动画结束图形自然归位）：</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch07/color_jitter",
+      "scene": "CustomAnimationDemo",
+      "caption": "<p><code>ColorJitter</code> 重写了 <code>begin()</code>（预生成随机噪声，保证每帧抖动方向一致）和 <code>interpolate_mobject()</code>（按 alpha 插值颜色、按 <code>4α(1−α)</code> 叠加位移）。正方形先从蓝变红抖动，再从红变绿加大振幅抖动。</p>",
+      "code": "import numpy as np\n\nfrom manim import *\n\n\nclass ColorJitter(Animation):\n    \"\"\"自定义动画：颜色向目标色渐变，同时叠加先增后减的随机抖动。\"\"\"\n\n    def __init__(self, mobject, target_color=YELLOW, amplitude=0.12, **kwargs):\n        self.target_color = target_color\n        self.amplitude = amplitude\n        super().__init__(mobject, **kwargs)\n\n    def begin(self):\n        # 在 super().begin() 之前预生成随机位移：\n        # 基类 begin 会立即调用 interpolate(0)，噪声必须先就绪\n        rng = np.random.default_rng(0)\n        self.noise = rng.uniform(-1, 1, self.mobject.points.shape)\n        super().begin()\n\n    def interpolate_mobject(self, alpha):\n        mobject = self.mobject\n        start = self.starting_mobject\n        mobject.set_color(interpolate_color(start.get_color(), self.target_color, alpha))\n        # 4 * alpha * (1 - alpha)：两端为 0，中间最大，抖动随动画结束自然归位\n        weight = 4 * alpha * (1 - alpha)\n        mobject.points = start.points + self.amplitude * weight * self.noise\n\n\nclass CustomAnimationDemo(Scene):\n    def construct(self):\n        square = Square().set_fill(BLUE, opacity=0.6).set_stroke(WHITE, width=4)\n        self.play(FadeIn(square), run_time=0.5)\n        self.play(ColorJitter(square, target_color=RED, run_time=2.0))\n        self.play(ColorJitter(square, target_color=GREEN, amplitude=0.2, run_time=1.5))\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "html",
+      "html": "<p>三个值得注意的实现细节：</p>\n<ul>\n<li>随机噪声在 <code>begin()</code> 里预生成，而不是每帧现取随机数——否则每帧抖动方向乱跳，视觉上变成噪声闪烁。</li>\n<li><code>begin()</code> 里<strong>先</strong>生成噪声再调 <code>super().begin()</code>：基类的 <code>begin</code> 会立即调用 <code>interpolate(0)</code>，此时 <code>interpolate_mobject</code> 已经需要读取 <code>self.noise</code>。</li>\n<li>位移基于 <code>starting_mobject.points</code>（起始快照），不是当前帧的 <code>points</code>，避免误差逐帧累积。</li>\n</ul>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自定义-animation-还是-updater",
+      "text": "自定义 Animation 还是 updater？"
+    },
+    {
+      "type": "html",
+      "html": "<p>两者都能让对象随时间变化，选择标准：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "",
+        "自定义 Animation",
+        "mobject updater"
+      ],
+      "rows": [
+        [
+          "-",
+          "<hr />",
+          "<hr />"
+        ],
+        [
+          "组织方式",
+          "<code>self.play(MyAnim(mob))</code>，有明确起止",
+          "<code>mob.add_updater(func)</code> 挂到对象上，跨多个动画持续生效"
+        ],
+        [
+          "与场景时间轴",
+          "属于时间轴上的一个片段，有 run_time",
+          "每帧都被调用，直到 <code>remove_updater</code>"
+        ],
+        [
+          "起始快照",
+          "<code>starting_mobject</code> 自动拷贝",
+          "需要自己保存状态"
+        ],
+        [
+          "缓存",
+          "参与部分视频缓存（见“性能与缓存”一节）",
+          "updater 期间缓存通常被跳过"
+        ],
+        [
+          "典型场景",
+          "一次性效果（变色、抖动、特殊形变）",
+          "持续行为（跟随、数值联动、物理模拟）"
+        ]
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>规则很简单：<strong>有明确开始和结束的一次性效果写成 Animation；需要持续到某个条件才停止的行为写成 updater</strong>。一个效果既要在 play 期间发生、又要在此前持续运行，就两者都用。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>在 <code>interpolate_submobject</code> 里直接返回新对象没有意义——这个方法靠<strong>就地修改</strong> <code>submobject</code> 起作用（基类实现就是 <code>pass</code>）。忘记修改、只 <code>return</code> 一个值，动画会“什么都不做”也不报错。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>重写 <code>begin()</code> 时忘了调 <code>super().begin()</code>。基类在这里创建 <code>starting_mobject</code> 快照并调用 <code>interpolate(0)</code>，跳过它会导致 <code>AttributeError</code>（找不到 <code>starting_mobject</code>）或首帧状态错误。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>Transform</code> 家族的 <code>interpolate_submobject</code> 签名多了一个 <code>target_copy</code> 参数（目标快照），与基类不同。如果你的自定义动画被 <code>Transform</code> 风格的逻辑困扰，检查是否混用了这两套签名。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>自定义动画里想“记住动画开始前的状态”，应该在哪一步、用什么方式保存？</p>",
+      "answerHtml": "<p>在 <code>begin()</code> 中（或重写 <code>create_starting_mobject</code>）。基类 <code>begin()</code> 会自动把目标对象拷贝成 <code>self.starting_mobject</code>，重写 <code>begin()</code> 时先调 <code>super().begin()</code> 即可直接用这个快照，不要手动 <code>deepcopy</code> 整个对象树。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>什么时候应该重写 <code>interpolate_submobject</code> 而不是 <code>interpolate_mobject</code>？</p>",
+      "answerHtml": "<p>当希望效果的粒度落到<strong>子对象</strong>上时：基类会把目标与其起始快照的子对象一一配对，逐个传入 <code>interpolate_submobject</code>，配合 <code>lag_ratio</code> 还能让子对象错峰响应。若效果是针对对象整体的（如整体变色、整体位移），重写 <code>interpolate_mobject</code> 更简单。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>掌握了图形与动画两条扩展路线后，下一节看向生态层面：如何用插件机制把自定义成果分享给他人、以及如何使用社区插件。</p>"
+    }
+  ]
+}

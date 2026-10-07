@@ -1,0 +1,206 @@
+{
+  "part": "ch05",
+  "id": "grow-and-fade",
+  "title": "生长与淡入淡出",
+  "partTitle": "动画进阶",
+  "prev": {
+    "part": "ch05",
+    "id": "creation",
+    "title": "创建家族",
+    "path": "/ch/ch05/creation"
+  },
+  "next": {
+    "part": "ch05",
+    "id": "transforms",
+    "title": "Transform 家族",
+    "path": "/ch/ch05/transforms"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>两组最直观的进场/离场动画：Grow 家族让物体从某个基准点\"生长\"出来，Fade 家族让物体淡入淡出并可附带平移/缩放。两组都支持 <code>point_color</code> 之类的起点着色参数，Grow 系默认 <code>introducer=True</code>，<code>FadeOut</code> 是 <code>remover=True</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "GrowFromPoint",
+      "text": "GrowFromPoint"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>GrowFromPoint(mobject, point, point_color=None)</code> 从任意 <code>point</code> 出发把物体放大到完整尺寸，<code>point_color</code> 可指定生长起点的颜色（默认跟随物体自身颜色）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "GrowFromCenter",
+      "text": "GrowFromCenter"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>GrowFromCenter(mobject, point_color=None)</code> 从物体中心生长——<code>GrowFromPoint</code> 以质心为 <code>point</code> 的便捷版。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "GrowFromEdge",
+      "text": "GrowFromEdge"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>GrowFromEdge(mobject, edge, point_color=None)</code> 从指定边缘方向（如 <code>LEFT</code>、<code>UP</code>）生长，适合做\"从屏幕边缘长出\"的效果。</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "类",
+        "生长基准",
+        "适合"
+      ],
+      "rows": [
+        [
+          "<code>GrowFromPoint</code>",
+          "任意点（必填）",
+          "从某个参照物/位置冒出"
+        ],
+        [
+          "<code>GrowFromCenter</code>",
+          "物体中心",
+          "通用进场"
+        ],
+        [
+          "<code>GrowFromEdge</code>",
+          "指定方向的边缘",
+          "从边缘展开"
+        ],
+        [
+          "<code>GrowArrow</code>",
+          "箭头起点",
+          "箭头类专用"
+        ],
+        [
+          "<code>SpinInFromNothing</code>",
+          "中心 + 旋转",
+          "带点动感的进场"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "GrowArrow",
+      "text": "GrowArrow"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>GrowArrow(arrow, point_color=None)</code> 从箭尾向箭头生长出完整箭头。它内部会调用 <code>arrow.scale(0, scale_tips=True, about_point=arrow.get_start())</code> 生成初始状态。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>GrowArrow</code> 只适合真正的 <code>Arrow</code>（其 <code>scale</code> 支持 <code>scale_tips</code> 参数）。对 <code>CurvedArrow</code> 使用会抛 <code>TypeError: VMobject.scale() got an unexpected keyword argument 'scale_tips'</code>（本机 v0.21.0 实测）——因为 <code>CurvedArrow</code> 继承自 <code>ArcBetweenPoints</code> 而非 <code>Arrow</code>。曲线箭头请改用 <code>Create</code> 或 <code>FadeIn</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "SpinInFromNothing",
+      "text": "SpinInFromNothing"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>SpinInFromNothing(mobject, angle=PI/2, point_color=None)</code> 从中心一边旋转一边放大出现，默认转 90°，比纯生长多一分动感。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch05/grow_variants",
+      "scene": "GrowVariants",
+      "caption": "<p>五个物体依次演示：<code>GrowFromPoint</code>（自定义点）、<code>GrowFromCenter</code>、<code>GrowFromEdge</code>、<code>GrowArrow</code> 与 <code>SpinInFromNothing</code>。</p>",
+      "code": "\"\"\"GrowVariants: GrowFromPoint / GrowFromCenter / GrowFromEdge / GrowArrow / SpinInFromNothing.\"\"\"\n\nfrom manim import *\n\n\nclass GrowVariants(Scene):\n    def construct(self):\n        p1 = Square(0.7).set_fill(RED, opacity=0.5).shift(LEFT * 3.5 + UP * 1.5)\n        p2 = Circle(0.4).set_fill(GREEN, opacity=0.5).shift(LEFT * 1.2 + UP * 1.5)\n        p3 = Triangle().set_fill(BLUE, opacity=0.5).shift(RIGHT * 1.2 + UP * 1.5).scale(0.6)\n        arrow = Arrow(ORIGIN, RIGHT * 1.5).shift(LEFT * 0.7 + DOWN * 1.2)\n        star = Star().set_fill(YELLOW, opacity=0.6).shift(RIGHT * 2.8 + UP * 1.5).scale(0.7)\n\n        self.play(GrowFromPoint(p1, point=LEFT * 5 + UP * 2.5), run_time=0.8)\n        self.play(GrowFromCenter(p2), run_time=0.8)\n        self.play(GrowFromEdge(p3, edge=RIGHT), run_time=0.8)\n        self.play(GrowArrow(arrow), run_time=0.8)\n        self.play(SpinInFromNothing(star), run_time=0.8)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "FadeIn",
+      "text": "FadeIn"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>FadeIn(*mobjects, shift=None, target_position=None, scale=1)</code> 让物体逐渐变不透明。可同时传入多个物体（内部包成 <code>Group</code>）。三个可选修饰参数来自其基类实现：</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>shift</code>",
+          "type": "np.ndarray \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>target_position</code>",
+          "type": "np.ndarray \\",
+          "default": "Mobject \\",
+          "desc": "None"
+        },
+        {
+          "name": "<code>scale</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "淡入起点的缩放倍数（如 <code>scale=0.2</code> 表示从 1/5 大小放大）"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "FadeOut",
+      "text": "FadeOut"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>FadeOut(*mobjects, shift=None)</code> 渐隐出场，<code>remover=True</code> 播完移除物体。也支持 <code>shift</code>（整体向某方向滑走）与 <code>target_position</code>。注意 <code>FadeOut</code> 只接受 <code>shift</code>/<code>target_position</code>，<strong>没有</strong> <code>scale</code> 参数。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch05/fade_variants",
+      "scene": "FadeVariants",
+      "caption": "<p>普通淡入、带 <code>shift</code> 的滑入、从指定 <code>target_position</code> 飞入、从小放大（<code>scale=0.2</code>）；最后四个物体整体 <code>FadeOut</code> 并向右滑走。</p>",
+      "code": "\"\"\"FadeVariants: FadeIn shift / target_position / scale, and FadeOut.\"\"\"\n\nfrom manim import *\n\n\nclass FadeVariants(Scene):\n    def construct(self):\n        anchor = Dot(LEFT * 4 + UP * 2, color=GREY_B)\n        self.add(anchor)\n\n        a = Square(0.7).set_fill(RED, opacity=0.6).shift(LEFT * 2 + UP)\n        b = Circle(0.4).set_fill(GREEN, opacity=0.6)\n        c = Triangle().set_fill(BLUE, opacity=0.6).scale(0.6).shift(RIGHT * 2 + UP)\n\n        # 普通淡入\n        self.play(FadeIn(a), run_time=0.8)\n        # 淡入的同时从指定方向滑入\n        self.play(FadeIn(b, shift=UP * 1.5), run_time=0.8)\n        # 从某个点（或物体中心）飞入\n        self.play(FadeIn(c, target_position=anchor), run_time=0.8)\n        # 淡入的同时从小放大\n        d = Star().set_fill(YELLOW, opacity=0.6).scale(0.6).shift(DOWN * 1.5)\n        self.play(FadeIn(d, scale=0.2), run_time=0.8)\n\n        # 淡出时可以整体向某个方向滑走\n        group = VGroup(a, b, c, d)\n        self.play(FadeOut(group, shift=RIGHT * 2), run_time=0.9)\n        self.wait(0.3)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>FadeIn</code>/<code>FadeOut</code> 位于 <code>manim.animation.fading</code> 模块，而名字相近的 <code>FadeTransform</code>/<code>FadeToColor</code> 却在 <code>manim.animation.transform</code> 模块——检索源码时注意区分。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>CurvedArrow(ORIGIN, RIGHT*2)</code> 想用生长效果进场，<code>GrowArrow</code> 可以吗？不行的话给出替代方案。</p>",
+      "answerHtml": "<p>不行。<code>CurvedArrow</code> 不是 <code>Arrow</code> 子类，其 <code>scale()</code> 没有 <code>scale_tips</code> 参数，<code>GrowArrow</code> 初始化起始状态时会抛 <code>TypeError</code>（v0.21.0 实测）。改用 <code>Create</code>（沿弧线画出）或 <code>FadeIn</code> 即可。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想让一个圆从屏幕左上角飞入并落在中央、同时从小变大，<code>FadeIn</code> 一行怎么写？</p>",
+      "answerHtml": "<p><code>self.play(FadeIn(c, target_position=LEFT * 5 + UP * 3, scale=0.2))</code>：<code>target_position</code> 指定淡入起点（也可用另一个 Mobject，取其中心），<code>scale=0.2</code> 让它从 1/5 尺寸放大到位。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>进场和离场都齐了，最重磅的一节来了：<code>Transform</code> 家族——如何让一个物体变成另一个物体。</p>"
+    }
+  ]
+}

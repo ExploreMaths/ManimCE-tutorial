@@ -1,0 +1,281 @@
+{
+  "part": "ch02",
+  "id": "groups",
+  "title": "组合容器",
+  "partTitle": "基础图形",
+  "prev": {
+    "part": "ch02",
+    "id": "vmobject",
+    "title": "VMobject",
+    "path": "/ch/ch02/vmobject"
+  },
+  "next": {
+    "part": "ch02",
+    "id": "basic-shapes",
+    "title": "基本形状",
+    "path": "/ch/ch02/basic-shapes"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>单个图形之外的下一个问题是<strong>组织</strong>：把多个 mobject 当成一个整体移动、缩放、着色。Manim 提供三个容器：<code>Group</code>、<code>VGroup</code> 与按键取值的 <code>VDict</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Group",
+      "text": "Group"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Group</code> 是最朴素的组合容器：把任意多个 <code>Mobject</code> 收进一个 <code>submobjects</code> 列表，整体参与布局与变换。它不校验成员类型，因此可以混合装入位图、3D 对象等任何 mobject。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Group",
+        "Mobject",
+        "object"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Group(*mobjects, **kwargs)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>*mobjects</code>",
+          "type": "Mobject",
+          "default": "—",
+          "desc": "任意数量的成员，可空"
+        },
+        {
+          "name": "<code>kwargs</code>",
+          "type": "—",
+          "default": "—",
+          "desc": "转发给 <code>Mobject</code> 构造"
+        }
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>同一个 mobject 重复 <code>add</code> 进同一个组会被<strong>静默忽略</strong>（官方文档明确说明）。如果需要两个一样的图形，先 <code>copy()</code> 再添加。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "VGroup",
+      "text": "VGroup"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>VGroup</code> 是矢量图形的专用组合容器：成员<strong>必须是 <code>VMobject</code></strong>，因此它继承了 <code>VMobject</code> 的全部样式方法，可以对整组统一 <code>set_fill</code>、整体渐变，并支持 <code>arrange</code> 自动排版。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "VGroup",
+        "VMobject",
+        "Mobject",
+        "object"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">VGroup(*vmobjects, **kwargs)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>*vmobjects</code>",
+          "type": "VMobject \\",
+          "default": "Iterable[VMobject]",
+          "desc": "—"
+        },
+        {
+          "name": "<code>kwargs</code>",
+          "type": "—",
+          "default": "—",
+          "desc": "转发给 <code>VMobject</code> 构造"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>与 <code>Group</code> 的对比如下：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "维度",
+        "Group",
+        "VGroup"
+      ],
+      "rows": [
+        [
+          "继承",
+          "Mobject",
+          "VMobject"
+        ],
+        [
+          "成员类型",
+          "任意 Mobject",
+          "仅 VMobject，否则 <code>TypeError</code>"
+        ],
+        [
+          "样式方法",
+          "无填充/描边概念",
+          "<code>set_fill</code> / <code>set_stroke</code> / <code>set_opacity</code> 等对整组生效"
+        ],
+        [
+          "整体渐变",
+          "不支持",
+          "<code>set_color_by_gradient</code> 按子对象依次着色"
+        ],
+        [
+          "典型场景",
+          "混合类型（位图 + 矢量 + 3D）",
+          "同类的矢量图形批量排版"
+        ]
+      ]
+    },
+    {
+      "type": "demo",
+      "example": "ch02/groups_demo",
+      "scene": "GroupsDemo",
+      "caption": "<p><code>arrange(RIGHT, buff=0.4)</code> 一键横排；对整组 <code>scale + rotate</code> 时三个图形保持相对位置不变；下排演示用下标 <code>squares[1]</code> 取单个成员单独上色。</p>",
+      "code": "from manim import *\n\n\nclass GroupsDemo(Scene):\n    def construct(self):\n        shapes = VGroup(Square(), Circle(), Triangle()).arrange(RIGHT, buff=0.4)\n        self.play(FadeIn(shapes))\n        self.play(shapes.animate.scale(0.7).rotate(PI / 8))\n        squares = VGroup(*[Square(side_length=0.5) for _ in range(4)]).arrange(RIGHT)\n        squares.to_edge(DOWN)\n        self.play(FadeIn(squares))\n        self.play(squares[1].animate.set_fill(YELLOW, 0.8))\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>VGroup(Square(), ImageMobject(\"a.png\"))</code> 会抛 <code>TypeError</code>——<code>VGroup.add</code> 会校验成员是 <code>VMobject</code>。混入非矢量对象时请改用 <code>Group</code>。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>arrange(direction=RIGHT, buff=0.25, center=True)</code> 是 <code>Mobject</code> 上的方法，任何容器都能用：它按方向排开所有子对象并保持组中心不变。<code>VGroup(*[Square() for _ in range(4)])</code> 批量构造列表成员是最常见的写法。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "VDict",
+      "text": "VDict"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>VDict</code> 是“字典版 VGroup”：每个成员关联一个可哈希的键，可以像 Python 字典一样 <code>d[\"key\"]</code> 取值、<code>d[\"key\"] = mob</code> 赋值。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "VDict",
+        "VMobject",
+        "Mobject",
+        "object"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">VDict(\n    mapping_or_iterable: Mapping[Hashable, VMobject] | Iterable[tuple[Hashable, VMobject]] = {},\n    show_keys: bool = False,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>mapping_or_iterable</code>",
+          "type": "Mapping \\",
+          "default": "Iterable[tuple]",
+          "desc": "{}"
+        },
+        {
+          "name": "<code>show_keys</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "是否在成员左侧显示键文本（调试用）"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>字典式操作一览：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "操作",
+        "效果"
+      ],
+      "rows": [
+        [
+          "<code>d[\"sq\"]</code>",
+          "取出键对应的 mobject（<code>__getitem__</code>）"
+        ],
+        [
+          "<code>d[\"tri\"] = Triangle()</code>",
+          "新增或替换键值对（<code>__setitem__</code>）"
+        ],
+        [
+          "<code>d.add({\"c\": Circle()})</code>",
+          "批量添加，参数同构造的映射"
+        ],
+        [
+          "<code>d.remove(\"sq\")</code>",
+          "按键移除"
+        ],
+        [
+          "<code>d.keys()</code> / <code>d.values()</code> / <code>d.items()</code>",
+          "字典三件套"
+        ]
+      ]
+    },
+    {
+      "type": "demo",
+      "example": "ch02/vdict_demo",
+      "scene": "VDictDemo",
+      "caption": "<p><code>VDict</code> 按键索引：<code>d[\"sq\"]</code> 单独给方块填色，<code>d[\"tri\"] = ...</code> 动态新增一个三角形成员。</p>",
+      "code": "from manim import *\n\n\nclass VDictDemo(Scene):\n    def construct(self):\n        d = VDict({\"sq\": Square(), \"ci\": Circle()})\n        d.arrange(RIGHT, buff=0.5)\n        self.play(FadeIn(d))\n        self.play(d[\"sq\"].animate.set_fill(BLUE, 0.7))\n        d[\"tri\"] = Triangle().next_to(d[\"ci\"], RIGHT)\n        self.play(FadeIn(d[\"tri\"]))\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>show_keys=True</code> 会用 <code>Tex</code> 渲染键名，<strong>需要本机安装 LaTeX</strong>；没有 LaTeX 环境时请保持默认 <code>False</code>。另外 <code>VDict</code> 的值必须是 <code>VMobject</code>，与 <code>VGroup</code> 一样会做类型校验。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>Group</code> 和 <code>VGroup</code> 各应该在什么情况下使用？</p>",
+      "answerHtml": "<p>成员全部是矢量图形、需要对整组上色/渐变时用 <code>VGroup</code>；成员类型混杂（如 <code>ImageMobject</code>、3D 对象）或只是纯逻辑分组时用 <code>Group</code>——<code>Group</code> 不校验类型，<code>VGroup</code> 遇到非 VMobject 会抛 <code>TypeError</code>。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>为什么 <code>VGroup(sq, sq)</code> 里只有一个方块？怎样得到两个？</p>",
+      "answerHtml": "<p><code>add</code> 会忽略重复添加的同一对象（<code>Group</code>/<code>VGroup</code> 都是如此，避免子对象树出现环）。需要两份时先拷贝：<code>VGroup(sq, sq.copy())</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>容器就位后，下一节进入实战：圆、矩形、多边形等<strong>基本形状</strong>的参数与画法。</p>"
+    }
+  ]
+}

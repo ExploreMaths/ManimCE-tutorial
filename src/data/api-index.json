@@ -1,0 +1,1407 @@
+[
+  {
+    "letter": "A",
+    "items": [
+      {
+        "name": "AbstractImageMobject",
+        "kind": "class",
+        "path": "/ch/ch02/images-and-svg#AbstractImageMobject"
+      },
+      {
+        "name": "Add",
+        "kind": "class",
+        "path": "/ch/ch05/animation-mechanism#Add"
+      },
+      {
+        "name": "AddTextLetterByLetter",
+        "kind": "class",
+        "path": "/ch/ch05/creation#AddTextLetterByLetter"
+      },
+      {
+        "name": "AddTextWordByWord",
+        "kind": "class",
+        "path": "/ch/ch05/creation#AddTextWordByWord"
+      },
+      {
+        "name": "Angle",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#Angle"
+      },
+      {
+        "name": "AnimatedBoundary",
+        "kind": "class",
+        "path": "/ch/ch05/tracing#AnimatedBoundary"
+      },
+      {
+        "name": "Animation",
+        "kind": "class",
+        "path": "/ch/ch05/animation-mechanism#Animation"
+      },
+      {
+        "name": "AnimationGroup",
+        "kind": "class",
+        "path": "/ch/ch05/composition#AnimationGroup"
+      },
+      {
+        "name": "AnnotationDot",
+        "kind": "class",
+        "path": "/ch/ch02/arcs-and-curves#AnnotationDot"
+      },
+      {
+        "name": "AnnularSector",
+        "kind": "class",
+        "path": "/ch/ch02/arcs-and-curves#AnnularSector"
+      },
+      {
+        "name": "Annulus",
+        "kind": "class",
+        "path": "/ch/ch02/arcs-and-curves#Annulus"
+      },
+      {
+        "name": "ApplyComplexFunction",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#ApplyComplexFunction"
+      },
+      {
+        "name": "ApplyFunction",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#ApplyFunction"
+      },
+      {
+        "name": "ApplyMatrix",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#ApplyMatrix"
+      },
+      {
+        "name": "ApplyMethod",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#ApplyMethod"
+      },
+      {
+        "name": "ApplyPointwiseFunction",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#ApplyPointwiseFunction"
+      },
+      {
+        "name": "ApplyPointwiseFunctionToCenter",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#ApplyPointwiseFunctionToCenter"
+      },
+      {
+        "name": "ApplyWave",
+        "kind": "class",
+        "path": "/ch/ch05/indication#ApplyWave"
+      },
+      {
+        "name": "Arc",
+        "kind": "class",
+        "path": "/ch/ch02/arcs-and-curves#Arc"
+      },
+      {
+        "name": "ArcBetweenPoints",
+        "kind": "class",
+        "path": "/ch/ch02/arcs-and-curves#ArcBetweenPoints"
+      },
+      {
+        "name": "ArcBrace",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#ArcBrace"
+      },
+      {
+        "name": "Arrow",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#Arrow"
+      },
+      {
+        "name": "Arrow3D",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-mobjects#Arrow3D"
+      },
+      {
+        "name": "ArrowCircleFilledTip",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#ArrowCircleFilledTip"
+      },
+      {
+        "name": "ArrowCircleTip",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#ArrowCircleTip"
+      },
+      {
+        "name": "ArrowSquareFilledTip",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#ArrowSquareFilledTip"
+      },
+      {
+        "name": "ArrowSquareTip",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#ArrowSquareTip"
+      },
+      {
+        "name": "ArrowTip",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#ArrowTip"
+      },
+      {
+        "name": "ArrowTriangleFilledTip",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#ArrowTriangleFilledTip"
+      },
+      {
+        "name": "ArrowTriangleTip",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#ArrowTriangleTip"
+      },
+      {
+        "name": "Axes",
+        "kind": "class",
+        "path": "/ch/ch04/axes-family#Axes"
+      },
+      {
+        "name": "add_sound",
+        "kind": "function",
+        "path": "/ch/ch07/misc#add_sound"
+      },
+      {
+        "name": "add_updater",
+        "kind": "function",
+        "path": "/ch/ch05/updaters#add_updater"
+      },
+      {
+        "name": "always_redraw",
+        "kind": "function",
+        "path": "/ch/ch05/updaters#always_redraw"
+      },
+      {
+        "name": "always_rotate",
+        "kind": "function",
+        "path": "/ch/ch05/updaters#always_rotate"
+      },
+      {
+        "name": "always_shift",
+        "kind": "function",
+        "path": "/ch/ch05/updaters#always_shift"
+      }
+    ]
+  },
+  {
+    "letter": "B",
+    "items": [
+      {
+        "name": "BackgroundRectangle",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#BackgroundRectangle"
+      },
+      {
+        "name": "BarChart",
+        "kind": "class",
+        "path": "/ch/ch04/probability-and-charts#BarChart"
+      },
+      {
+        "name": "Blink",
+        "kind": "class",
+        "path": "/ch/ch05/indication#Blink"
+      },
+      {
+        "name": "Brace",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#Brace"
+      },
+      {
+        "name": "BraceBetweenPoints",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#BraceBetweenPoints"
+      },
+      {
+        "name": "BraceLabel",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#BraceLabel"
+      },
+      {
+        "name": "BraceText",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#BraceText"
+      },
+      {
+        "name": "Broadcast",
+        "kind": "class",
+        "path": "/ch/ch05/indication#Broadcast"
+      },
+      {
+        "name": "BulletedList",
+        "kind": "class",
+        "path": "/ch/ch03/lists-and-title#BulletedList"
+      }
+    ]
+  },
+  {
+    "letter": "C",
+    "items": [
+      {
+        "name": "Camera",
+        "kind": "class",
+        "path": "/ch/ch06/camera-internals#Camera"
+      },
+      {
+        "name": "ChangeDecimalToValue",
+        "kind": "class",
+        "path": "/ch/ch05/number-animations#ChangeDecimalToValue"
+      },
+      {
+        "name": "ChangeSpeed",
+        "kind": "class",
+        "path": "/ch/ch05/speed#ChangeSpeed"
+      },
+      {
+        "name": "ChangingDecimal",
+        "kind": "class",
+        "path": "/ch/ch05/number-animations#ChangingDecimal"
+      },
+      {
+        "name": "Circle",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#Circle"
+      },
+      {
+        "name": "Circumscribe",
+        "kind": "class",
+        "path": "/ch/ch05/indication#Circumscribe"
+      },
+      {
+        "name": "ClockwiseTransform",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#ClockwiseTransform"
+      },
+      {
+        "name": "Code",
+        "kind": "class",
+        "path": "/ch/ch03/code-highlight#Code"
+      },
+      {
+        "name": "ComplexHomotopy",
+        "kind": "class",
+        "path": "/ch/ch05/motion#ComplexHomotopy"
+      },
+      {
+        "name": "ComplexPlane",
+        "kind": "class",
+        "path": "/ch/ch04/axes-family#ComplexPlane"
+      },
+      {
+        "name": "Cone",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-mobjects#Cone"
+      },
+      {
+        "name": "ConvexHull",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#ConvexHull"
+      },
+      {
+        "name": "ConvexHull3D",
+        "kind": "class",
+        "path": "/ch/ch06/polyhedra#ConvexHull3D"
+      },
+      {
+        "name": "CoordinateSystem",
+        "kind": "class",
+        "path": "/ch/ch04/axes-family#CoordinateSystem"
+      },
+      {
+        "name": "CounterclockwiseTransform",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#CounterclockwiseTransform"
+      },
+      {
+        "name": "Create",
+        "kind": "class",
+        "path": "/ch/ch05/creation#Create"
+      },
+      {
+        "name": "Cross",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#Cross"
+      },
+      {
+        "name": "Cube",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-mobjects#Cube"
+      },
+      {
+        "name": "CubicBezier",
+        "kind": "class",
+        "path": "/ch/ch02/arcs-and-curves#CubicBezier"
+      },
+      {
+        "name": "CurvedArrow",
+        "kind": "class",
+        "path": "/ch/ch02/arcs-and-curves#CurvedArrow"
+      },
+      {
+        "name": "CurvedDoubleArrow",
+        "kind": "class",
+        "path": "/ch/ch02/arcs-and-curves#CurvedDoubleArrow"
+      },
+      {
+        "name": "CurvesAsSubmobjects",
+        "kind": "class",
+        "path": "/ch/ch02/vmobject#CurvesAsSubmobjects"
+      },
+      {
+        "name": "Cutout",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#Cutout"
+      },
+      {
+        "name": "CyclicReplace",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#CyclicReplace"
+      },
+      {
+        "name": "Cylinder",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-mobjects#Cylinder"
+      },
+      {
+        "name": "clear_updaters",
+        "kind": "function",
+        "path": "/ch/ch05/updaters#clear_updaters"
+      },
+      {
+        "name": "cycle_animation",
+        "kind": "function",
+        "path": "/ch/ch05/updaters#cycle_animation"
+      }
+    ]
+  },
+  {
+    "letter": "D",
+    "items": [
+      {
+        "name": "DashedLine",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#DashedLine"
+      },
+      {
+        "name": "DashedVMobject",
+        "kind": "class",
+        "path": "/ch/ch02/vmobject#DashedVMobject"
+      },
+      {
+        "name": "DecimalMatrix",
+        "kind": "class",
+        "path": "/ch/ch04/matrices#DecimalMatrix"
+      },
+      {
+        "name": "DecimalNumber",
+        "kind": "class",
+        "path": "/ch/ch03/numbers#DecimalNumber"
+      },
+      {
+        "name": "DecimalTable",
+        "kind": "class",
+        "path": "/ch/ch04/tables#DecimalTable"
+      },
+      {
+        "name": "DefaultSectionType",
+        "kind": "class",
+        "path": "/ch/ch01/cli-and-sections#DefaultSectionType"
+      },
+      {
+        "name": "Difference",
+        "kind": "class",
+        "path": "/ch/ch02/boolean-ops#Difference"
+      },
+      {
+        "name": "Dodecahedron",
+        "kind": "class",
+        "path": "/ch/ch06/polyhedra#Dodecahedron"
+      },
+      {
+        "name": "Dot",
+        "kind": "class",
+        "path": "/ch/ch02/dots-and-clouds#Dot"
+      },
+      {
+        "name": "Dot3D",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-mobjects#Dot3D"
+      },
+      {
+        "name": "DoubleArrow",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#DoubleArrow"
+      },
+      {
+        "name": "DrawBorderThenFill",
+        "kind": "class",
+        "path": "/ch/ch05/creation#DrawBorderThenFill"
+      }
+    ]
+  },
+  {
+    "letter": "E",
+    "items": [
+      {
+        "name": "Elbow",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#Elbow"
+      },
+      {
+        "name": "Ellipse",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#Ellipse"
+      },
+      {
+        "name": "Exclusion",
+        "kind": "class",
+        "path": "/ch/ch02/boolean-ops#Exclusion"
+      }
+    ]
+  },
+  {
+    "letter": "F",
+    "items": [
+      {
+        "name": "FadeIn",
+        "kind": "class",
+        "path": "/ch/ch05/grow-and-fade#FadeIn"
+      },
+      {
+        "name": "FadeOut",
+        "kind": "class",
+        "path": "/ch/ch05/grow-and-fade#FadeOut"
+      },
+      {
+        "name": "FadeToColor",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#FadeToColor"
+      },
+      {
+        "name": "FadeTransform",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#FadeTransform"
+      },
+      {
+        "name": "FadeTransformPieces",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#FadeTransformPieces"
+      },
+      {
+        "name": "Flash",
+        "kind": "class",
+        "path": "/ch/ch05/indication#Flash"
+      },
+      {
+        "name": "FocusOn",
+        "kind": "class",
+        "path": "/ch/ch05/indication#FocusOn"
+      },
+      {
+        "name": "FunctionGraph",
+        "kind": "class",
+        "path": "/ch/ch04/function-graphs#FunctionGraph"
+      },
+      {
+        "name": "f_always",
+        "kind": "function",
+        "path": "/ch/ch05/updaters#f_always"
+      }
+    ]
+  },
+  {
+    "letter": "G",
+    "items": [
+      {
+        "name": "Group",
+        "kind": "class",
+        "path": "/ch/ch02/groups#Group"
+      },
+      {
+        "name": "GrowArrow",
+        "kind": "class",
+        "path": "/ch/ch05/grow-and-fade#GrowArrow"
+      },
+      {
+        "name": "GrowFromCenter",
+        "kind": "class",
+        "path": "/ch/ch05/grow-and-fade#GrowFromCenter"
+      },
+      {
+        "name": "GrowFromEdge",
+        "kind": "class",
+        "path": "/ch/ch05/grow-and-fade#GrowFromEdge"
+      },
+      {
+        "name": "GrowFromPoint",
+        "kind": "class",
+        "path": "/ch/ch05/grow-and-fade#GrowFromPoint"
+      },
+      {
+        "name": "get_det_text",
+        "kind": "function",
+        "path": "/ch/ch04/matrices#get_det_text"
+      }
+    ]
+  },
+  {
+    "letter": "H",
+    "items": [
+      {
+        "name": "HSV",
+        "kind": "class",
+        "path": "/ch/ch02/colors#HSV"
+      },
+      {
+        "name": "Homotopy",
+        "kind": "class",
+        "path": "/ch/ch05/motion#Homotopy"
+      }
+    ]
+  },
+  {
+    "letter": "I",
+    "items": [
+      {
+        "name": "Icosahedron",
+        "kind": "class",
+        "path": "/ch/ch06/polyhedra#Icosahedron"
+      },
+      {
+        "name": "ImageMobject",
+        "kind": "class",
+        "path": "/ch/ch02/images-and-svg#ImageMobject"
+      },
+      {
+        "name": "ImageMobjectFromCamera",
+        "kind": "class",
+        "path": "/ch/ch06/zoomed-scene#ImageMobjectFromCamera"
+      },
+      {
+        "name": "ImplicitFunction",
+        "kind": "class",
+        "path": "/ch/ch04/function-graphs#ImplicitFunction"
+      },
+      {
+        "name": "Indicate",
+        "kind": "class",
+        "path": "/ch/ch05/indication#Indicate"
+      },
+      {
+        "name": "Integer",
+        "kind": "class",
+        "path": "/ch/ch03/numbers#Integer"
+      },
+      {
+        "name": "IntegerMatrix",
+        "kind": "class",
+        "path": "/ch/ch04/matrices#IntegerMatrix"
+      },
+      {
+        "name": "IntegerTable",
+        "kind": "class",
+        "path": "/ch/ch04/tables#IntegerTable"
+      },
+      {
+        "name": "Intersection",
+        "kind": "class",
+        "path": "/ch/ch02/boolean-ops#Intersection"
+      },
+      {
+        "name": "interactive_embed",
+        "kind": "function",
+        "path": "/ch/ch07/misc#interactive_embed"
+      }
+    ]
+  },
+  {
+    "letter": "L",
+    "items": [
+      {
+        "name": "Label",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#Label"
+      },
+      {
+        "name": "LabeledArrow",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#LabeledArrow"
+      },
+      {
+        "name": "LabeledDot",
+        "kind": "class",
+        "path": "/ch/ch02/dots-and-clouds#LabeledDot"
+      },
+      {
+        "name": "LabeledLine",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#LabeledLine"
+      },
+      {
+        "name": "LabeledPolygram",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#LabeledPolygram"
+      },
+      {
+        "name": "LaggedStart",
+        "kind": "class",
+        "path": "/ch/ch05/composition#LaggedStart"
+      },
+      {
+        "name": "LaggedStartMap",
+        "kind": "class",
+        "path": "/ch/ch05/composition#LaggedStartMap"
+      },
+      {
+        "name": "Line",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#Line"
+      },
+      {
+        "name": "Line3D",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-mobjects#Line3D"
+      },
+      {
+        "name": "LinearBase",
+        "kind": "class",
+        "path": "/ch/ch04/scales#LinearBase"
+      },
+      {
+        "name": "LinearTransformationScene",
+        "kind": "class",
+        "path": "/ch/ch04/vector-space-scenes#LinearTransformationScene"
+      },
+      {
+        "name": "LogBase",
+        "kind": "class",
+        "path": "/ch/ch04/scales#LogBase"
+      }
+    ]
+  },
+  {
+    "letter": "M",
+    "items": [
+      {
+        "name": "MaintainPositionRelativeTo",
+        "kind": "class",
+        "path": "/ch/ch05/updaters#MaintainPositionRelativeTo"
+      },
+      {
+        "name": "ManimColor",
+        "kind": "class",
+        "path": "/ch/ch02/colors#ManimColor"
+      },
+      {
+        "name": "ManimMagic",
+        "kind": "class",
+        "path": "/ch/ch01/installation#ManimMagic"
+      },
+      {
+        "name": "MappingCamera",
+        "kind": "class",
+        "path": "/ch/ch06/camera-internals#MappingCamera"
+      },
+      {
+        "name": "MarkupText",
+        "kind": "class",
+        "path": "/ch/ch03/markup-text#MarkupText"
+      },
+      {
+        "name": "MathTable",
+        "kind": "class",
+        "path": "/ch/ch04/tables#MathTable"
+      },
+      {
+        "name": "MathTex",
+        "kind": "class",
+        "path": "/ch/ch03/tex-and-mathtex#MathTex"
+      },
+      {
+        "name": "MathTexPart",
+        "kind": "class",
+        "path": "/ch/ch03/tex-and-mathtex#MathTexPart"
+      },
+      {
+        "name": "MathTypst",
+        "kind": "class",
+        "path": "/ch/ch03/typst#MathTypst"
+      },
+      {
+        "name": "Matrix",
+        "kind": "class",
+        "path": "/ch/ch04/matrices#Matrix"
+      },
+      {
+        "name": "Mobject",
+        "kind": "class",
+        "path": "/ch/ch02/mobject-core#Mobject"
+      },
+      {
+        "name": "Mobject1D",
+        "kind": "class",
+        "path": "/ch/ch02/dots-and-clouds#Mobject1D"
+      },
+      {
+        "name": "Mobject2D",
+        "kind": "class",
+        "path": "/ch/ch02/dots-and-clouds#Mobject2D"
+      },
+      {
+        "name": "MobjectMatrix",
+        "kind": "class",
+        "path": "/ch/ch04/matrices#MobjectMatrix"
+      },
+      {
+        "name": "MobjectTable",
+        "kind": "class",
+        "path": "/ch/ch04/tables#MobjectTable"
+      },
+      {
+        "name": "MoveAlongPath",
+        "kind": "class",
+        "path": "/ch/ch05/motion#MoveAlongPath"
+      },
+      {
+        "name": "MoveToTarget",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#MoveToTarget"
+      },
+      {
+        "name": "MovingCamera",
+        "kind": "class",
+        "path": "/ch/ch06/moving-camera#MovingCamera"
+      },
+      {
+        "name": "MovingCameraScene",
+        "kind": "class",
+        "path": "/ch/ch06/moving-camera#MovingCameraScene"
+      },
+      {
+        "name": "MultiCamera",
+        "kind": "class",
+        "path": "/ch/ch06/zoomed-scene#MultiCamera"
+      },
+      {
+        "name": "matrix_to_mobject",
+        "kind": "function",
+        "path": "/ch/ch04/matrices#matrix_to_mobject"
+      },
+      {
+        "name": "matrix_to_tex_string",
+        "kind": "function",
+        "path": "/ch/ch04/matrices#matrix_to_tex_string"
+      }
+    ]
+  },
+  {
+    "letter": "N",
+    "items": [
+      {
+        "name": "NumberLine",
+        "kind": "class",
+        "path": "/ch/ch04/number-line#NumberLine"
+      },
+      {
+        "name": "NumberPlane",
+        "kind": "class",
+        "path": "/ch/ch04/axes-family#NumberPlane"
+      },
+      {
+        "name": "next_section",
+        "kind": "function",
+        "path": "/ch/ch01/cli-and-sections#next_section"
+      }
+    ]
+  },
+  {
+    "letter": "O",
+    "items": [
+      {
+        "name": "Octahedron",
+        "kind": "class",
+        "path": "/ch/ch06/polyhedra#Octahedron"
+      },
+      {
+        "name": "OldMultiCamera",
+        "kind": "class",
+        "path": "/ch/ch06/camera-internals#OldMultiCamera"
+      },
+      {
+        "name": "override_animation",
+        "kind": "function",
+        "path": "/ch/ch05/animation-mechanism#override_animation"
+      }
+    ]
+  },
+  {
+    "letter": "P",
+    "items": [
+      {
+        "name": "PGroup",
+        "kind": "class",
+        "path": "/ch/ch02/dots-and-clouds#PGroup"
+      },
+      {
+        "name": "PMobject",
+        "kind": "class",
+        "path": "/ch/ch02/dots-and-clouds#PMobject"
+      },
+      {
+        "name": "Paragraph",
+        "kind": "class",
+        "path": "/ch/ch03/text-and-paragraph#Paragraph"
+      },
+      {
+        "name": "ParametricFunction",
+        "kind": "class",
+        "path": "/ch/ch04/function-graphs#ParametricFunction"
+      },
+      {
+        "name": "PhaseFlow",
+        "kind": "class",
+        "path": "/ch/ch05/motion#PhaseFlow"
+      },
+      {
+        "name": "Point",
+        "kind": "class",
+        "path": "/ch/ch02/dots-and-clouds#Point"
+      },
+      {
+        "name": "PointCloudDot",
+        "kind": "class",
+        "path": "/ch/ch02/dots-and-clouds#PointCloudDot"
+      },
+      {
+        "name": "PolarPlane",
+        "kind": "class",
+        "path": "/ch/ch04/axes-family#PolarPlane"
+      },
+      {
+        "name": "Polygon",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#Polygon"
+      },
+      {
+        "name": "Polygram",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#Polygram"
+      },
+      {
+        "name": "Polyhedron",
+        "kind": "class",
+        "path": "/ch/ch06/polyhedra#Polyhedron"
+      },
+      {
+        "name": "Prism",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-mobjects#Prism"
+      },
+      {
+        "name": "play",
+        "kind": "function",
+        "path": "/ch/ch01/first-scene#play"
+      },
+      {
+        "name": "prepare_animation",
+        "kind": "function",
+        "path": "/ch/ch05/animation-mechanism#prepare_animation"
+      }
+    ]
+  },
+  {
+    "letter": "Q",
+    "items": [
+      {
+        "name": "QUALITIES",
+        "kind": "class",
+        "path": "/ch/ch01/render-pipeline#QUALITIES"
+      }
+    ]
+  },
+  {
+    "letter": "R",
+    "items": [
+      {
+        "name": "RGBA",
+        "kind": "class",
+        "path": "/ch/ch02/colors#RGBA"
+      },
+      {
+        "name": "RandomColorGenerator",
+        "kind": "class",
+        "path": "/ch/ch02/colors#RandomColorGenerator"
+      },
+      {
+        "name": "Rectangle",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#Rectangle"
+      },
+      {
+        "name": "RegularPolygon",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#RegularPolygon"
+      },
+      {
+        "name": "RegularPolygram",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#RegularPolygram"
+      },
+      {
+        "name": "RemoveTextLetterByLetter",
+        "kind": "class",
+        "path": "/ch/ch05/creation#RemoveTextLetterByLetter"
+      },
+      {
+        "name": "ReplacementTransform",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#ReplacementTransform"
+      },
+      {
+        "name": "Restore",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#Restore"
+      },
+      {
+        "name": "RightAngle",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#RightAngle"
+      },
+      {
+        "name": "Rotate",
+        "kind": "class",
+        "path": "/ch/ch05/rotation#Rotate"
+      },
+      {
+        "name": "Rotating",
+        "kind": "class",
+        "path": "/ch/ch05/rotation#Rotating"
+      },
+      {
+        "name": "RoundedRectangle",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#RoundedRectangle"
+      },
+      {
+        "name": "register_font",
+        "kind": "function",
+        "path": "/ch/ch03/text-and-paragraph#register_font"
+      },
+      {
+        "name": "remove_invisible_chars",
+        "kind": "function",
+        "path": "/ch/ch03/text-and-paragraph#remove_invisible_chars"
+      },
+      {
+        "name": "remove_updater",
+        "kind": "function",
+        "path": "/ch/ch05/updaters#remove_updater"
+      }
+    ]
+  },
+  {
+    "letter": "S",
+    "items": [
+      {
+        "name": "SVGMobject",
+        "kind": "class",
+        "path": "/ch/ch02/images-and-svg#SVGMobject"
+      },
+      {
+        "name": "SampleSpace",
+        "kind": "class",
+        "path": "/ch/ch04/probability-and-charts#SampleSpace"
+      },
+      {
+        "name": "ScaleInPlace",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#ScaleInPlace"
+      },
+      {
+        "name": "Scene",
+        "kind": "class",
+        "path": "/ch/ch01/first-scene#Scene"
+      },
+      {
+        "name": "SceneFileWriter",
+        "kind": "class",
+        "path": "/ch/ch01/render-pipeline#SceneFileWriter"
+      },
+      {
+        "name": "Section",
+        "kind": "class",
+        "path": "/ch/ch01/cli-and-sections#Section"
+      },
+      {
+        "name": "Sector",
+        "kind": "class",
+        "path": "/ch/ch02/arcs-and-curves#Sector"
+      },
+      {
+        "name": "ShowIncreasingSubsets",
+        "kind": "class",
+        "path": "/ch/ch05/creation#ShowIncreasingSubsets"
+      },
+      {
+        "name": "ShowPartial",
+        "kind": "class",
+        "path": "/ch/ch05/creation#ShowPartial"
+      },
+      {
+        "name": "ShowPassingFlash",
+        "kind": "class",
+        "path": "/ch/ch05/indication#ShowPassingFlash"
+      },
+      {
+        "name": "ShowPassingFlashWithThinningStrokeWidth",
+        "kind": "class",
+        "path": "/ch/ch05/indication#ShowPassingFlashWithThinningStrokeWidth"
+      },
+      {
+        "name": "ShowSubmobjectsOneByOne",
+        "kind": "class",
+        "path": "/ch/ch05/creation#ShowSubmobjectsOneByOne"
+      },
+      {
+        "name": "ShrinkToCenter",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#ShrinkToCenter"
+      },
+      {
+        "name": "SingleStringMathTex",
+        "kind": "class",
+        "path": "/ch/ch03/tex-and-mathtex#SingleStringMathTex"
+      },
+      {
+        "name": "SmoothedVectorizedHomotopy",
+        "kind": "class",
+        "path": "/ch/ch05/motion#SmoothedVectorizedHomotopy"
+      },
+      {
+        "name": "SpecialThreeDScene",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-scene#SpecialThreeDScene"
+      },
+      {
+        "name": "Sphere",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-mobjects#Sphere"
+      },
+      {
+        "name": "SpinInFromNothing",
+        "kind": "class",
+        "path": "/ch/ch05/grow-and-fade#SpinInFromNothing"
+      },
+      {
+        "name": "SpiralIn",
+        "kind": "class",
+        "path": "/ch/ch05/creation#SpiralIn"
+      },
+      {
+        "name": "SplitScreenCamera",
+        "kind": "class",
+        "path": "/ch/ch06/camera-internals#SplitScreenCamera"
+      },
+      {
+        "name": "Square",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#Square"
+      },
+      {
+        "name": "Star",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#Star"
+      },
+      {
+        "name": "StealthTip",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#StealthTip"
+      },
+      {
+        "name": "Succession",
+        "kind": "class",
+        "path": "/ch/ch05/composition#Succession"
+      },
+      {
+        "name": "Surface",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-mobjects#Surface"
+      },
+      {
+        "name": "SurroundingRectangle",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#SurroundingRectangle"
+      },
+      {
+        "name": "Swap",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#Swap"
+      }
+    ]
+  },
+  {
+    "letter": "T",
+    "items": [
+      {
+        "name": "Table",
+        "kind": "class",
+        "path": "/ch/ch04/tables#Table"
+      },
+      {
+        "name": "TangentLine",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#TangentLine"
+      },
+      {
+        "name": "TangentialArc",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#TangentialArc"
+      },
+      {
+        "name": "Tetrahedron",
+        "kind": "class",
+        "path": "/ch/ch06/polyhedra#Tetrahedron"
+      },
+      {
+        "name": "Tex",
+        "kind": "class",
+        "path": "/ch/ch03/tex-and-mathtex#Tex"
+      },
+      {
+        "name": "TexFontTemplates",
+        "kind": "class",
+        "path": "/ch/ch03/tex-templates#TexFontTemplates"
+      },
+      {
+        "name": "TexTemplate",
+        "kind": "class",
+        "path": "/ch/ch03/tex-templates#TexTemplate"
+      },
+      {
+        "name": "TexTemplateLibrary",
+        "kind": "class",
+        "path": "/ch/ch03/tex-templates#TexTemplateLibrary"
+      },
+      {
+        "name": "Text",
+        "kind": "class",
+        "path": "/ch/ch03/text-and-paragraph#Text"
+      },
+      {
+        "name": "ThreeDAxes",
+        "kind": "class",
+        "path": "/ch/ch04/axes-family#ThreeDAxes"
+      },
+      {
+        "name": "ThreeDScene",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-scene#ThreeDScene"
+      },
+      {
+        "name": "ThreeDVMobject",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-mobjects#ThreeDVMobject"
+      },
+      {
+        "name": "TipableVMobject",
+        "kind": "class",
+        "path": "/ch/ch02/arcs-and-curves#TipableVMobject"
+      },
+      {
+        "name": "Title",
+        "kind": "class",
+        "path": "/ch/ch03/lists-and-title#Title"
+      },
+      {
+        "name": "Torus",
+        "kind": "class",
+        "path": "/ch/ch06/three-d-mobjects#Torus"
+      },
+      {
+        "name": "TracedPath",
+        "kind": "class",
+        "path": "/ch/ch05/tracing#TracedPath"
+      },
+      {
+        "name": "Transform",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#Transform"
+      },
+      {
+        "name": "TransformAnimations",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#TransformAnimations"
+      },
+      {
+        "name": "TransformFromCopy",
+        "kind": "class",
+        "path": "/ch/ch05/transforms#TransformFromCopy"
+      },
+      {
+        "name": "TransformMatchingAbstractBase",
+        "kind": "class",
+        "path": "/ch/ch05/matching-transforms#TransformMatchingAbstractBase"
+      },
+      {
+        "name": "TransformMatchingShapes",
+        "kind": "class",
+        "path": "/ch/ch05/matching-transforms#TransformMatchingShapes"
+      },
+      {
+        "name": "TransformMatchingTex",
+        "kind": "class",
+        "path": "/ch/ch05/matching-transforms#TransformMatchingTex"
+      },
+      {
+        "name": "Triangle",
+        "kind": "class",
+        "path": "/ch/ch02/basic-shapes#Triangle"
+      },
+      {
+        "name": "TypeWithCursor",
+        "kind": "class",
+        "path": "/ch/ch05/creation#TypeWithCursor"
+      },
+      {
+        "name": "Typst",
+        "kind": "class",
+        "path": "/ch/ch03/typst#Typst"
+      },
+      {
+        "name": "turn_animation_into_updater",
+        "kind": "function",
+        "path": "/ch/ch05/updaters#turn_animation_into_updater"
+      }
+    ]
+  },
+  {
+    "letter": "U",
+    "items": [
+      {
+        "name": "Uncreate",
+        "kind": "class",
+        "path": "/ch/ch05/creation#Uncreate"
+      },
+      {
+        "name": "Underline",
+        "kind": "class",
+        "path": "/ch/ch02/annotations#Underline"
+      },
+      {
+        "name": "Union",
+        "kind": "class",
+        "path": "/ch/ch02/boolean-ops#Union"
+      },
+      {
+        "name": "UnitInterval",
+        "kind": "class",
+        "path": "/ch/ch04/number-line#UnitInterval"
+      },
+      {
+        "name": "UntypeWithCursor",
+        "kind": "class",
+        "path": "/ch/ch05/creation#UntypeWithCursor"
+      },
+      {
+        "name": "Unwrite",
+        "kind": "class",
+        "path": "/ch/ch05/creation#Unwrite"
+      },
+      {
+        "name": "UpdateFromAlphaFunc",
+        "kind": "class",
+        "path": "/ch/ch05/updaters#UpdateFromAlphaFunc"
+      },
+      {
+        "name": "UpdateFromFunc",
+        "kind": "class",
+        "path": "/ch/ch05/updaters#UpdateFromFunc"
+      }
+    ]
+  },
+  {
+    "letter": "V",
+    "items": [
+      {
+        "name": "VDict",
+        "kind": "class",
+        "path": "/ch/ch02/groups#VDict"
+      },
+      {
+        "name": "VGroup",
+        "kind": "class",
+        "path": "/ch/ch02/groups#VGroup"
+      },
+      {
+        "name": "VMobject",
+        "kind": "class",
+        "path": "/ch/ch02/vmobject#VMobject"
+      },
+      {
+        "name": "VMobjectFromSVGPath",
+        "kind": "class",
+        "path": "/ch/ch02/images-and-svg#VMobjectFromSVGPath"
+      },
+      {
+        "name": "ValueTracker",
+        "kind": "class",
+        "path": "/ch/ch05/updaters#ValueTracker"
+      },
+      {
+        "name": "Variable",
+        "kind": "class",
+        "path": "/ch/ch03/numbers#Variable"
+      },
+      {
+        "name": "Vector",
+        "kind": "class",
+        "path": "/ch/ch02/lines-and-arrows#Vector"
+      },
+      {
+        "name": "VectorScene",
+        "kind": "class",
+        "path": "/ch/ch04/vector-space-scenes#VectorScene"
+      },
+      {
+        "name": "VectorizedPoint",
+        "kind": "class",
+        "path": "/ch/ch02/vmobject#VectorizedPoint"
+      }
+    ]
+  },
+  {
+    "letter": "W",
+    "items": [
+      {
+        "name": "Wait",
+        "kind": "class",
+        "path": "/ch/ch05/animation-mechanism#Wait"
+      },
+      {
+        "name": "Wiggle",
+        "kind": "class",
+        "path": "/ch/ch05/indication#Wiggle"
+      },
+      {
+        "name": "Write",
+        "kind": "class",
+        "path": "/ch/ch05/creation#Write"
+      },
+      {
+        "name": "wait",
+        "kind": "function",
+        "path": "/ch/ch01/first-scene#wait"
+      }
+    ]
+  },
+  {
+    "letter": "Z",
+    "items": [
+      {
+        "name": "ZoomedScene",
+        "kind": "class",
+        "path": "/ch/ch06/zoomed-scene#ZoomedScene"
+      }
+    ]
+  }
+]

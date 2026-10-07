@@ -1,0 +1,506 @@
+{
+  "part": "ch06",
+  "id": "three-d-mobjects",
+  "title": "3D 几何",
+  "partTitle": "3D 与摄像机",
+  "prev": {
+    "part": "ch06",
+    "id": "three-d-scene",
+    "title": "ThreeDScene",
+    "path": "/ch/ch06/three-d-scene"
+  },
+  "next": {
+    "part": "ch06",
+    "id": "polyhedra",
+    "title": "多面体",
+    "path": "/ch/ch06/polyhedra"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>Manim 的 3D 几何体全部可以用 Cairo 渲染器绘制（伪 3D 投影 + 着色），无需 OpenGL。它们分两个家族：由 <code>Surface</code> 参数化生成的曲面家族，以及由面片拼成的多面体家族（多面体在下一节专门介绍）。</p>\n<p>先看最常用的六个实体：</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch06/three_d_solids",
+      "scene": "ThreeDSolids",
+      "caption": "<p>六个基本实体一字排开：<code>Cube</code>、<code>Sphere</code>、<code>Cone</code>、<code>Cylinder</code>、<code>Torus</code>、<code>Prism</code>。默认角度下它们看起来像压扁的 2D 图形，配合 <code>set_camera_orientation</code> 才有立体感。</p>",
+      "code": "from manim import *\n\n\nclass ThreeDSolids(ThreeDScene):\n    def construct(self):\n        solids = VGroup(\n            Cube(),\n            Sphere(),\n            Cone(),\n            Cylinder(),\n            Torus(major_radius=1, minor_radius=0.35),\n            Prism(dimensions=[1.5, 1.0, 0.8]),\n        )\n        solids.arrange(RIGHT, buff=0.8)\n        self.set_camera_orientation(phi=70 * DEGREES, theta=-60 * DEGREES)\n        self.play(FadeIn(solids), run_time=2)\n        self.begin_ambient_camera_rotation(rate=0.4)\n        self.wait(2)\n        self.stop_ambient_camera_rotation()\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Cone",
+      "text": "Cone"
+    },
+    {
+      "type": "html",
+      "html": "<p>圆锥面（侧面为参数化曲面，默认无底面）。</p>\n<pre><code class=\"language-python\">Cone(\n    base_radius: float = 1,\n    height: float = 1,\n    direction: Vector3DLike = Z_AXIS,\n    show_base: bool = False,\n    v_range: tuple[float, float] = (0, 2*PI),\n    u_min: float = 0,\n    checkerboard_colors=False,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>base_radius</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "底面半径"
+        },
+        {
+          "name": "<code>height</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "高"
+        },
+        {
+          "name": "<code>direction</code>",
+          "type": "Vector3DLike",
+          "default": "[0,0,1]",
+          "desc": "锥体朝向，默认沿 Z 轴"
+        },
+        {
+          "name": "<code>show_base</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "是否显示底面圆盘"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Cube",
+      "text": "Cube"
+    },
+    {
+      "type": "html",
+      "html": "<p>立方体，由 6 个正方形面片组成（因此是 <code>VGroup</code>，见下文 <code>Prism</code>）。</p>\n<pre><code class=\"language-python\">Cube(\n    side_length: float = 2,\n    fill_opacity: float = 0.75,\n    fill_color: ParsableManimColor = &quot;#58C4DD&quot;,\n    stroke_width: float = 0,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Cube",
+        "VGroup",
+        "VMobject",
+        "Mobject"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Cylinder",
+      "text": "Cylinder"
+    },
+    {
+      "type": "html",
+      "html": "<p>圆柱面。</p>\n<pre><code class=\"language-python\">Cylinder(\n    radius: float = 1,\n    height: float = 2,\n    direction: Vector3DLike = Z_AXIS,\n    v_range: tuple[float, float] = (0, 2*PI),\n    show_ends: bool = True,\n    resolution: int | tuple[int, int] = (24, 24),\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>radius</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "半径"
+        },
+        {
+          "name": "<code>height</code>",
+          "type": "float",
+          "default": "2",
+          "desc": "高"
+        },
+        {
+          "name": "<code>direction</code>",
+          "type": "Vector3DLike",
+          "default": "[0,0,1]",
+          "desc": "轴向"
+        },
+        {
+          "name": "<code>show_ends</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "是否封闭上下底"
+        },
+        {
+          "name": "<code>resolution</code>",
+          "type": "int \\",
+          "default": "tuple",
+          "desc": "(24, 24)"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Sphere",
+      "text": "Sphere"
+    },
+    {
+      "type": "html",
+      "html": "<p>球面。</p>\n<pre><code class=\"language-python\">Sphere(\n    center: Point3DLike = ORIGIN,\n    radius: float = 1,\n    resolution: int | Sequence[int] | None = None,\n    u_range: tuple[float, float] = (0, 2*PI),\n    v_range: tuple[float, float] = (0, PI),\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>center</code>",
+          "type": "Point3DLike",
+          "default": "ORIGIN",
+          "desc": "球心"
+        },
+        {
+          "name": "<code>radius</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "半径"
+        },
+        {
+          "name": "<code>resolution</code>",
+          "type": "int \\",
+          "default": "Sequence \\",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Torus",
+      "text": "Torus"
+    },
+    {
+      "type": "html",
+      "html": "<p>圆环面（救生圈形状）。</p>\n<pre><code class=\"language-python\">Torus(\n    major_radius: float = 3,\n    minor_radius: float = 1,\n    u_range: tuple[float, float] = (0, 2*PI),\n    v_range: tuple[float, float] = (0, 2*PI),\n    resolution: int | tuple[int, int] | None = None,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>major_radius</code>",
+          "type": "float",
+          "default": "3",
+          "desc": "中心到管中心的距离"
+        },
+        {
+          "name": "<code>minor_radius</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "管半径"
+        }
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>Torus</code> 默认 <code>major_radius=3</code>，在小场景中显得很大，演示时通常显式传 <code>Torus(major_radius=1, minor_radius=0.4)</code> 之类的值。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Prism",
+      "text": "Prism"
+    },
+    {
+      "type": "html",
+      "html": "<p>长方体（矩形棱柱），继承 <code>Cube</code>。</p>\n<pre><code class=\"language-python\">Prism(dimensions: Vector3DLike = [3, 2, 1], **kwargs)\n</code></pre>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Prism",
+        "Cube",
+        "VGroup",
+        "VMobject"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p><code>dimensions</code> 是 <code>[宽, 高, 深]</code> 三个方向的长度。<code>Prism([2, 2, 2])</code> 等价于 <code>Cube(side_length=2)</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Dot3D",
+      "text": "Dot3D"
+    },
+    {
+      "type": "html",
+      "html": "<p>3D 点：一个极小的球。</p>\n<pre><code class=\"language-python\">Dot3D(\n    point: Point3D = ORIGIN,\n    radius: float = 0.08,\n    color: ParsableManimColor = WHITE,\n    resolution: int | tuple[int, int] | None = (8, 8),\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Dot3D",
+        "Sphere",
+        "Surface",
+        "VGroup"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Line3D",
+      "text": "Line3D"
+    },
+    {
+      "type": "html",
+      "html": "<p>3D 线段：一根很细的圆柱。</p>\n<pre><code class=\"language-python\">Line3D(\n    start: Point3DLike = [-1, 0, 0],\n    end: Point3DLike = [1, 0, 0],\n    thickness: float = 0.02,\n    color: ParsableManimColor | None = None,\n    resolution: int | tuple[int, int] = 24,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Line3D",
+        "Cylinder",
+        "Surface",
+        "VGroup"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Arrow3D",
+      "text": "Arrow3D"
+    },
+    {
+      "type": "html",
+      "html": "<p>3D 箭头：细圆柱 + 圆锥头。</p>\n<pre><code class=\"language-python\">Arrow3D(\n    start: Point3DLike = [-1, 0, 0],\n    end: Point3DLike = [1, 0, 0],\n    thickness: float = 0.02,\n    height: float = 0.3,\n    base_radius: float = 0.08,\n    color: ParsableManimColor = WHITE,\n    resolution: int | tuple[int, int] = 24,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Arrow3D",
+        "Line3D",
+        "Cylinder",
+        "Surface"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>下面这个示例把 <code>Line3D</code>、<code>Arrow3D</code>、<code>Dot3D</code> 和自定义 <code>Surface</code> 放在一起：</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch06/three_d_lines_surface",
+      "scene": "ThreeDLinesAndSurface",
+      "caption": "<p><code>saddle(u, v)</code> 返回 <code>[u, v, 0.5*u*v]</code> 定义一张马鞍面；<code>Line3D</code>/<code>Arrow3D</code> 本质上是细圆柱，所以它们继承 <code>Cylinder</code> 的参数。</p>",
+      "code": "from manim import *\n\n\nclass ThreeDLinesAndSurface(ThreeDScene):\n    def construct(self):\n        line = Line3D(ORIGIN, [2, 2, 2])\n        arrow = Arrow3D([-2.5, 0, 0], [-2.5, 0, 2])\n        dot = Dot3D([2, -1.5, 1], color=YELLOW)\n\n        def saddle(u, v):\n            return np.array([u, v, 0.5 * u * v])\n\n        surface = Surface(\n            saddle,\n            u_range=(-2, 2),\n            v_range=(-2, 2),\n            resolution=(16, 16),\n        )\n        self.set_camera_orientation(phi=60 * DEGREES, theta=-45 * DEGREES)\n        self.play(Create(line), Create(arrow), FadeIn(dot), run_time=1)\n        self.play(Create(surface), run_time=2)\n        self.wait(0.5)\n        self.move_camera(theta=20 * DEGREES, run_time=1)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Surface",
+      "text": "Surface"
+    },
+    {
+      "type": "html",
+      "html": "<p>一切参数化 3D 曲面的基类：给一个 <code>(u, v) -&gt; [x, y, z]</code> 函数，再指定参数范围和网格分辨率，Manim 把它切成小面片拼出来。</p>\n<pre><code class=\"language-python\">Surface(\n    func: Callable[[float, float], np.ndarray],\n    u_range: tuple[float, float] = (0, 1),\n    v_range: tuple[float, float] = (0, 1),\n    resolution: int | Sequence[int] = 32,\n    surface_piece_config: dict = {},\n    fill_color: ParsableManimColor = BLUE_D,\n    fill_opacity: float = 1.0,\n    checkerboard_colors=[BLUE_D, BLUE_E],\n    stroke_color: ParsableManimColor = LIGHT_GREY,\n    stroke_width: float = 0.5,\n    should_make_jagged: bool = False,\n    pre_function_handle_to_anchor_scale_factor: float = 1e-5,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>func</code>",
+          "type": "Callable",
+          "default": "—",
+          "desc": "参数化函数 <code>(u, v) -&gt; np.ndarray([x, y, z])</code>"
+        },
+        {
+          "name": "<code>u_range</code>",
+          "type": "tuple[float, float]",
+          "default": "(0, 1)",
+          "desc": "u 参数范围"
+        },
+        {
+          "name": "<code>v_range</code>",
+          "type": "tuple[float, float]",
+          "default": "(0, 1)",
+          "desc": "v 参数范围"
+        },
+        {
+          "name": "<code>resolution</code>",
+          "type": "int \\",
+          "default": "Sequence",
+          "desc": "32"
+        },
+        {
+          "name": "<code>checkerboard_colors</code>",
+          "type": "Iterable \\",
+          "default": "False",
+          "desc": "[BLUE_D, BLUE_E]"
+        },
+        {
+          "name": "<code>should_make_jagged</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "是否让面片边缘锯齿化（着色更硬）"
+        }
+      ]
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Surface",
+        "VGroup",
+        "VMobject",
+        "Mobject"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>注意继承关系：<code>Surface</code> 不是 <code>VMobject</code> 的直接子类，而是 <strong><code>VGroup</code></strong>——每个小面片是 <code>ThreeDVMobject</code>，整个曲面是面片的组合。因此可以用 <code>VGroup</code> 的所有方法（<code>arrange</code>、<code>scale</code> 等）操作曲面。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ThreeDVMobject",
+      "text": "ThreeDVMobject"
+    },
+    {
+      "type": "html",
+      "html": "<p>单个 3D 面片（<code>Surface</code> 的内部组成单元），也可单独用于自定义 3D 图形。</p>\n<pre><code class=\"language-python\">ThreeDVMobject(shade_in_3d: bool = True, **kwargs)\n</code></pre>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "ThreeDVMobject",
+        "VMobject",
+        "Mobject"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p><code>shade_in_3d=True</code> 时按 3D 法线方向参与光照着色；设 False 则按普通 2D 图形平涂。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常用类对比",
+      "text": "常用类对比"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "类",
+        "继承",
+        "一句话用途",
+        "关键参数"
+      ],
+      "rows": [
+        [
+          "<code>Sphere</code>",
+          "Surface → VGroup",
+          "球面",
+          "<code>center</code>、<code>radius</code>、<code>resolution</code>"
+        ],
+        [
+          "<code>Cone</code>",
+          "Surface → VGroup",
+          "圆锥",
+          "<code>base_radius</code>、<code>height</code>、<code>show_base</code>"
+        ],
+        [
+          "<code>Cylinder</code>",
+          "Surface → VGroup",
+          "圆柱",
+          "<code>radius</code>、<code>height</code>、<code>show_ends</code>"
+        ],
+        [
+          "<code>Torus</code>",
+          "Surface → VGroup",
+          "圆环",
+          "<code>major_radius</code>、<code>minor_radius</code>"
+        ],
+        [
+          "<code>Cube</code>",
+          "VGroup",
+          "立方体",
+          "<code>side_length</code>"
+        ],
+        [
+          "<code>Prism</code>",
+          "Cube → VGroup",
+          "长方体",
+          "<code>dimensions=[x,y,z]</code>"
+        ],
+        [
+          "<code>Dot3D</code>",
+          "Sphere → Surface",
+          "3D 点",
+          "<code>point</code>、<code>radius</code>"
+        ],
+        [
+          "<code>Line3D</code>",
+          "Cylinder → Surface",
+          "3D 线段",
+          "<code>start</code>、<code>end</code>、<code>thickness</code>"
+        ],
+        [
+          "<code>Arrow3D</code>",
+          "Line3D → Cylinder",
+          "3D 箭头",
+          "<code>height</code>、<code>base_radius</code>（箭头头部）"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>不要用 2D 的 <code>Line</code>/<code>Arrow</code> 在 3D 场景里连接两个 z 坐标不同的点——它们只画 XY 平面的投影。跨深度的连线请用 <code>Line3D</code>/<code>Arrow3D</code>。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>Surface</code> 的 <code>func</code> 必须返回长度为 3 的 <code>np.ndarray</code>（如 <code>np.array([u, v, u*v])</code>）。返回 list 或形状不对会在构造时直接报错。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>resolution</code> 是渲染速度的主要开关。<code>-ql</code> 下调低分辨率（如 <code>(8, 8)</code>）调试，出正式片再恢复 <code>(32, 32)</code> 或更高。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>本节签名与默认值均基于 <code>manim 0.21.0</code> 本机 <code>inspect</code> 核实（如 <code>Sphere</code> 有 <code>center</code> 参数、<code>Surface</code> 直接继承 <code>VGroup</code>）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想画一张高度为 <code>z = sin(x) + cos(y)</code>、范围 x,y∈[-2,2] 的曲面，该怎么写？</p>",
+      "answerHtml": "<p>用 <code>Surface</code> 显式写出参数化函数：</p>\n<pre><code class=\"language-python\">def func(u, v):\n    return np.array([u, v, np.sin(u) + np.cos(v)])\n\nsurface = Surface(func, u_range=(-2, 2), v_range=(-2, 2), resolution=(24, 24))\n</code></pre>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>Cube</code> 是 <code>VMobject</code> 吗？<code>solids.arrange(RIGHT)</code> 为什么能直接用在六个不同类型的实体组合上？</p>",
+      "answerHtml": "<p><code>Cube</code> 直接继承 <code>VGroup</code>（再由 <code>VGroup</code> → <code>VMobject</code>），而 <code>Cone</code>/<code>Sphere</code> 等经 <code>Surface</code> 也继承 <code>VGroup</code>。因此所有 3D 实体都具有 <code>VGroup</code>/<code>Mobject</code> 的变换与布局方法，可以放进同一个 <code>VGroup</code> 后统一 <code>arrange</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>基本 3D 几何体已经齐备。下一节看多面体家族：正多面体、任意自定义多面体，以及从点集自动求凸包的 <code>ConvexHull3D</code>。</p>"
+    }
+  ]
+}

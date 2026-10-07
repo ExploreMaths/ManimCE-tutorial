@@ -1,0 +1,487 @@
+{
+  "part": "ch04",
+  "id": "axes-family",
+  "title": "坐标系家族",
+  "partTitle": "坐标系与数据可视化",
+  "prev": {
+    "part": "ch04",
+    "id": "scales",
+    "title": "缩放基",
+    "path": "/ch/ch04/scales"
+  },
+  "next": {
+    "part": "ch04",
+    "id": "function-graphs",
+    "title": "函数绘图",
+    "path": "/ch/ch04/function-graphs"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>坐标系把“数据坐标”翻译成“场景位置”，是函数绘图和数据可视化的舞台。家族成员都围绕 <code>CoordinateSystem</code> 的坐标互转 API 构建，再各自叠加网格、刻度或极坐标线。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "CoordinateSystem",
+        "object"
+      ]
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Axes",
+        "VGroup"
+      ]
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "NumberPlane",
+        "Axes",
+        "VGroup"
+      ]
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "ComplexPlane",
+        "NumberPlane",
+        "Axes"
+      ]
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "PolarPlane",
+        "Axes",
+        "VGroup"
+      ]
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "ThreeDAxes",
+        "Axes",
+        "VGroup"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "CoordinateSystem",
+      "text": "CoordinateSystem"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>CoordinateSystem</code> 是<strong>抽象基类</strong>，本身不可实例化（<code>get_axis_labels()</code> 直接抛 <code>NotImplementedError</code>）。它的价值在于定义了所有坐标系共享的核心 API：</p>\n<ul>\n<li><strong>坐标互转</strong>：<code>coords_to_point(*coords)</code>（别名 <code>c2p</code>）与 <code>point_to_coords(point)</code>（别名 <code>p2c</code>）；<code>NumberLine</code> 上的 <code>number_to_point</code>/<code>point_to_number</code> 是一维版本</li>\n<li><strong>绘图</strong>：<code>plot</code>、<code>plot_parametric_curve</code>、<code>plot_implicit_curve</code>、<code>plot_polar_graph</code>、<code>plot_derivative_graph</code>、<code>plot_antiderivative_graph</code>、<code>plot_surface</code>（详见“函数绘图”一节）</li>\n<li><strong>辅助线</strong>：<code>get_vertical_line(point)</code>、<code>get_horizontal_line(point)</code>、<code>get_line_from_axis_to_point(index, point)</code>（从坐标轴指向点的虚线）</li>\n<li><strong>面积与积分</strong>：<code>get_area(graph, ...)</code>、<code>get_riemann_rectangles(...)</code></li>\n<li><strong>标签</strong>：<code>get_axis_labels()</code>（子类实现）、<code>get_graph_label(graph, label, x_val=..., dot=...)</code>、<code>get_T_label(...)</code></li>\n<li><strong>切线</strong>：<code>slope_of_tangent(x, graph)</code>、<code>angle_of_tangent(...)</code>、<code>get_secant_slope_group(...)</code></li>\n</ul>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>x_range</code>",
+          "type": "Sequence[float] \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>y_range</code>",
+          "type": "Sequence[float] \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>x_length</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>y_length</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>dimension</code>",
+          "type": "int",
+          "default": "2",
+          "desc": "坐标系维数"
+        }
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>旧教程里的 <code>axes.get_graph(lambda x: x**2)</code> <strong>在 v0.21.0 已不存在</strong>（<code>Axes</code> 上没有 <code>get_graph</code> 方法），统一改用 <code>axes.plot(...)</code>。同理 <code>get_graph_label</code> 属于坐标系而不是图对象：<code>axes.get_graph_label(graph, \"f(x)\")</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Axes",
+      "text": "Axes"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Axes</code> 是标准的<strong>直角坐标系</strong>：x 轴 + y 轴（两条 <code>NumberLine</code>），默认带箭头、无网格。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>x_range</code>",
+          "type": "Sequence[float] \\",
+          "default": "None",
+          "desc": "(-7.11, 7.11, 1)"
+        },
+        {
+          "name": "<code>y_range</code>",
+          "type": "Sequence[float] \\",
+          "default": "None",
+          "desc": "(-4, 4, 1)"
+        },
+        {
+          "name": "<code>x_length</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "12"
+        },
+        {
+          "name": "<code>y_length</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "6"
+        },
+        {
+          "name": "<code>axis_config</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>x_axis_config</code> / <code>y_axis_config</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>tips</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "是否显示轴末端箭头"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Axes</code> 的两个子对象可通过 <code>axes.get_x_axis()</code> / <code>axes.get_y_axis()</code> 取回（它们就是 <code>NumberLine</code>）；<code>axes.get_origin()</code> 返回原点场景位置。<code>axes.get_axis_labels(x_label=\"x\", y_label=\"y\")</code> 返回默认的 LaTeX 轴标签（也可传入 <code>Text</code> 等 Mobject）。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch04/axes_basic",
+      "scene": "AxesDemo",
+      "caption": "<p><code>coords_to_point(2, 1)</code> 把数据坐标翻译成场景坐标；配合 <code>point_to_coords</code> 可以在几何位置与数据坐标之间自由往返。</p>",
+      "code": "\"\"\"AxesDemo: Axes 的基本创建、坐标互转与坐标读取线。\"\"\"\n\nfrom manim import *\n\n\nclass AxesDemo(Scene):\n    def construct(self):\n        axes = Axes(\n            x_range=(-3, 3, 1),\n            y_range=(-2, 2, 1),\n            x_length=9,\n            y_length=6,\n            axis_config={\"include_tip\": True},\n        )\n        labels = axes.get_axis_labels(\n            x_label=Text(\"x\", font_size=36),\n            y_label=Text(\"y\", font_size=36),\n        )\n\n        self.play(Create(axes), run_time=1.5)\n        self.play(FadeIn(labels), run_time=0.5)\n\n        # coords_to_point：坐标 -> 场景点；point_to_coords 为其逆运算\n        dot = Dot(axes.coords_to_point(2, 1), color=RED)\n        x_line = DashedLine(axes.coords_to_point(2, 0), axes.coords_to_point(2, 1))\n        y_line = DashedLine(axes.coords_to_point(0, 1), axes.coords_to_point(2, 1))\n        self.play(Create(x_line), Create(y_line), FadeIn(dot), run_time=1.0)\n\n        coord = Text(\"(2, 1)\", font_size=30).next_to(dot, UR, buff=0.1)\n        self.play(Write(coord), run_time=0.8)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>坐标轴本质上就是 <code>NumberLine</code>，所以数轴的所有配置都能用：给某条轴加数字只需 <code>axes.get_x_axis().add_numbers()</code>；对数坐标则用 <code>x_axis_config={\"scaling\": LogBase(base=10)}</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "NumberPlane",
+      "text": "NumberPlane"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>NumberPlane</code> 在 <code>Axes</code> 基础上铺满<strong>背景网格线</strong>（主实线 + 次淡化线），是默认的“草稿纸”。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>x_range</code> / <code>y_range</code>",
+          "type": "Sequence[float] \\",
+          "default": "None",
+          "desc": "(-7.11, 7.11, 1) / (-4, 4, 1)"
+        },
+        {
+          "name": "<code>x_length</code> / <code>y_length</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>background_line_style</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>faded_line_style</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>faded_line_ratio</code>",
+          "type": "int",
+          "default": "1",
+          "desc": "每个主间隔中淡化线的数量"
+        },
+        {
+          "name": "<code>make_smooth_after_applying_functions</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "应用函数变换后是否平滑网格"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>默认<strong>不显示数字</strong>；需要坐标数字时调用 <code>plane.add_coordinates()</code>（走 LaTeX）或自行 <code>add_labels</code>。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch04/number_plane",
+      "scene": "NumberPlaneDemo",
+      "caption": "<p><code>faded_line_ratio=2</code> 让每个主间隔出现两条淡化线；淡化线很适合营造“坐标纸”质感而不喧宾夺主。</p>",
+      "code": "\"\"\"NumberPlaneDemo: NumberPlane 背景网格与淡化线。\"\"\"\n\nfrom manim import *\n\n\nclass NumberPlaneDemo(Scene):\n    def construct(self):\n        plane = NumberPlane(\n            x_range=[-4, 4, 1],\n            y_range=[-3, 3, 1],\n            background_line_style={\n                \"stroke_color\": BLUE_E,\n                \"stroke_width\": 2,\n                \"stroke_opacity\": 0.5,\n            },\n            faded_line_style={\"stroke_opacity\": 0.15},\n            faded_line_ratio=2,\n        )\n        self.add(plane)\n\n        dot = Dot(plane.coords_to_point(1.5, 1), color=YELLOW)\n        self.play(FadeIn(dot, scale=2), run_time=0.8)\n        self.play(dot.animate.move_to(plane.coords_to_point(-2, -1)), run_time=1.2)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ComplexPlane",
+      "text": "ComplexPlane"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>ComplexPlane</code> 把平面解释为<strong>复平面</strong>：<code>number_to_point</code> 接受复数（如 <code>2 + 1j</code>），<code>point_to_number</code> 返回复数。构造参数与 <code>NumberPlane</code> 完全一致（<code>__init__(self, **kwargs)</code> 全部转发），只额外提供复数语义的转换方法。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch04/complex_plane",
+      "scene": "ComplexPlaneDemo",
+      "caption": "<p><code>plane.number_to_point(2 + 1j)</code> 一步到位；<code>point_to_number</code> 是它的逆运算，返回 <code>complex</code>。</p>",
+      "code": "\"\"\"ComplexPlaneDemo: ComplexPlane 上复数与点的互转。\"\"\"\n\nfrom manim import *\n\n\nclass ComplexPlaneDemo(Scene):\n    def construct(self):\n        plane = ComplexPlane(\n            x_range=[-3, 3, 1],\n            y_range=[-2, 2, 1],\n        )\n        self.add(plane)\n\n        # number_to_point 接受复数（或实数），返回场景坐标\n        z = 2 + 1j\n        dot = Dot(plane.number_to_point(z), color=RED)\n        v_line = DashedLine(\n            plane.number_to_point(2), plane.number_to_point(z), color=RED\n        )\n        h_line = DashedLine(\n            plane.number_to_point(1j), plane.number_to_point(z), color=RED\n        )\n        label = Text(\"2 + i\", font_size=30).next_to(dot, UR, buff=0.1)\n\n        self.play(FadeIn(h_line), FadeIn(v_line), FadeIn(dot), run_time=1.0)\n        self.play(Write(label), run_time=0.8)\n\n        # point_to_number 返回复数\n        back = plane.point_to_number(dot.get_center())\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "html",
+      "html": "<p>常用搭配：</p>\n<ul>\n<li><code>plane.add_coordinates()</code> —— 同时添加实轴、虚轴数字（LaTeX）</li>\n<li><code>plane.get_coordinate_labels(...)</code> —— 更精细的坐标标签控制</li>\n<li><code>z_to_point</code> 的等价写法：复数可直接传给 <code>number_to_point</code></li>\n</ul>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "PolarPlane",
+      "text": "PolarPlane"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>PolarPlane</code> 绘制<strong>极坐标网格</strong>：同心圆（半径）+ 放射线（方位角）。它同样继承 <code>Axes</code> 的 <code>plot</code> 家族，并额外提供 <code>polar_to_point(radius, azimuth)</code> / <code>point_to_polar(point)</code>（别名 <code>pr2pt</code> / <code>pt2pr</code>）。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>radius_max</code>",
+          "type": "float",
+          "default": "4.0",
+          "desc": "最大半径"
+        },
+        {
+          "name": "<code>size</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>radius_step</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "半径网格间隔"
+        },
+        {
+          "name": "<code>azimuth_step</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>azimuth_units</code>",
+          "type": "str",
+          "default": "\"PI radians\"",
+          "desc": "方位角标签单位，可选 <code>\"PI radians\"</code> / <code>\"TAU radians\"</code> / <code>\"degrees\"</code> / <code>\"gradians\"</code> / None"
+        },
+        {
+          "name": "<code>azimuth_compact_fraction</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "标签用 π 的紧凑分数形式"
+        },
+        {
+          "name": "<code>azimuth_offset</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "角度标签偏移"
+        },
+        {
+          "name": "<code>azimuth_direction</code>",
+          "type": "str",
+          "default": "\"CCW\"",
+          "desc": "角度增大方向（<code>\"CCW\"</code> 逆时针）"
+        },
+        {
+          "name": "<code>radius_config</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>background_line_style</code> / <code>faded_line_style</code> / <code>faded_line_ratio</code>",
+          "type": "—",
+          "default": "—",
+          "desc": "同 <code>NumberPlane</code>"
+        }
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "版本说明",
+      "html": "<p>网上旧资料常说 PolarPlane 默认角度单位是<strong>度</strong>——<strong>在 v0.21.0 不正确</strong>。默认 <code>azimuth_units=\"PI radians\"</code>，角度标签渲染为 <code>PI/4</code> 这样的 LaTeX；要十进制度请显式传 <code>azimuth_units=\"degrees\"</code>。注意 <code>get_coordinate_labels()</code> 生成的标签依赖 LaTeX。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch04/polar_plane",
+      "scene": "PolarPlaneDemo",
+      "caption": "<p>继承自 <code>Axes</code>，所以 <code>plot_polar_graph(r_func, theta_range=...)</code> 可直接使用；<code>r_func</code> 输入弧度制的 θ，输出半径。</p>",
+      "code": "\"\"\"PolarPlaneDemo: PolarPlane 极坐标网格与极坐标曲线。\"\"\"\n\nfrom manim import *\n\n\nclass PolarPlaneDemo(Scene):\n    def construct(self):\n        # 默认 azimuth_units=\"PI radians\"，角度标签以 PI 的倍数表示\n        plane = PolarPlane(\n            radius_max=4,\n            azimuth_units=\"PI radians\",\n            background_line_style={\"stroke_opacity\": 0.3},\n        )\n        self.add(plane)\n\n        # 三瓣玫瑰线 r = 1.5 + cos(3t)\n        graph = plane.plot_polar_graph(\n            lambda t: 1.5 + np.cos(3 * t),\n            theta_range=(0, 2 * PI),\n            color=YELLOW,\n        )\n        self.play(Create(graph), run_time=2.0)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ThreeDAxes",
+      "text": "ThreeDAxes"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>ThreeDAxes</code> 增加一条 <strong>z 轴</strong>，组成三维直角坐标系。在普通 <code>Scene</code> 中它以固定的斜投影显示；真正的 3D 交互（旋转视角、设置相机）要配合 <code>ThreeDScene</code> 使用，见“3D 与摄像机”板块。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>x_range</code> / <code>y_range</code> / <code>z_range</code>",
+          "type": "Sequence[float] \\",
+          "default": "None",
+          "desc": "(-6, 6, 1) / (-5, 5, 1) / (-4, 4, 1)"
+        },
+        {
+          "name": "<code>x_length</code> / <code>y_length</code> / <code>z_length</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "10.5 / 10.5 / 6.5"
+        },
+        {
+          "name": "<code>z_axis_config</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>z_normal</code>",
+          "type": "Vector3DLike",
+          "default": "(0, -1, 0)",
+          "desc": "z 轴“朝向上方”的方向参考"
+        },
+        {
+          "name": "<code>num_axis_pieces</code>",
+          "type": "int",
+          "default": "20",
+          "desc": "每个轴的分段数"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p><code>coords_to_point</code> 在此接受<strong>三个</strong>坐标；<code>get_z_axis()</code> 取回 z 轴。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch04/three_d_axes",
+      "scene": "ThreeDAxesDemo",
+      "caption": "<p>普通 <code>Scene</code> 里 <code>ThreeDAxes</code> 以斜投影静态呈现；给它加 <code>Dot3D</code> 标记空间点，后续移入 <code>ThreeDScene</code> 即可获得完整 3D 体验。</p>",
+      "code": "\"\"\"ThreeDAxesDemo: 在普通 2D Scene 中创建 ThreeDAxes（斜投影）。\"\"\"\n\nfrom manim import *\n\n\nclass ThreeDAxesDemo(Scene):\n    def construct(self):\n        axes = ThreeDAxes(\n            x_range=(-3, 3, 1),\n            y_range=(-3, 3, 1),\n            z_range=(-2, 2, 1),\n            z_axis_config={\"stroke_color\": BLUE},\n        )\n        self.play(Create(axes), run_time=2.0)\n\n        # coords_to_point 接受三个坐标（普通 Scene 中为斜投影效果）\n        dot = Dot3D(axes.coords_to_point(1, 1, 1), color=RED)\n        self.play(FadeIn(dot), run_time=0.8)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "成员怎么选",
+      "text": "成员怎么选"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "需求",
+        "用谁"
+      ],
+      "rows": [
+        [
+          "只要两条轴、画函数图像",
+          "<code>Axes</code>"
+        ],
+        [
+          "需要网格背景",
+          "<code>NumberPlane</code>"
+        ],
+        [
+          "复数运算可视化",
+          "<code>ComplexPlane</code>"
+        ],
+        [
+          "极坐标方程、角度数据",
+          "<code>PolarPlane</code>"
+        ],
+        [
+          "空间曲线/曲面",
+          "<code>ThreeDAxes</code> + <code>ThreeDScene</code>（ch06）"
+        ],
+        [
+          "数据柱状图",
+          "<code>BarChart</code>（见“概率与图表”）"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>已知 <code>plane = NumberPlane(x_range=[-4, 4, 1], y_range=[-3, 3, 1], x_length=8, y_length=6)</code>，<code>plane.coords_to_point(2, 1)</code> 大约在场景什么位置？（原点即平面中心）</p>",
+      "answerHtml": "<p>x 方向 <code>unit_size = 8 / 8 = 1</code>，y 方向 <code>unit_size = 6 / 6 = 1</code>，所以结果约为 <code>(2, 1, 0)</code>。一般地：<code>coords_to_point</code> 的结果 = 原点 + <code>(x * x_unit_size, y * y_unit_size)</code>，可用 <code>plane.get_x_unit_size()</code> / <code>get_y_unit_size()</code> 查询。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>旧脚本里有一句 <code>graph = axes.get_graph(np.sin)</code>，在 v0.21.0 下如何修改？</p>",
+      "answerHtml": "<p>改为 <code>graph = axes.plot(np.sin)</code>。<code>get_graph</code> 已在重构中移除；返回值是 <code>ParametricFunction</code>，后续 <code>axes.get_area(graph, ...)</code>、<code>axes.get_graph_label(graph, ...)</code> 的用法不变。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想让 <code>PolarPlane</code> 的角度标签显示为十进制度（如 45°），怎么做？</p>",
+      "answerHtml": "<p>构造时传 <code>azimuth_units=\"degrees\"</code>；若还想要 ° 符号或自定义格式，可传 <code>azimuth_units=None</code> 后自行用 <code>add_labels</code> 添加 <code>Text</code> 标签。</p>"
+    }
+  ]
+}

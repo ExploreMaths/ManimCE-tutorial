@@ -1,0 +1,176 @@
+{
+  "part": "ch07",
+  "id": "scripting",
+  "title": "脚本化调用",
+  "partTitle": "高级主题",
+  "prev": {
+    "part": "ch07",
+    "id": "cli-deep-dive",
+    "title": "CLI 深度",
+    "path": "/ch/ch07/cli-deep-dive"
+  },
+  "next": {
+    "part": "ch07",
+    "id": "utils-overview",
+    "title": "实用工具速览",
+    "path": "/ch/ch07/utils-overview"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>前几节的渲染入口都是 CLI：<code>manim scene.py MyScene</code>。但 Manim 本质是一个 Python 库——场景类完全可以像普通类一样在脚本里实例化并渲染。当你需要批量出图、在 Web 服务里渲染、或做单元测试时，这就成了刚需。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "scenerender",
+      "text": "Scene.render"
+    },
+    {
+      "type": "html",
+      "html": "<p>渲染一个场景的底层入口是 <code>Scene.render()</code>：</p>\n<pre><code class=\"language-python\">Scene.render(preview: bool = False) -&gt; bool\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>preview</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "渲染完成后打开预览（等价于 CLI 的 <code>-p</code>）"
+        },
+        {
+          "name": "返回值",
+          "type": "bool",
+          "default": "—",
+          "desc": "场景请求“重跑”时为 True（<code>RerunSceneException</code> 机制），正常完成为 False"
+        }
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>本机 v0.21.0 的 <code>Scene.render()</code> <strong>没有</strong> <code>quiet</code> 参数——早期资料里的 <code>quiet</code> 是老版本 3b1 的 API，社区版从未提供过。想安静输出，用 <code>config.verbosity = \"WARNING\"</code>（或更低）降低日志级别。</p>"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>render()</code> 内部依次执行 <code>setup() → construct() → tear_down()</code>，与 CLI 渲染完全同一条路径。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "最小脚本化渲染",
+      "text": "最小脚本化渲染"
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">from manim import *\n\nconfig.quality = &quot;medium_quality&quot;   # 等价于 CLI -qm\nconfig.media_dir = &quot;./media_out&quot;\nconfig.verbosity = &quot;WARNING&quot;        # 减少日志输出\n\nclass MyScene(Scene):\n    def construct(self):\n        self.play(FadeIn(Square()))\n        self.wait(0.5)\n\nif __name__ == &quot;__main__&quot;:\n    scene = MyScene()\n    scene.render()\n</code></pre>\n<p>保存为 <code>render_demo.py</code>，直接 <code>python render_demo.py</code> 即可，不需要 <code>manim</code> 命令。输出位置与 CLI 一致：<code>./media_out/videos/render_demo/720p30/MyScene.mp4</code>。</p>\n<p>批量渲染多个场景 / 多个参数组合也一样：</p>\n<pre><code class=\"language-python\">for color in (RED, GREEN, BLUE):\n    class S(Scene):\n        def construct(self):\n            self.play(FadeIn(Square(color=color)))\n            self.wait(0.5)\n    S().render()\n</code></pre>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "与-cli-渲染的等价关系",
+      "text": "与 CLI 渲染的等价关系"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "方面",
+        "CLI 渲染",
+        "脚本化渲染"
+      ],
+      "rows": [
+        [
+          "入口",
+          "<code>manim -qm scene.py MyScene</code>",
+          "<code>MyScene().render()</code>"
+        ],
+        [
+          "画质/输出目录",
+          "<code>-qm</code>、<code>--media_dir</code>",
+          "<code>config.quality</code>、<code>config.media_dir</code>"
+        ],
+        [
+          "配置文件",
+          "自动读取三层 <code>manim.cfg</code>",
+          "同样读取（<code>import manim</code> 时消化）"
+        ],
+        [
+          "预览",
+          "<code>-p</code> 标志",
+          "<code>render(preview=True)</code>"
+        ],
+        [
+          "场景选择",
+          "命令行场景名参数",
+          "实例化哪个类就渲染哪个"
+        ],
+        [
+          "日志级别",
+          "<code>-v</code>",
+          "<code>config.verbosity</code>"
+        ],
+        [
+          "额外能力",
+          "<code>cfg</code>、<code>checkhealth</code>、<code>init</code> 等子命令",
+          "无（自行实现）"
+        ]
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>CLI 本质就是“解析参数 → 写进 <code>config</code> → 找到场景类 → 调用 <code>render()</code>”的一层薄壳。脚本化时这层壳由你接管，配置文件仍然生效，行为一致。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>两者也可以混用：<code>manim render</code> 渲染的同时，同一个文件里保留 <code>if __name__ == \"__main__\":</code> 脚本入口，调试时 <code>python scene.py</code> 直接跑，发布时走 CLI 精确控制参数。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>在脚本入口实例化多个场景时，前一个场景的 mobject / updater 不会自动清干净——每个场景实例有自己的 <code>mobjects</code> 列表，但 <code>config</code> 是全局的。循环渲染时若改了 <code>config</code>（如 <code>background_color</code>），会影响后续所有场景。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>render()</code> 返回 True 表示场景通过 <code>RerunSceneException</code> 请求重跑（交互模式的 <code>rerun()</code>），脚本里忽略返回值通常没问题；但如果你在自己的循环里渲染，注意这个信号，否则重跑语义会丢失。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>写一个没有 CLI、双击即可运行的脚本，渲染 <code>Circle</code> 淡入 1 秒后停留 0.5 秒，输出到 <code>./out</code>。</p>",
+      "answerHtml": "<pre><code class=\"language-python\">from manim import *\n\nconfig.quality = &quot;medium_quality&quot;\nconfig.media_dir = &quot;./out&quot;\n\nclass CircleScene(Scene):\n    def construct(self):\n        self.play(FadeIn(Circle()), run_time=1.0)\n        self.wait(0.5)\n\nif __name__ == &quot;__main__&quot;:\n    CircleScene().render()\n</code></pre>\n<p><code>python</code> 直接运行即可；等价 CLI 是 <code>manim -qm --media_dir ./out scene.py CircleScene</code>。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想在脚本渲染时完全静音 Manim 的日志，有 <code>render(quiet=True)</code> 吗？应该怎么做？</p>",
+      "answerHtml": "<p>没有。v0.21.0 的 <code>render()</code> 只接受 <code>preview</code>。静音方式是把日志级别调低：<code>config.verbosity = \"ERROR\"</code>（或 <code>\"CRITICAL\"</code>），这同时影响终端输出与 ffmpeg 日志级别。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>最后一节是工具箱：<code>manim.utils</code> 里那些被各章节反复用到、却很少被正眼看待的工具函数。</p>"
+    }
+  ]
+}

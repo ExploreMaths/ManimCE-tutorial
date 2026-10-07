@@ -1,0 +1,296 @@
+{
+  "part": "ch05",
+  "id": "creation",
+  "title": "创建家族",
+  "partTitle": "动画进阶",
+  "prev": {
+    "part": "ch05",
+    "id": "animation-mechanism",
+    "title": "Animation 机制",
+    "path": "/ch/ch05/animation-mechanism"
+  },
+  "next": {
+    "part": "ch05",
+    "id": "grow-and-fade",
+    "title": "生长与淡入淡出",
+    "path": "/ch/ch05/grow-and-fade"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>创建（Creation）动画管\"物体如何进场\"：描边、填色、逐字、逐批、打字机……它们的共同点是 <code>introducer=True</code>——动画开始时物体进入场景。先给一张选型表，再逐个展开。</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "需求",
+        "用哪个"
+      ],
+      "rows": [
+        [
+          "图形/曲线一笔画出",
+          "<code>Create</code>"
+        ],
+        [
+          "先描边再填充的厚重感",
+          "<code>DrawBorderThenFill</code>"
+        ],
+        [
+          "文字沿笔画书写",
+          "<code>Write</code>"
+        ],
+        [
+          "子对象一批批/一个个出现",
+          "<code>ShowIncreasingSubsets</code> / <code>ShowSubmobjectsOneByOne</code>"
+        ],
+        [
+          "文字逐字符/逐词淡入",
+          "<code>AddTextLetterByLetter</code> / <code>AddTextWordByWord</code>"
+        ],
+        [
+          "打字机效果（带光标）",
+          "<code>TypeWithCursor</code>"
+        ],
+        [
+          "成群物体螺旋飞入",
+          "<code>SpiralIn</code>"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Create",
+      "text": "Create"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Create(mobject, lag_ratio=1.0)</code> 沿 <code>VMobject</code> 的描边逐点\"画\"出物体，是图形进场的主力。<code>lag_ratio=1.0</code> 让组成它的各条子路径依次绘制而非同时。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Create",
+        "DrawBorderThenFill",
+        "Animation",
+        "object"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Uncreate",
+      "text": "Uncreate"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Uncreate</code> 是 <code>Create</code> 的镜像：<code>reverse_rate_function=True</code> 反转进度、<code>remover=True</code> 播完把物体移出场景——相当于沿原路径\"擦除\"。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch05/creation_family",
+      "scene": "CreationFamily",
+      "caption": "<p>三个图形分别用 <code>Create</code>、<code>DrawBorderThenFill</code> 进场；随后 <code>Uncreate</code> 把前两个擦除。</p>",
+      "code": "\"\"\"CreationFamily: Create / DrawBorderThenFill / Uncreate.\"\"\"\n\nfrom manim import *\n\n\nclass CreationFamily(Scene):\n    def construct(self):\n        shapes = VGroup(\n            Square().set_fill(RED, opacity=0.5),\n            Circle().set_fill(GREEN, opacity=0.5),\n            Triangle().set_fill(BLUE, opacity=0.5),\n        ).arrange(RIGHT, buff=1.2)\n\n        self.play(Create(shapes[0]), run_time=0.9)\n        self.play(DrawBorderThenFill(shapes[1]), run_time=1.2)\n        self.add(shapes[2])\n        self.wait(0.3)\n        self.play(Uncreate(shapes[0]), run_time=0.8)\n        self.play(Uncreate(shapes[1]), run_time=0.8)\n        self.wait(0.3)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Write",
+      "text": "Write"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Write(vmobject, rate_func=linear, reverse=False)</code> 让 <code>VMobject</code>（常用于 <code>Text</code>/<code>MathTex</code>）沿笔画描出轮廓再填充。注意它的默认 <code>rate_func</code> 是 <code>linear</code> 而不是大多数动画的 <code>smooth</code>，书写节奏更均匀。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Write",
+        "Draw",
+        "DrawBorderThenFill",
+        "Animation",
+        "object"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Unwrite",
+      "text": "Unwrite"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Unwrite(vmobject, rate_func=linear, reverse=True)</code> 是 <code>Write</code> 的逆过程：按 <code>reverse=True</code> 从尾到头擦除，<code>remover=True</code> 收场。英文教材中 <code>Write</code>/<code>Unwrite</code> 是演示公式推导的经典组合。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "DrawBorderThenFill",
+      "text": "DrawBorderThenFill"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>DrawBorderThenFill(vmobject, run_time=2, rate_func=double_smooth, stroke_width=2, stroke_color=None)</code> 分两段：先用细线描边，再展开填充。默认 <code>run_time=2</code> 比多数动画长，自带\"隆重登场\"的节奏；<code>stroke_width</code>/<code>stroke_color</code> 控制前一段描边的粗细与颜色（默认取物体描边色）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ShowIncreasingSubsets",
+      "text": "ShowIncreasingSubsets"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>ShowIncreasingSubsets(group, suspend_mobject_updating=False, int_func=floor)</code> 让 VGroup 的子对象<strong>一批一批</strong>出现：进度 α 对应前 <code>int_func(α × n)</code> 个子对象可见。<code>int_func</code> 决定取整方式（默认 <code>floor</code>，即 α=0.5、n=5 时显示前 2 个）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ShowSubmobjectsOneByOne",
+      "text": "ShowSubmobjectsOneByOne"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>ShowSubmobjectsOneByOne(group, int_func=ceil)</code> 与前者类似，但节奏是\"<strong>逐个点亮再熄灭</strong>\"：每个子对象依次短暂出现后消失，动画结束只保留最后一个——适合做扫描、点名式的强调。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch05/creation_subsets",
+      "scene": "CreationSubsets",
+      "caption": "<p>圆点用 <code>ShowIncreasingSubsets</code> 一批批入场；正方形用 <code>ShowSubmobjectsOneByOne</code> 逐个点亮；最后六个圆环 <code>SpiralIn</code> 螺旋飞入。</p>",
+      "code": "\"\"\"CreationSubsets: ShowIncreasingSubsets / ShowSubmobjectsOneByOne / SpiralIn.\"\"\"\n\nfrom manim import *\n\n\nclass CreationSubsets(Scene):\n    def construct(self):\n        dots = VGroup(*[Dot().shift(i * RIGHT * 0.9) for i in range(5)])\n        dots.shift(UP * 1.5 + LEFT * 1.8)\n\n        # 子对象一批一批地显示出来\n        self.play(ShowIncreasingSubsets(dots), run_time=1.5)\n        self.wait(0.3)\n\n        # 子对象逐个显示（最后只保留最后一个？不——逐个点亮）\n        squares = VGroup(*[Square(0.5).shift(i * RIGHT * 0.9) for i in range(4)])\n        squares.shift(DOWN * 0.5 + LEFT * 1.4)\n        self.play(ShowSubmobjectsOneByOne(squares), run_time=1.6)\n        self.wait(0.2)\n\n        # 螺旋飞入\n        rings = VGroup(*[Circle(radius=0.25).shift(1.5 * np.cos(i) * RIGHT + 1.5 * np.sin(i) * UP) for i in np.linspace(0, 2 * PI, 6)[:-1]])\n        self.play(SpiralIn(rings), run_time=1.4)\n        self.wait(0.3)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "AddTextLetterByLetter",
+      "text": "AddTextLetterByLetter"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>AddTextLetterByLetter(text, rate_func=linear, time_per_char=0.1, run_time=None)</code> 让 <code>Text</code> 的字符<strong>逐个淡入</strong>。每个字符耗时 <code>time_per_char</code> 秒；不传 <code>run_time</code> 时总时长自动算为 <code>time_per_char × 字符数</code>（下限 0.1 秒）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "RemoveTextLetterByLetter",
+      "text": "RemoveTextLetterByLetter"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>RemoveTextLetterByLetter</code> 是它的逆动画：<code>reverse_rate_function=True</code> 从后往前逐字符淡出，<code>remover=True</code> 播完移除。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "AddTextWordByWord",
+      "text": "AddTextWordByWord"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>AddTextWordByWord(text_mobject, time_per_char=0.06)</code> 按<strong>空格</strong>把文字切成词，逐词整体淡入。<code>time_per_char</code> 控制每个词内部的节奏。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>中文没有天然空格：<code>AddTextWordByWord(Text(\"一词 一词 出现\"))</code> 依赖你手动插入的空格分词；不分词的中文整句会作为一个词整体出现。纯中文逐字进场请用 <code>AddTextLetterByLetter</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "TypeWithCursor",
+      "text": "TypeWithCursor"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>TypeWithCursor(text, cursor, buff=0.1, keep_cursor_y=True, leave_cursor_on=True, time_per_char=0.1)</code> 在逐字符出现的同时，把一个<strong>光标物体</strong>贴在已出现文字的末尾，形成打字机效果。<code>cursor</code> 是任意的 <code>Mobject</code>（常用细长 <code>Rectangle</code>）；<code>keep_cursor_y=True</code> 让光标始终与文字中线对齐；<code>leave_cursor_on=True</code> 播完后保留光标。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "UntypeWithCursor",
+      "text": "UntypeWithCursor"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>UntypeWithCursor(text, cursor=None, ...)</code> 是逆过程（打字删除），<code>remover=True</code> 播完把文字移出场景。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>UntypeWithCursor</code> 的 <code>cursor</code> 形参默认是 <code>None</code>，但<strong>实际上必须显式传入</strong>：传 None 会在动画开始阶段崩溃（本机 v0.21.0 实测抛 <code>AttributeError: 'NoneType' object has no attribute 'get_y'</code>）。建议把 <code>TypeWithCursor</code> 用过的同一个光标再传给它。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch05/creation_typing",
+      "scene": "CreationTyping",
+      "caption": "<p><code>TypeWithCursor</code> 带着矩形光标逐字打出文字；<code>UntypeWithCursor</code> 用同一光标把文字逐个删掉。</p>",
+      "code": "\"\"\"CreationTyping: TypeWithCursor / UntypeWithCursor.\"\"\"\n\nfrom manim import *\n\n\nclass CreationTyping(Scene):\n    def construct(self):\n        text = Text(\"typewriter\", font_size=44)\n        cursor = Rectangle(\n            height=0.55, width=0.32, stroke_width=2\n        ).set_fill(opacity=0)\n\n        # 光标贴着文字打字\n        self.play(TypeWithCursor(text, cursor), run_time=2.0)\n        self.wait(0.3)\n        # UntypeWithCursor 的 cursor 默认是 None，不显式传会在 begin() 崩溃\n        self.play(UntypeWithCursor(text, cursor), run_time=1.5)\n        self.wait(0.3)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>这两个动画只支持 <code>Text</code>，不支持 <code>MathTex</code>（官方文档明确说明）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "SpiralIn",
+      "text": "SpiralIn"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>SpiralIn(shapes, scale_factor=8, fade_in_fraction=0.3)</code> 让一组物体从远处（<code>scale_factor</code> 倍）螺旋收拢飞入，最后 <code>fade_in_fraction</code> 比例的行程内淡入收尾，适合表现\"一群东西聚拢成形\"。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ShowPartial",
+      "text": "ShowPartial"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>ShowPartial</code> 是 <code>Create</code> 系动画的抽象基类：按 <code>VMobject</code> 已有的部分绘制进度（<code>0</code> 到 <code>1</code>）显示物体，自己不规定进度如何推进。日常几乎不会直接实例化它，但自定义\"按自定义曲线进度显示\"的动画时可以继承。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "ShowPartial",
+        "Animation",
+        "object"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>一行 <code>Text(\"Hello World\")</code> 想做出\"逐词淡入\"的效果，用哪个动画？对 <code>\"你好世界\"</code>（无空格）会得到什么效果？</p>",
+      "answerHtml": "<p>用 <code>AddTextWordByWord</code>：它按空格切词，<code>Hello</code> 和 <code>World</code> 会依次整体淡入。<code>\"你好世界\"</code> 没有空格，整句会被当作一个词一次性出现；中文逐字效果应改用 <code>AddTextLetterByLetter</code>。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>ShowIncreasingSubsets</code> 与 <code>ShowSubmobjectsOneByOne</code> 播完后画面有什么区别？</p>",
+      "answerHtml": "<p><code>ShowIncreasingSubsets</code>：子对象只增不减，播完时<strong>全部</strong>保留；<code>ShowSubmobjectsOneByOne</code>：每个子对象闪亮后消失，播完时<strong>只剩最后一个</strong>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>创建家族管\"从无到有\"，下一节是另一组进场/离场动画：从一点\"长出来\"的 Grow 家族，与淡入淡出的 Fade 家族。</p>"
+    }
+  ]
+}

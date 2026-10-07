@@ -1,0 +1,12 @@
+# Runtime dependencies for CI content tooling.
+# Pin manim to the tutorial target version; the render cache hashes this pin.
+manim==0.21.0
+markdown>=3.5
+PyYAML>=6.0
+# Optional dependency: v0.21.0 Typst/MathTypst mobjects (manim[typst]).
+typst>=0.12
+# ctex Chinese templates additionally need xelatex in CI
+# (see texlive-xetex / texlive-lang-chinese in .github/workflows/build.yml).
+
+# Dev-only (optional): uncomment locally to lint the workflow YAML.
+# pyyaml  # already required above

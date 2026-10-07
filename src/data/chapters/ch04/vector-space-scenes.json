@@ -1,0 +1,202 @@
+{
+  "part": "ch04",
+  "id": "vector-space-scenes",
+  "title": "向量空间场景",
+  "partTitle": "坐标系与数据可视化",
+  "prev": {
+    "part": "ch04",
+    "id": "tables",
+    "title": "表格",
+    "path": "/ch/ch04/tables"
+  },
+  "next": {
+    "part": "ch05",
+    "id": "animation-mechanism",
+    "title": "Animation 机制",
+    "path": "/ch/ch05/animation-mechanism"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p><code>manim.scene.vector_space_scene</code> 提供两个教学向的场景基类：<code>VectorScene</code> 在网格背景上<strong>画向量、标注坐标</strong>，<code>LinearTransformationScene</code> 把整张网格当作向量空间，<strong>以动画演示矩阵乘法</strong>（3Blue1Brown 线性代数系列的核心场景）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "VectorScene",
+      "text": "VectorScene"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>VectorScene</code> 继承普通 <code>Scene</code>，额外提供网格背景与一整套向量操作：加向量、贴标签、写坐标、坐标与向量的双向演示。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "VectorScene",
+        "Scene"
+      ]
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>basis_vector_stroke_width</code>",
+          "type": "float",
+          "default": "6.0",
+          "desc": "基向量（i / j 帽）的线宽"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>场景辅助（默认背景<strong>没有</strong>网格，需要时自行添加）：</p>\n<ul>\n<li><code>self.add_plane(animate=False, **kwargs)</code> —— 添加 <code>NumberPlane</code> 背景</li>\n<li><code>self.add_axes(animate=False, color=WHITE)</code> —— 只添加 <code>Axes</code></li>\n<li><code>self.lock_in_faded_grid(dimness=0.7, axes_dimness=0.5)</code> —— 常用开场：淡化网格 + 坐标轴锁定在底层</li>\n</ul>\n<p>向量操作：</p>\n<ul>\n<li><code>self.add_vector(vector, color=YELLOW, animate=True, **kwargs)</code> —— 画向量并播放 <code>GrowArrow</code>，返回 <code>Arrow</code>；<code>vector</code> 可传坐标序列</li>\n<li><code>self.label_vector(vector, label, animate=True, **kwargs)</code> —— 给向量贴标签（<code>Text</code> / <code>MathTex</code> 均可），返回标签</li>\n<li><code>self.get_vector(numerical_vector, **kwargs)</code> —— 只创建不播放，返回 <code>Arrow</code></li>\n<li><code>self.write_vector_coordinates(vector, **kwargs)</code> —— 写出向量的坐标矩阵 <code>Matrix</code></li>\n<li><code>self.vector_to_coords(vector, integer_labels=True, clean_up=True)</code> —— 演示“向量 → 坐标”：返回 <code>(坐标矩阵, x 虚线, y 虚线)</code>，<code>clean_up=False</code> 保留辅助线</li>\n<li><code>self.coords_to_vector(coords, coords_start=(2, 2, 0), clean_up=True)</code> —— 反向演示“坐标 → 向量”</li>\n</ul>"
+    },
+    {
+      "type": "demo",
+      "example": "ch04/vector_scene",
+      "scene": "VectorSceneDemo",
+      "caption": "<p><code>add_vector</code> 默认播放生长动画并返回 <code>Arrow</code>，返回值要接住才能继续 <code>label_vector</code>；标签用 <code>Text</code> 渲染即可，不依赖 LaTeX。</p>",
+      "code": "\"\"\"VectorSceneDemo: VectorScene 的加向量与向量标注。\"\"\"\n\nfrom manim import *\n\n\nclass VectorSceneDemo(VectorScene):\n    def construct(self):\n        # add_vector 默认播放动画并返回 Arrow\n        v = self.add_vector([2, 1], color=YELLOW)\n        self.label_vector(v, Text(\"v\", font_size=36))\n        self.wait(0.5)\n\n        w = self.add_vector([-1, 1.5], color=BLUE)\n        self.label_vector(w, Text(\"w\", font_size=36))\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>VectorScene</code> 的网格不会自动出现——<code>add_plane()</code> / <code>lock_in_faded_grid()</code> 二选一。只做向量加减讲解时 <code>lock_in_faded_grid()</code> 的淡化网格最省心；需要读坐标时再用 <code>add_plane()</code> 配合 <code>show_coordinates</code> 风格的显式网格。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "LinearTransformationScene",
+      "text": "LinearTransformationScene"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>LinearTransformationScene</code> 继承 <code>VectorScene</code>，专为<strong>线性变换动画</strong>设计：场景自带背景网格与前景网格，以及 i 帽 / j 帽两个基向量；<code>apply_matrix(...)</code> 会把整个空间（网格、基向量、所有“可变换对象”）按矩阵逐一变换。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "LinearTransformationScene",
+        "VectorScene",
+        "Scene"
+      ]
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>include_background_plane</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "底层淡化网格"
+        },
+        {
+          "name": "<code>include_foreground_plane</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "顶层“会变形的”网格"
+        },
+        {
+          "name": "<code>background_plane_kwargs</code> / <code>foreground_plane_kwargs</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>show_coordinates</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "是否显示网格坐标数字"
+        },
+        {
+          "name": "<code>show_basis_vectors</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "是否显示 i 帽 / j 帽"
+        },
+        {
+          "name": "<code>basis_vector_stroke_width</code>",
+          "type": "float",
+          "default": "6",
+          "desc": "基向量线宽"
+        },
+        {
+          "name": "<code>i_hat_color</code>",
+          "type": "ParsableManimColor",
+          "default": "'#83C167'",
+          "desc": "i 帽颜色（绿）"
+        },
+        {
+          "name": "<code>j_hat_color</code>",
+          "type": "ParsableManimColor",
+          "default": "'#FC6255'",
+          "desc": "j 帽颜色（红）"
+        },
+        {
+          "name": "<code>leave_ghost_vectors</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "变换时是否留下基向量的“残影”轨迹"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>变换方法：</p>\n<ul>\n<li><code>self.apply_matrix(matrix, **kwargs)</code> —— 播放线性变换动画；<code>matrix</code> 为 2×2（列是 i 帽 / j 帽的新位置）</li>\n<li><code>self.apply_inverse(matrix, **kwargs)</code> / <code>apply_transposed_matrix(...)</code> / <code>apply_inverse_transpose(...)</code> —— 逆 / 转置 / 逆转置</li>\n<li><code>self.apply_nonlinear_transformation(function, **kwargs)</code> —— 任意 <code>R² → R²</code> 函数变换（如 <code>lambda p: p + np.array([np.sin(p[1]), 0, 0])</code>）</li>\n<li><code>self.add_unit_square(animate=False, **kwargs)</code> —— 添加单位正方形（默认不播动画）</li>\n<li><code>self.add_transformable_mobject(*mobjects)</code> —— 注册自定义对象，变换时随网格一起变形</li>\n<li><code>self.add_transformable_label(vector, label, transformation_name=\"L\", new_label=None, **kwargs)</code> —— 给基向量添加会跟随变换的标注（<code>MathTex</code>）</li>\n<li><code>self.add_title(title, scale_factor=1.5, animate=False)</code> —— 场景标题</li>\n</ul>"
+    },
+    {
+      "type": "demo",
+      "example": "ch04/linear_transformation",
+      "scene": "LinearTransformationDemo",
+      "caption": "<p><code>[[1, 1], [0, 1]]</code> 是切变矩阵：第一列 <code>(1, 0)</code> 是 i 帽的新位置，第二列 <code>(1, 1)</code> 是 j 帽的新位置。单位正方形随网格一起被“推斜”。</p>",
+      "code": "\"\"\"LinearTransformationDemo: 切变矩阵的线性变换动画。\"\"\"\n\nfrom manim import *\n\n\nclass LinearTransformationDemo(LinearTransformationScene):\n    def construct(self):\n        # 默认已包含背景/前景 NumberPlane 与 i_hat、j_hat 基向量\n        self.add_unit_square()\n        self.wait(0.3)\n\n        # 切变：x 轴不变，j_hat 移到 (1, 1)\n        self.apply_matrix([[1, 1], [0, 1]], run_time=2.0)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>apply_matrix</code> 的参数是<strong>列主序</strong>的数学矩阵：每一列是一个基向量变换后的像（第一列 = i 帽新位置，第二列 = j 帽新位置）。想实现“x 轴不变、y 按 x 剪切”（<code>x' = x + y, y' = y</code>）应传 <code>[[1, 1], [0, 1]]</code>；而它的转置 <code>[[1, 0], [1, 1]]</code> 是“y 轴不变、x 按 y 剪切”——两者效果完全不同，对称矩阵看不出来时最容易写错。不确定就观察 i 帽 / j 帽的实际走向。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>leave_ghost_vectors=True</code> 会在每次变换时留下基向量的半透明残影，多步变换的轨迹一目了然；<code>show_coordinates=True</code> 适合演示“网格线即坐标”的概念，但数字较密，正式讲解常用 <code>show_coordinates=False</code> 的干净网格。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>self.add_vector([2, 1])</code> 之后想给这个向量贴上标签 <code>v</code>，完整写法是什么？</p>",
+      "answerHtml": "<p>接住返回值再标注：</p>\n<pre><code class=\"language-python\">v = self.add_vector([2, 1], color=YELLOW)\nself.label_vector(v, Text(&quot;v&quot;, font_size=36))\n</code></pre>\n<p><code>add_vector</code> 默认播放 <code>GrowArrow</code> 动画；不想播动画可传 <code>animate=False</code>。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>在 <code>LinearTransformationScene</code> 中演示“先逆时针旋转 90°，再沿 x 轴剪切”的两步变换，第二步应该怎么写矩阵？（旋转矩阵 <code>R = [[0, -1], [1, 0]]</code>，剪切 <code>S = [[1, 1], [0, 1]]</code>）</p>",
+      "answerHtml": "<p>第二步直接 <code>self.apply_matrix([[1, 1], [0, 1]])</code> 即可。<code>LinearTransformationScene</code> 的每一步 <code>apply_matrix</code> 都作用在<strong>当前</strong>空间状态上：先 <code>self.apply_matrix([[0, -1], [1, 0]])</code> 旋转，再 <code>self.apply_matrix([[1, 1], [0, 1]])</code> 剪切，总效果即复合变换 <code>S @ R</code>。想一次到位也可合成矩阵 <code>self.apply_matrix(np.array([[1, 1], [0, 1]]) @ np.array([[0, -1], [1, 0]]))</code>。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>只想保留会变形的“前景网格”，去掉底层淡化网格，怎么构造？</p>",
+      "answerHtml": "<p><code>class MyScene(LinearTransformationScene): def __init__(self, **kw): super().__init__(include_background_plane=False, **kw)</code>——或直接在构造时传参。前景网格是变换的“主角”，背景网格只作参照；两层都关掉（<code>include_foreground_plane=False</code>）则只剩基向量和注册对象在动。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>坐标系与数据可视化板块到此结束：数轴、刻度、坐标系家族、函数绘图、概率图表、矩阵、表格与向量空间场景都已就位。下一板块进入动画进阶，从 <code>Animation</code> 的内部机制讲起。</p>"
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+{
+  "part": "ch07",
+  "id": "misc",
+  "title": "杂项",
+  "partTitle": "高级主题",
+  "prev": {
+    "part": "ch07",
+    "id": "utils-overview",
+    "title": "实用工具速览",
+    "path": "/ch/ch07/utils-overview"
+  },
+  "next": null,
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>最后收拢三个不易归类但实用的主题：给视频配音的 <code>add_sound</code>、交互式调试的 <code>interactive_embed</code>，以及一组调试小工具。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "add_sound",
+      "text": "add_sound"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Scene.add_sound()</code> 在视频时间轴的当前位置插入一段音效，最终由 ffmpeg 混流进输出视频。</p>\n<pre><code class=\"language-python\">Scene.add_sound(\n    sound_file: str,\n    time_offset: float = 0,\n    gain: float | None = None,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>sound_file</code>",
+          "type": "str",
+          "default": "—",
+          "desc": "音效文件路径；会在 <code>assets_dir</code>（默认 <code>./</code>）下按 <code>.wav</code>、<code>.mp3</code> 扩展名搜索"
+        },
+        {
+          "name": "<code>time_offset</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "相对偏移：实际播放时刻 = 调用时的 <code>self.time + time_offset</code>；正值延后，负值提前（声音在调用之前就开始）"
+        },
+        {
+          "name": "<code>gain</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>典型用法：</p>\n<pre><code class=\"language-python\">class ClickScene(Scene):\n    def construct(self):\n        dot = Dot()\n        self.add_sound(&quot;click.wav&quot;)      # 此刻插入音效\n        self.play(FadeIn(dot))\n        self.add_sound(&quot;click.wav&quot;, time_offset=0.2)  # 再延后 0.2 秒补一声\n        self.wait()\n</code></pre>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>add_sound</code> 依赖 ffmpeg：混流在写视频文件时进行。<code>--dry_run</code>、只出 PNG（<code>-s</code> / <code>--format png</code>）的模式下没有视频容器，声音不会被写入。找不到文件时会抛错——确认文件名在 <code>assets_dir</code> 下可解析（可用 <code>config.assets_dir</code> 指定素材目录）。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>音效的播放时刻以<strong>调用 <code>add_sound</code> 时的场景时间</strong>为准，而不是动画结束时间。放在 <code>self.play(...)</code> 之前调用，声音就落在动画开始处。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "interactive_embed",
+      "text": "interactive_embed"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>interactive_embed()</code> 在场景执行到一半时打开一个 IPython 交互终端，让你在现场手动操作场景里的 mobject，验证坐标、试验动画参数，退出后继续渲染。</p>\n<pre><code class=\"language-python\">Scene.interactive_embed() -&gt; None\n</code></pre>\n<p>无参数。前置条件（源码中直接断言）：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "条件",
+        "说明"
+      ],
+      "rows": [
+        [
+          "OpenGL 渲染器",
+          "必须是 <code>--renderer opengl</code>（断言 <code>camera</code> 为 <code>OpenGLCamera</code>、<code>renderer</code> 为 <code>OpenGLRenderer</code>），Cairo 下会直接断言失败"
+        ],
+        [
+          "IPython 环境",
+          "内部导入 <code>IPython.terminal.embed.InteractiveShellEmbed</code>，未安装 IPython 时不可用"
+        ],
+        [
+          "交互窗口",
+          "配合 <code>--force_window</code> 或 <code>-p</code> 使用，需要能打开窗口的环境"
+        ]
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>进入终端时，整个 <code>manim</code> 与 <code>manim.opengl</code> 命名空间已注入，可直接操作场景变量：</p>\n<pre><code class=\"language-python\">class EmbedScene(Scene):\n    def construct(self):\n        dot = Dot()\n        self.add(dot)\n        self.interactive_embed()   # 进入 IPython，敲 dot.shift(LEFT) 实时看效果\n        self.play(dot.animate.shift(RIGHT * 2))\n</code></pre>\n<p>终端里还内置了一个 <code>rerun()</code> 函数：调用它会整体重跑场景，是交互调试复杂动画的利器。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>在默认的 Cairo 渲染器下调用 <code>interactive_embed()</code> 会立即触发 <code>AssertionError</code>。它不是通用的“暂停调试”手段——Cairo 管道下想逐段检查，请用 <code>-n</code> 分段渲染加 <code>-s</code> 出帧。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "调试工具",
+      "text": "调试工具"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>manim.utils.debug</code> 提供两个小工具，<code>from manim import *</code> 后可直接用：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "name",
+        "签名",
+        "作用"
+      ],
+      "rows": [
+        [
+          "<code>index_labels</code>",
+          "<code>(mobject, label_height=0.15, background_stroke_width=5, background_stroke_color=BLACK, **kwargs) -&gt; VGroup</code>",
+          "给 mobject 的每个子对象贴上序号标签（0、1、2……），返回由标签组成的 <code>VGroup</code>，可 <code>self.add(...)</code> 查看或加进场景"
+        ],
+        [
+          "<code>print_family</code>",
+          "<code>(mobject, n_tabs=0) -&gt; None</code>",
+          "把 mobject 的子对象树打印到控制台，带缩进层级"
+        ]
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">group = VGroup(Square(), Circle(), Triangle())\nprint_family(group)          # 控制台输出层级树\nself.add(group, index_labels(group))   # 画面上标注子对象序号\n</code></pre>\n<p>调试 <code>Transform</code> 不匹配、自定义对象子对象结构异常时，这两个工具几乎总是第一步。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>index_labels</code> 返回的是<strong>新的</strong> <code>VGroup</code>，不会自动进场景；忘了 <code>self.add(labels)</code> 就看不到任何标签。标签本身也是 mobject，会参与后续 <code>Transform</code>——检查完及时移除。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>self.add_sound(\"click.wav\", time_offset=-0.5)</code> 放在 <code>self.play(...)</code> 之前调用，声音会在什么时候响起？</p>",
+      "answerHtml": "<p>在调用 <code>add_sound</code> 那一刻的场景时间<strong>提前 0.5 秒</strong>开始播放——如果场景开始不到 0.5 秒，实际效果取决于混流处理（声音会被截断到视频起点附近）。负偏移适合让长音效的前奏对齐动画。注意声音只在输出视频文件时混流，预览 PNG 或 dry run 听不到。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想在渲染中途暂停、手动试试某个 <code>VGroup</code> 的排布再决定后续动画，该用哪个方法？有什么前提？</p>",
+      "answerHtml": "<p>用 <code>self.interactive_embed()</code>。前提：必须用 <code>--renderer opengl</code> 渲染（源码断言 OpenGL 渲染器与摄像机）、环境装有 IPython、且能打开交互窗口。进入后可直接操作场景对象，内置 <code>rerun()</code> 可重跑场景；Cairo 渲染器下请改用 <code>-n</code> + <code>-s</code> 分段出帧调试。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>到这里，九个板块的内容全部走完。回到教程首页，挑一个感兴趣的板块开始动手吧——最好的学习方式是边看边改示例代码。</p>"
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "part": "ch05",
+  "id": "matching-transforms",
+  "title": "匹配变换",
+  "partTitle": "动画进阶",
+  "prev": {
+    "part": "ch05",
+    "id": "transforms",
+    "title": "Transform 家族",
+    "path": "/ch/ch05/transforms"
+  },
+  "next": {
+    "part": "ch05",
+    "id": "composition",
+    "title": "组合与编排",
+    "path": "/ch/ch05/composition"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>普通 <code>Transform</code> 把整个物体糊成一团渐变。匹配变换（Matching Transforms）则先<strong>拆解</strong>两个物体的组成部分、按规则配对，相同的部件原地不动，不同的部件精准对换——公式变形、字母重排（Anagram）因此干净利落。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "TransformMatchingAbstractBase",
+      "text": "TransformMatchingAbstractBase"
+    },
+    {
+      "type": "html",
+      "html": "<p>两个具体类的共同基类，本身继承 <code>AnimationGroup</code>：匹配变换内部就是\"一个整体 <code>Transform</code> + 若干子动画\"的组合。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "TransformMatchingAbstractBase",
+        "AnimationGroup",
+        "Animation",
+        "object"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>工作机制分三步：</p>\n<ol>\n<li><strong>拆分</strong>：<code>get_mobject_parts(mobject)</code> 把两边拆成部件列表（子类决定粒度）。</li>\n<li><strong>配对</strong>：<code>get_mobject_key(part)</code> 给每个部件算一个 key，key 相同的部件配成一对。</li>\n<li><strong>组动画</strong>：key 相同的部件 <code>Transform</code> 互变；key 对不上的部分按下述参数处理。</li>\n</ol>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>transform_mismatches</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "不匹配的部件互相做 <code>Transform</code> 变形"
+        },
+        {
+          "name": "<code>fade_transform_mismatches</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "不匹配的部件互相做 <code>FadeTransformPieces</code> 淡入淡出变换"
+        },
+        {
+          "name": "<code>key_map</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>不匹配部件的默认行为（两个参数都保持 False）：源侧不匹配的部件朝目标侧不匹配部件的方向 <code>FadeOut</code>，目标侧不匹配的部件从源侧的方向 <code>FadeIn</code>——位置上有交代，但不变形。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>key_map</code> 的方向是<strong>源 → 目标</strong>（官方 docstring：把起始物体子对象的 key 映射到目标物体子对象的 key）。写反了不会报错，只是静默不生效（源码里 key 不存在时直接跳过该条映射）。两部分的 key 都要真实存在，建议先用 <code>get_mobject_key</code> 打印确认。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "TransformMatchingShapes",
+      "text": "TransformMatchingShapes"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>TransformMatchingShapes(mobject, target_mobject, ...)</code>：按<strong>形状</strong>匹配。key 是部件点坐标归一化（移到原点、高度缩到 1、坐标保留三位小数）后的哈希值——形状相同即匹配，颜色、大小、位置不影响。</p>\n<pre><code class=\"language-python\">src = VGroup(Circle(), Square(), Triangle())   # 排成一行\ntar = VGroup(Square(), Triangle(), Circle())   # 换个顺序\nself.play(TransformMatchingShapes(src, tar))   # 每个图形飞到新位置，而不是整体糊掉\n</code></pre>"
+    },
+    {
+      "type": "demo",
+      "example": "ch05/matching_shapes",
+      "scene": "MatchingShapesDemo",
+      "caption": "<p>上排三个图形按形状一一对应飞到重排后的位置；下排两个圆变成四个圆，多出的部分用 <code>fade_transform_mismatches=True</code> 淡入。</p>",
+      "code": "\"\"\"MatchingShapesDemo: TransformMatchingShapes 及 mismatches 处理.\"\"\"\n\nfrom manim import *\n\n\nclass MatchingShapesDemo(Scene):\n    def construct(self):\n        # 形状相同的子对象一一对应：各自飞过去，而不是整体变形\n        src = VGroup(\n            Circle(radius=0.3).set_fill(RED, opacity=0.6),\n            Square(0.6).set_fill(GREEN, opacity=0.6),\n            Triangle().set_fill(BLUE, opacity=0.6).scale(0.6),\n        ).arrange(RIGHT, buff=0.8).shift(UP * 1.2)\n\n        tar = VGroup(\n            Square(0.6).set_fill(GREEN, opacity=0.6),\n            Triangle().set_fill(BLUE, opacity=0.6).scale(0.6),\n            Circle(radius=0.3).set_fill(RED, opacity=0.6),\n        ).arrange(RIGHT, buff=0.8).shift(UP * 1.2)\n\n        self.add(src)\n        self.play(TransformMatchingShapes(src, tar), run_time=1.2)\n        self.wait(0.3)\n\n        # 数量不匹配时：fade_transform_mismatches=True 让多余/缺失的部分淡入淡出\n        src2 = VGroup(*[Circle(radius=0.25).set_fill(TEAL, opacity=0.6) for _ in range(2)]).arrange(RIGHT)\n        tar2 = VGroup(*[Circle(radius=0.25).set_fill(TEAL, opacity=0.6) for _ in range(4)]).arrange(RIGHT).shift(DOWN * 1.5)\n        self.add(src2)\n        self.play(\n            TransformMatchingShapes(src2, tar2, fade_transform_mismatches=True),\n            run_time=1.2,\n        )\n        self.wait(0.3)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "TransformMatchingTex",
+      "text": "TransformMatchingTex"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>TransformMatchingTex(mobject, target_mobject, ...)</code>：按 <code>tex_string</code> 匹配，专用于 <code>MathTex</code>（或 <code>Tex</code>）。相同的符号原地保留，不同符号交叉换位，是公式推导演示的标配。</p>\n<pre><code class=\"language-python\">eq1 = MathTex(&quot;{{a}}^2&quot;, &quot;+&quot;, &quot;{{b}}^2&quot;, &quot;=&quot;, &quot;{{c}}^2&quot;)\neq2 = MathTex(&quot;{{a}}^2&quot;, &quot;=&quot;, &quot;{{c}}^2&quot;, &quot;-&quot;, &quot;{{b}}^2&quot;)\nself.play(TransformMatchingTex(eq1, eq2))   # a²、b²、c² 各自飞去新位置\n</code></pre>"
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>v0.21.0 起 <code>MathTex</code> 的 <code>{{ ... }}</code> 双花括号写法会把 <code>{{a}}^2</code> 拆成 <code>\"a\"</code> 与 <code>\"^2\"</code> <strong>两个独立部分</strong>，key 是不含花括号的 <code>tex_string</code>（如 <code>\"a\"</code>、<code>\"^2\"</code>、<code>\"+\"</code>）。因此 <code>key_map</code> 要写成 <code>{\"x\": \"a\"}</code> 这种形式，旧教程里的 <code>\"{x}^{2}\"</code> 写法在本版本不会产生任何匹配。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch05/matching_tex",
+      "scene": "MatchingTexDemo",
+      "caption": "<p>第一段把 <code>a²+b²=c²</code> 重排成 <code>a²=c²-b²</code>，相同平方项各自飞去新位置；第二段用 <code>key_map={\"x\": \"a\", ...}</code> 把 <code>x²+y²=z²</code> 强行对到上一式的 <code>a/b/c</code> 上。本示例需要本机安装 LaTeX，请在 CI 环境渲染。</p>",
+      "code": "\"\"\"MatchingTexDemo: TransformMatchingTex 与 key_map。需要本机 LaTeX，CI 渲染。\"\"\"\n\nfrom manim import *\n\n\nclass MatchingTexDemo(Scene):\n    def construct(self):\n        # 按 tex_string 匹配：相同的符号原地保留，不同的符号交叉变换\n        eq1 = MathTex(\"{{a}}^2\", \"+\", \"{{b}}^2\", \"=\", \"{{c}}^2\")\n        eq2 = MathTex(\"{{a}}^2\", \"=\", \"{{c}}^2\", \"-\", \"{{b}}^2\")\n        self.add(eq1)\n        self.play(TransformMatchingTex(eq1, eq2), run_time=1.0)\n        self.wait(0.3)\n\n        # key_map：源子对象的 key → 目标子对象的 key，强行把不匹配的两部分当作一对\n        # 注意 v0.21.0 中 \"{{x}}^2\" 会拆成 \"x\" 与 \"^2\" 两个部分，key 是不含花括号的 \"x\"\n        eq3 = MathTex(\"{{x}}^2\", \"+\", \"{{y}}^2\", \"=\", \"{{z}}^2\")\n        self.play(\n            TransformMatchingTex(\n                eq3,\n                eq2,\n                key_map={\"x\": \"a\", \"y\": \"b\", \"z\": \"c\"},\n            ),\n            run_time=1.2,\n        )\n        self.wait(0.3)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>匹配粒度受 <code>MathTex(...)</code> 的逗号分段控制：分段越细、配对生活越精确，但过细的段会增加编译开销。调试时先 <code>self.add(eq)</code> 暂停一帧，确认每个符号确实是独立子对象，再播放匹配变换。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>TransformMatchingShapes</code> 为什么能认出\"两个圆是同一个图形\"，即使它们大小颜色不同？</p>",
+      "answerHtml": "<p>它的 key 来自部件<strong>归一化后的点坐标哈希</strong>：先把部件移到原点、高度缩放到 1、坐标四舍五入到三位小数，再对字节串取哈希。颜色、位置、缩放都不参与计算，只有形状（轮廓）决定 key。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>TransformMatchingTex(eq1, eq2)</code> 里某个符号两边拼写不同（如源里是 <code>x</code>、目标里是 <code>a</code>），但你想让它原地变形过去，该怎么做？方向注意什么？</p>",
+      "answerHtml": "<p>用 <code>key_map</code>：<code>TransformMatchingTex(eq1, eq2, key_map={\"x\": \"a\"})</code>。注意方向是<strong>源 key → 目标 key</strong>（<code>x</code> 在 eq1、<code>a</code> 在 eq2）；写反不会报错但静默失效。v0.21.0 中双花括号会把 <code>{{x}}^2</code> 拆成 <code>\"x\"</code> 与 <code>\"^2\"</code>，key 是不带花括号的 <code>tex_string</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>单个动画再丰富也只是一条时间线。下一节把多个动画编排成并行、串行、错峰的复合结构：<code>AnimationGroup</code> 与它的三个子类。</p>"
+    }
+  ]
+}

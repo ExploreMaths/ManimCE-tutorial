@@ -1,0 +1,120 @@
+{
+  "part": "ch07",
+  "id": "plugins",
+  "title": "插件机制",
+  "partTitle": "高级主题",
+  "prev": {
+    "part": "ch07",
+    "id": "custom-animations",
+    "title": "自定义 Animation",
+    "path": "/ch/ch07/custom-animations"
+  },
+  "next": {
+    "part": "ch07",
+    "id": "config-deep-dive",
+    "title": "配置系统深度",
+    "path": "/ch/ch07/config-deep-dive"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>插件（plugin）是把自定义 mobject、动画、工具函数打包成 Python 包、随 <code>pip</code> 分发的机制。你的场景文件只要多一行 <code>import</code>，就能使用插件提供的全部内容；本节介绍发现、安装、编写插件的方式。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "插件的发现机制",
+      "text": "插件的发现机制"
+    },
+    {
+      "type": "html",
+      "html": "<p>Manim 使用 Python 标准的 <strong>entry points</strong> 机制发现插件：一个包只要在打包元数据里声明自己属于 <code>manim.plugins</code> 组，就会被 <code>manim plugins -l</code> 列出来。</p>\n<p>对插件作者而言，声明方式是在 <code>pyproject.toml</code> 里加一个 entry points 表：</p>\n<pre><code class=\"language-toml\">[project.entry-points.&quot;manim.plugins&quot;]\nmypackage = &quot;mypackage&quot;\n</code></pre>\n<p><code>mypackage = \"mypackage\"</code> 的含义：entry point 的名字（左侧）是插件名，右侧是 <code>import</code> 时执行的模块路径。安装这个包（<code>pip install .</code>）之后，它就出现在插件列表里。</p>\n<p>对用户而言，查看本机已安装的插件：</p>\n<pre><code class=\"language-bash\">manim plugins -l\n</code></pre>\n<p>输出形如：</p>\n<pre><code class=\"language-text\">Plugins:\n • manim_mobject_svg\n</code></pre>\n<p><code>manim plugins</code> 子命令只有 <code>-l/--list</code> 一个选项，仅负责<strong>列出</strong>插件，不负责安装或卸载——安装就是普通的 <code>pip install</code>，卸载是 <code>pip uninstall</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "在场景中使用插件",
+      "text": "在场景中使用插件"
+    },
+    {
+      "type": "html",
+      "html": "<p>插件被列出不等于其内容自动可用。<strong>在 v0.21.0，使用插件内容需要在场景文件里显式导入</strong>：</p>\n<pre><code class=\"language-python\">from manim import *\nfrom manim_mobject_svg import SVGMobject  # 插件提供的类\n</code></pre>\n<p>配置项 <code>[CLI] plugins</code>（逗号分隔的插件名列表）仍然存在：Manim 在导入时会核对这些插件是否已安装，缺失的会在日志中给出警告（<code>Missing Plugins: ...</code>）。它是一个“声明依赖、及早报警”的机制，不再触发自动导入。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>在 v0.18.0 及更早版本中，配置 <code>[CLI] plugins</code> 里列出的插件会在 <code>import manim</code> 时被<strong>自动导入</strong>；v0.18.1 移除了这一行为，改为显式 <code>import</code>。从旧版本迁移的脚本，需要在文件顶部补上对插件的导入语句。见“杂项”一节的废弃提醒写法与本节说明。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>manim plugins -l</code> 能列出某插件，但场景里 <code>SomeClass</code> 报 <code>NameError</code>——列出只说明 entry point 存在，不代表名字进了命名空间。检查场景文件顶部是否真的 <code>import</code> 了插件提供的模块。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "社区插件举例",
+      "text": "社区插件举例"
+    },
+    {
+      "type": "html",
+      "html": "<p>社区维护的插件覆盖了演示播放、物理模拟、机器学习可视化等方向（可用性随时间变化，安装前请以 PyPI 页面为准）：</p>\n<ul>\n<li><code>manim-slides</code>：把场景导出为可键盘控制的演示幻灯片，带后退、跳过、触碰翻页等功能，是最流行的 Manim 生态插件之一</li>\n<li><code>manim-physics</code>：引力场、电磁场、刚体等物理模拟可视化组件</li>\n<li><code>manim-ml</code>：神经网络、Transformer 等机器学习结构的可视化</li>\n<li><code>manim_mobject_svg</code>：把任意 <code>VMobject</code> 导出为 SVG 文件（本机已安装，可用 <code>manim plugins -l</code> 看到）</li>\n</ul>\n<p>这些插件的用法一致：安装后在场景文件顶部显式导入。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "编写自己的插件",
+      "text": "编写自己的插件"
+    },
+    {
+      "type": "html",
+      "html": "<p>最小可行插件只有三步：</p>\n<ol>\n<li>写一个普通 Python 包（<code>pyproject.toml</code> + 你的模块），内容就是你想复用的 mobject / 动画 / 工具函数。</li>\n<li>在 <code>pyproject.toml</code> 中添加上文的 <code>[project.entry-points.\"manim.plugins\"]</code> 声明。</li>\n<li><code>pip install .</code> 后 <code>manim plugins -l</code> 能列出它，场景文件 <code>import</code> 即可使用。</li>\n</ol>\n<p>换言之，插件包本身没有任何 Manim 特有的代码结构要求——entry point 只是一枚“我是 Manim 插件”的徽章。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>插件里的自定义 mobject、自定义 Animation 遵循本节前两节的原则：继承 <code>VMobject</code> 重写 <code>generate_points</code>，或继承 <code>Animation</code> 重写插值钩子。把调试工具（如 <code>manim.utils.debug</code> 的 <code>index_labels</code>）一并收进插件，团队的调试体验也会一致。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>不要在插件模块顶层执行重活（连接网络、渲染测试片段）。entry point 的加载发生在 <code>manim plugins -l</code> 等命令中，顶层代码会被立即执行，拖慢所有命令并可能在没有显示环境的机器上失败。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>安装了某个插件后，场景里直接使用它提供的类却报 <code>NameError</code>，但 <code>manim plugins -l</code> 能列出它。可能是什么原因？</p>",
+      "answerHtml": "<p>v0.18.1 起插件不再自动导入，entry point 只负责“登记”。需要在场景文件顶部显式 <code>import</code> 插件提供的模块，名字才会进入命名空间。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>如何把自己写的 <code>FancyBanner</code> mobject 打包成插件供他人 <code>pip install</code> 使用？</p>",
+      "answerHtml": "<p>最小做法：建一个 Python 包，把 <code>FancyBanner</code> 放进模块里；在 <code>pyproject.toml</code> 添加 <code>[project.entry-points.\"manim.plugins\"]</code> 表（<code>包名 = \"模块路径\"</code>）；<code>pip install .</code> 发布或本地安装。使用者 <code>pip install</code> 后在场景文件里显式导入即可。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>插件解决“代码如何分享”，接下来的三节转向“渲染如何受控”：先深入配置系统，再看性能与缓存，最后把 CLI 的全部选项一次讲透。</p>"
+    }
+  ]
+}

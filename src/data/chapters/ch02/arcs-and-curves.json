@@ -1,0 +1,496 @@
+{
+  "part": "ch02",
+  "id": "arcs-and-curves",
+  "title": "圆弧与曲线",
+  "partTitle": "基础图形",
+  "prev": {
+    "part": "ch02",
+    "id": "lines-and-arrows",
+    "title": "线与箭头",
+    "path": "/ch/ch02/lines-and-arrows"
+  },
+  "next": {
+    "part": "ch02",
+    "id": "dots-and-clouds",
+    "title": "点与点云",
+    "path": "/ch/ch02/dots-and-clouds"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>本节覆盖圆弧家族（<code>Arc</code>、扇形、圆环）、贝塞尔曲线与曲线箭头。所有圆弧都继承 <code>TipableVMobject</code>，因此也能像直线一样挂箭头尖。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "CurvedDoubleArrow",
+        "CurvedArrow",
+        "ArcBetweenPoints",
+        "Arc",
+        "TipableVMobject",
+        "VMobject"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Arc",
+      "text": "Arc"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Arc</code> 是按圆心、半径与角度生成的一段圆弧，是所有圆弧图形的基石。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>radius</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "1.0"
+        },
+        {
+          "name": "<code>start_angle</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "起始角（弧度）"
+        },
+        {
+          "name": "<code>angle</code>",
+          "type": "float",
+          "default": "PI / 2",
+          "desc": "圆弧张角（弧度）"
+        },
+        {
+          "name": "<code>num_components</code>",
+          "type": "int",
+          "default": "9",
+          "desc": "组成圆弧的贝塞尔曲线段数"
+        },
+        {
+          "name": "<code>arc_center</code>",
+          "type": "Point3DLike",
+          "default": "[0, 0, 0]",
+          "desc": "圆心位置"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Arc(radius=2, start_angle=PI / 6, angle=PI * 2 / 3)\n</code></pre>\n<p>常见坑：<code>arc_center</code> 只在构造时生效；之后 <code>move_to</code> / <code>shift</code> 改变的是包围盒位置，<code>get_arc_center()</code> 仍是几何圆心——以圆心为基准做动画时用 <code>arc.get_arc_center()</code> 而不是 <code>ORIGIN</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ArcBetweenPoints",
+      "text": "ArcBetweenPoints"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>ArcBetweenPoints</code> 生成经过指定起点、终点的圆弧，弯曲程度由圆心角 <code>angle</code> 或 <code>radius</code> 控制。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>start</code>",
+          "type": "Point3DLike",
+          "default": "—",
+          "desc": "起点"
+        },
+        {
+          "name": "<code>end</code>",
+          "type": "Point3DLike",
+          "default": "—",
+          "desc": "终点"
+        },
+        {
+          "name": "<code>angle</code>",
+          "type": "float",
+          "default": "PI / 2",
+          "desc": "圆心角；决定弯曲程度"
+        },
+        {
+          "name": "<code>radius</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>常见坑：当 <code>start</code> 与 <code>end</code> 距离固定时，<code>angle</code> 越大弧越“鼓”；<code>angle=PI</code> 恰好是半圆，更大的角会让圆心跑到起终点连线的另一侧。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "AnnularSector",
+      "text": "AnnularSector"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>AnnularSector</code>（环形扇区）是内外两个同心圆弧夹出的填充区域，<code>Sector</code> 是它的特例（内半径为 0）。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>inner_radius</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "内半径"
+        },
+        {
+          "name": "<code>outer_radius</code>",
+          "type": "float",
+          "default": "2",
+          "desc": "外半径"
+        },
+        {
+          "name": "<code>angle</code>",
+          "type": "float",
+          "default": "PI / 2",
+          "desc": "张角（弧度）"
+        },
+        {
+          "name": "<code>start_angle</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "起始角"
+        },
+        {
+          "name": "<code>fill_opacity</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "填充不透明度"
+        },
+        {
+          "name": "<code>stroke_width</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "描边宽度（默认不描边）"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Sector",
+      "text": "Sector"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Sector</code> 是从圆心切出的实心扇形，继承 <code>AnnularSector</code>（<code>inner_radius=0</code>）。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>radius</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "扇形半径"
+        },
+        {
+          "name": "<code>angle</code>",
+          "type": "float",
+          "default": "PI / 2",
+          "desc": "张角（弧度），经 kwargs 传入"
+        },
+        {
+          "name": "<code>start_angle</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "起始角，经 kwargs 传入"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Sector(radius=2, angle=PI / 3, start_angle=PI / 6)\n</code></pre>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Annulus",
+      "text": "Annulus"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Annulus</code>（圆环）是两个同心圆之间的区域，继承 <code>Circle</code>。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>inner_radius</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "内半径"
+        },
+        {
+          "name": "<code>outer_radius</code>",
+          "type": "float",
+          "default": "2",
+          "desc": "外半径"
+        },
+        {
+          "name": "<code>fill_opacity</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "填充不透明度"
+        },
+        {
+          "name": "<code>stroke_width</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "描边宽度"
+        },
+        {
+          "name": "<code>mark_paths_closed</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "是否把路径标记为闭合"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>常见坑：<code>Annulus</code> 的填充区域依赖 <code>fill_opacity</code>，默认描边为 0，直接 <code>Create</code> 会看到“空心圆盘外框”而不是圆环——记得保留填充或加描边。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "AnnotationDot",
+      "text": "AnnotationDot"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>AnnotationDot</code> 是 3Blue1Brown 风格的注释圆点：青色填充、白色粗描边，继承 <code>Dot</code>。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>radius</code>",
+          "type": "float",
+          "default": "0.104",
+          "desc": "圆点半径"
+        },
+        {
+          "name": "<code>stroke_width</code>",
+          "type": "float",
+          "default": "5",
+          "desc": "白色描边宽度"
+        },
+        {
+          "name": "<code>stroke_color</code>",
+          "type": "ParsableManimColor",
+          "default": "WHITE",
+          "desc": "描边颜色"
+        },
+        {
+          "name": "<code>fill_color</code>",
+          "type": "ParsableManimColor",
+          "default": "<h1>58C4DD</h1>",
+          "desc": "填充颜色（品牌青）"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "CubicBezier",
+      "text": "CubicBezier"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>CubicBezier</code> 用四个控制点生成一段三次贝塞尔曲线：起点锚点、起点手柄、终点手柄、终点锚点。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>start_anchor</code>",
+          "type": "Point3DLike",
+          "default": "—",
+          "desc": "曲线起点"
+        },
+        {
+          "name": "<code>start_handle</code>",
+          "type": "Point3DLike",
+          "default": "—",
+          "desc": "起点方向手柄"
+        },
+        {
+          "name": "<code>end_handle</code>",
+          "type": "Point3DLike",
+          "default": "—",
+          "desc": "终点方向手柄"
+        },
+        {
+          "name": "<code>end_anchor</code>",
+          "type": "Point3DLike",
+          "default": "—",
+          "desc": "曲线终点"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">CubicBezier(LEFT * 2, LEFT * 2 + UP, RIGHT * 2 + DOWN, RIGHT * 2)\n</code></pre>\n<p>常见坑：手柄离锚点越远曲线越“拗”；多段平滑曲线请用多段 <code>CubicBezier</code> 或 <code>VMobject</code> 的 <code>start_new_path</code>，不要把多段硬拼成一个 <code>CubicBezier</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "CurvedArrow",
+      "text": "CurvedArrow"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>CurvedArrow</code> 是带箭头尖的 <code>ArcBetweenPoints</code>，箭头画在终点切线方向上。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>start_point</code>",
+          "type": "Point3DLike",
+          "default": "—",
+          "desc": "起点"
+        },
+        {
+          "name": "<code>end_point</code>",
+          "type": "Point3DLike",
+          "default": "—",
+          "desc": "终点"
+        },
+        {
+          "name": "<code>angle</code>",
+          "type": "float",
+          "default": "PI / 2",
+          "desc": "圆心角（kwargs）"
+        },
+        {
+          "name": "<code>tip_shape</code>",
+          "type": "type[ArrowTip]",
+          "default": "ArrowTriangleFilledTip",
+          "desc": "箭头尖形状"
+        }
+      ]
+    },
+    {
+      "type": "demo",
+      "example": "ch02/arcs_showcase",
+      "scene": "ArcsShowcase",
+      "caption": "<p><code>Arc</code>、<code>Sector</code>、<code>AnnularSector</code>、<code>Annulus</code> 同框；下方是 <code>CubicBezier</code> 与 <code>CurvedArrow</code> / <code>CurvedDoubleArrow</code>。曲线箭头用 <code>Create</code> 入场，因为 <code>GrowArrow</code> 依赖 <code>scale_tips</code>，对圆弧系不适用。</p>",
+      "code": "\"\"\"ArcsShowcase: Arc / ArcBetweenPoints / Sector / AnnularSector / Annulus / CubicBezier / CurvedArrow / CurvedDoubleArrow.\"\"\"\n\nfrom manim import *\n\n\nclass ArcsShowcase(Scene):\n    def construct(self):\n        arc = Arc(radius=1.2, start_angle=PI / 6, angle=PI * 0.75, color=BLUE)\n        sector = Sector(radius=1.0, angle=PI / 3, color=GREEN).shift(LEFT * 3.5 + DOWN * 0.5)\n        annular = AnnularSector(inner_radius=0.6, outer_radius=1.1, angle=PI * 0.9, color=YELLOW)\n        annular.shift(RIGHT * 3.5 + DOWN * 0.5)\n        annulus = Annulus(inner_radius=0.5, outer_radius=0.9, color=RED).shift(RIGHT * 0.2 + UP * 0.3)\n\n        self.play(Create(arc), Create(sector), Create(annular), FadeIn(annulus))\n\n        bez = CubicBezier(\n            LEFT * 5 + DOWN * 2.5,\n            LEFT * 3.5 + DOWN * 0.5,\n            LEFT * 2 + DOWN * 3.5,\n            LEFT * 0.5 + DOWN * 2,\n            color=PURPLE,\n        )\n        curved = CurvedArrow(ORIGIN + DOWN * 2.5, RIGHT * 2.5 + DOWN * 2.5, color=ORANGE)\n        dcurved = CurvedDoubleArrow(RIGHT * 3 + DOWN * 3, RIGHT * 5.5 + DOWN * 1.5, color=PINK)\n\n        self.play(Create(bez), Create(curved), Create(dcurved))\n        self.wait(1)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "CurvedDoubleArrow",
+      "text": "CurvedDoubleArrow"
+    },
+    {
+      "type": "html",
+      "html": "<p>两端都带箭头尖的曲线箭头，继承 <code>CurvedArrow</code>。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>tip_shape_start</code>",
+          "type": "type[ArrowTip]",
+          "default": "ArrowTriangleFilledTip",
+          "desc": "起点箭头尖"
+        },
+        {
+          "name": "<code>tip_shape_end</code>",
+          "type": "type[ArrowTip]",
+          "default": "ArrowTriangleFilledTip",
+          "desc": "终点箭头尖"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "TipableVMobject",
+      "text": "TipableVMobject"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>TipableVMobject</code> 是 <code>Line</code> 与 <code>Arc</code> 共同的基类，提供“可挂箭头尖”的机制：<code>tip_length</code>、<code>normal_vector</code>、<code>tip_style</code> 三个构造参数与 <code>add_tip()</code>、<code>get_tip()</code> 等方法。<code>CurvedArrow</code> 就是在 <code>ArcBetweenPoints</code> 构造后调用 <code>self.add_tip()</code> 实现的。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>tip_length</code>",
+          "type": "float",
+          "default": "0.35",
+          "desc": "箭头尖默认长度"
+        },
+        {
+          "name": "<code>normal_vector</code>",
+          "type": "Vector3DLike",
+          "default": "[0, 0, 1]",
+          "desc": "箭头尖法向量（决定朝向）"
+        },
+        {
+          "name": "<code>tip_style</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">arc = Arc(angle=PI, tip_style={&quot;fill_opacity&quot;: 0.5})\narc.add_tip(tip_shape=StealthTip, tip_length=0.5)\n</code></pre>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>圆弧族的 <code>angle</code> 一律是<strong>弧度</strong>。传角度制数值（如 90）会得到绕很多圈的乱弧；用 <code>90 * DEGREES</code> 转换。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>num_components</code> 控制圆弧的贝zier 分段数：需要让圆弧与直线 <code>Transform</code> 时提高分段数能让变形更平滑，代价是略慢的构造速度。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>画一段从 <code>LEFT*2</code> 到 <code>RIGHT*2</code>、向上鼓起的半圆弧，并把箭头尖装在起点（朝左）。</p>",
+      "answerHtml": "<p>半圆对应圆心角 <code>PI</code>；箭头尖装在起点用 <code>add_tip(at_start=True)</code>：</p>\n<pre><code class=\"language-python\">arc = ArcBetweenPoints(LEFT * 2, RIGHT * 2, angle=PI)\narc.add_tip(at_start=True)\n</code></pre>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>有了基础图形，下一节介绍如何用布尔运算（并、交、差、异或）组合出复杂的填充形状。</p>"
+    }
+  ]
+}

@@ -1,0 +1,1607 @@
+[
+  {
+    "name": "CLI 基础与章节分段",
+    "kind": "section",
+    "path": "/ch/ch01/cli-and-sections"
+  },
+  {
+    "name": "DefaultSectionType",
+    "kind": "class",
+    "path": "/ch/ch01/cli-and-sections#DefaultSectionType"
+  },
+  {
+    "name": "Section",
+    "kind": "class",
+    "path": "/ch/ch01/cli-and-sections#Section"
+  },
+  {
+    "name": "next_section",
+    "kind": "function",
+    "path": "/ch/ch01/cli-and-sections#next_section"
+  },
+  {
+    "name": "你的第一个场景",
+    "kind": "section",
+    "path": "/ch/ch01/first-scene"
+  },
+  {
+    "name": "Scene",
+    "kind": "class",
+    "path": "/ch/ch01/first-scene#Scene"
+  },
+  {
+    "name": "play",
+    "kind": "function",
+    "path": "/ch/ch01/first-scene#play"
+  },
+  {
+    "name": "wait",
+    "kind": "function",
+    "path": "/ch/ch01/first-scene#wait"
+  },
+  {
+    "name": "安装与运行环境",
+    "kind": "section",
+    "path": "/ch/ch01/installation"
+  },
+  {
+    "name": "ManimMagic",
+    "kind": "class",
+    "path": "/ch/ch01/installation#ManimMagic"
+  },
+  {
+    "name": "渲染流程与输出结构",
+    "kind": "section",
+    "path": "/ch/ch01/render-pipeline"
+  },
+  {
+    "name": "QUALITIES",
+    "kind": "class",
+    "path": "/ch/ch01/render-pipeline#QUALITIES"
+  },
+  {
+    "name": "SceneFileWriter",
+    "kind": "class",
+    "path": "/ch/ch01/render-pipeline#SceneFileWriter"
+  },
+  {
+    "name": "标注与装饰",
+    "kind": "section",
+    "path": "/ch/ch02/annotations"
+  },
+  {
+    "name": "ArcBrace",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#ArcBrace"
+  },
+  {
+    "name": "BackgroundRectangle",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#BackgroundRectangle"
+  },
+  {
+    "name": "Brace",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#Brace"
+  },
+  {
+    "name": "BraceBetweenPoints",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#BraceBetweenPoints"
+  },
+  {
+    "name": "BraceLabel",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#BraceLabel"
+  },
+  {
+    "name": "BraceText",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#BraceText"
+  },
+  {
+    "name": "Cross",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#Cross"
+  },
+  {
+    "name": "Label",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#Label"
+  },
+  {
+    "name": "LabeledArrow",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#LabeledArrow"
+  },
+  {
+    "name": "LabeledLine",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#LabeledLine"
+  },
+  {
+    "name": "LabeledPolygram",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#LabeledPolygram"
+  },
+  {
+    "name": "SurroundingRectangle",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#SurroundingRectangle"
+  },
+  {
+    "name": "Underline",
+    "kind": "class",
+    "path": "/ch/ch02/annotations#Underline"
+  },
+  {
+    "name": "圆弧与曲线",
+    "kind": "section",
+    "path": "/ch/ch02/arcs-and-curves"
+  },
+  {
+    "name": "AnnotationDot",
+    "kind": "class",
+    "path": "/ch/ch02/arcs-and-curves#AnnotationDot"
+  },
+  {
+    "name": "AnnularSector",
+    "kind": "class",
+    "path": "/ch/ch02/arcs-and-curves#AnnularSector"
+  },
+  {
+    "name": "Annulus",
+    "kind": "class",
+    "path": "/ch/ch02/arcs-and-curves#Annulus"
+  },
+  {
+    "name": "Arc",
+    "kind": "class",
+    "path": "/ch/ch02/arcs-and-curves#Arc"
+  },
+  {
+    "name": "ArcBetweenPoints",
+    "kind": "class",
+    "path": "/ch/ch02/arcs-and-curves#ArcBetweenPoints"
+  },
+  {
+    "name": "CubicBezier",
+    "kind": "class",
+    "path": "/ch/ch02/arcs-and-curves#CubicBezier"
+  },
+  {
+    "name": "CurvedArrow",
+    "kind": "class",
+    "path": "/ch/ch02/arcs-and-curves#CurvedArrow"
+  },
+  {
+    "name": "CurvedDoubleArrow",
+    "kind": "class",
+    "path": "/ch/ch02/arcs-and-curves#CurvedDoubleArrow"
+  },
+  {
+    "name": "Sector",
+    "kind": "class",
+    "path": "/ch/ch02/arcs-and-curves#Sector"
+  },
+  {
+    "name": "TipableVMobject",
+    "kind": "class",
+    "path": "/ch/ch02/arcs-and-curves#TipableVMobject"
+  },
+  {
+    "name": "基本形状",
+    "kind": "section",
+    "path": "/ch/ch02/basic-shapes"
+  },
+  {
+    "name": "Circle",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#Circle"
+  },
+  {
+    "name": "ConvexHull",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#ConvexHull"
+  },
+  {
+    "name": "Cutout",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#Cutout"
+  },
+  {
+    "name": "Ellipse",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#Ellipse"
+  },
+  {
+    "name": "Polygon",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#Polygon"
+  },
+  {
+    "name": "Polygram",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#Polygram"
+  },
+  {
+    "name": "Rectangle",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#Rectangle"
+  },
+  {
+    "name": "RegularPolygon",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#RegularPolygon"
+  },
+  {
+    "name": "RegularPolygram",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#RegularPolygram"
+  },
+  {
+    "name": "RoundedRectangle",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#RoundedRectangle"
+  },
+  {
+    "name": "Square",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#Square"
+  },
+  {
+    "name": "Star",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#Star"
+  },
+  {
+    "name": "Triangle",
+    "kind": "class",
+    "path": "/ch/ch02/basic-shapes#Triangle"
+  },
+  {
+    "name": "布尔运算",
+    "kind": "section",
+    "path": "/ch/ch02/boolean-ops"
+  },
+  {
+    "name": "Difference",
+    "kind": "class",
+    "path": "/ch/ch02/boolean-ops#Difference"
+  },
+  {
+    "name": "Exclusion",
+    "kind": "class",
+    "path": "/ch/ch02/boolean-ops#Exclusion"
+  },
+  {
+    "name": "Intersection",
+    "kind": "class",
+    "path": "/ch/ch02/boolean-ops#Intersection"
+  },
+  {
+    "name": "Union",
+    "kind": "class",
+    "path": "/ch/ch02/boolean-ops#Union"
+  },
+  {
+    "name": "颜色系统",
+    "kind": "section",
+    "path": "/ch/ch02/colors"
+  },
+  {
+    "name": "HSV",
+    "kind": "class",
+    "path": "/ch/ch02/colors#HSV"
+  },
+  {
+    "name": "ManimColor",
+    "kind": "class",
+    "path": "/ch/ch02/colors#ManimColor"
+  },
+  {
+    "name": "RGBA",
+    "kind": "class",
+    "path": "/ch/ch02/colors#RGBA"
+  },
+  {
+    "name": "RandomColorGenerator",
+    "kind": "class",
+    "path": "/ch/ch02/colors#RandomColorGenerator"
+  },
+  {
+    "name": "点与点云",
+    "kind": "section",
+    "path": "/ch/ch02/dots-and-clouds"
+  },
+  {
+    "name": "Dot",
+    "kind": "class",
+    "path": "/ch/ch02/dots-and-clouds#Dot"
+  },
+  {
+    "name": "LabeledDot",
+    "kind": "class",
+    "path": "/ch/ch02/dots-and-clouds#LabeledDot"
+  },
+  {
+    "name": "Mobject1D",
+    "kind": "class",
+    "path": "/ch/ch02/dots-and-clouds#Mobject1D"
+  },
+  {
+    "name": "Mobject2D",
+    "kind": "class",
+    "path": "/ch/ch02/dots-and-clouds#Mobject2D"
+  },
+  {
+    "name": "PGroup",
+    "kind": "class",
+    "path": "/ch/ch02/dots-and-clouds#PGroup"
+  },
+  {
+    "name": "PMobject",
+    "kind": "class",
+    "path": "/ch/ch02/dots-and-clouds#PMobject"
+  },
+  {
+    "name": "Point",
+    "kind": "class",
+    "path": "/ch/ch02/dots-and-clouds#Point"
+  },
+  {
+    "name": "PointCloudDot",
+    "kind": "class",
+    "path": "/ch/ch02/dots-and-clouds#PointCloudDot"
+  },
+  {
+    "name": "组合容器",
+    "kind": "section",
+    "path": "/ch/ch02/groups"
+  },
+  {
+    "name": "Group",
+    "kind": "class",
+    "path": "/ch/ch02/groups#Group"
+  },
+  {
+    "name": "VDict",
+    "kind": "class",
+    "path": "/ch/ch02/groups#VDict"
+  },
+  {
+    "name": "VGroup",
+    "kind": "class",
+    "path": "/ch/ch02/groups#VGroup"
+  },
+  {
+    "name": "位图与 SVG",
+    "kind": "section",
+    "path": "/ch/ch02/images-and-svg"
+  },
+  {
+    "name": "AbstractImageMobject",
+    "kind": "class",
+    "path": "/ch/ch02/images-and-svg#AbstractImageMobject"
+  },
+  {
+    "name": "ImageMobject",
+    "kind": "class",
+    "path": "/ch/ch02/images-and-svg#ImageMobject"
+  },
+  {
+    "name": "SVGMobject",
+    "kind": "class",
+    "path": "/ch/ch02/images-and-svg#SVGMobject"
+  },
+  {
+    "name": "VMobjectFromSVGPath",
+    "kind": "class",
+    "path": "/ch/ch02/images-and-svg#VMobjectFromSVGPath"
+  },
+  {
+    "name": "线与箭头",
+    "kind": "section",
+    "path": "/ch/ch02/lines-and-arrows"
+  },
+  {
+    "name": "Angle",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#Angle"
+  },
+  {
+    "name": "Arrow",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#Arrow"
+  },
+  {
+    "name": "ArrowCircleFilledTip",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#ArrowCircleFilledTip"
+  },
+  {
+    "name": "ArrowCircleTip",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#ArrowCircleTip"
+  },
+  {
+    "name": "ArrowSquareFilledTip",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#ArrowSquareFilledTip"
+  },
+  {
+    "name": "ArrowSquareTip",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#ArrowSquareTip"
+  },
+  {
+    "name": "ArrowTip",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#ArrowTip"
+  },
+  {
+    "name": "ArrowTriangleFilledTip",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#ArrowTriangleFilledTip"
+  },
+  {
+    "name": "ArrowTriangleTip",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#ArrowTriangleTip"
+  },
+  {
+    "name": "DashedLine",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#DashedLine"
+  },
+  {
+    "name": "DoubleArrow",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#DoubleArrow"
+  },
+  {
+    "name": "Elbow",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#Elbow"
+  },
+  {
+    "name": "Line",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#Line"
+  },
+  {
+    "name": "RightAngle",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#RightAngle"
+  },
+  {
+    "name": "StealthTip",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#StealthTip"
+  },
+  {
+    "name": "TangentLine",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#TangentLine"
+  },
+  {
+    "name": "TangentialArc",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#TangentialArc"
+  },
+  {
+    "name": "Vector",
+    "kind": "class",
+    "path": "/ch/ch02/lines-and-arrows#Vector"
+  },
+  {
+    "name": "Mobject 核心",
+    "kind": "section",
+    "path": "/ch/ch02/mobject-core"
+  },
+  {
+    "name": "Mobject",
+    "kind": "class",
+    "path": "/ch/ch02/mobject-core#Mobject"
+  },
+  {
+    "name": "VMobject",
+    "kind": "section",
+    "path": "/ch/ch02/vmobject"
+  },
+  {
+    "name": "CurvesAsSubmobjects",
+    "kind": "class",
+    "path": "/ch/ch02/vmobject#CurvesAsSubmobjects"
+  },
+  {
+    "name": "DashedVMobject",
+    "kind": "class",
+    "path": "/ch/ch02/vmobject#DashedVMobject"
+  },
+  {
+    "name": "VMobject",
+    "kind": "class",
+    "path": "/ch/ch02/vmobject#VMobject"
+  },
+  {
+    "name": "VectorizedPoint",
+    "kind": "class",
+    "path": "/ch/ch02/vmobject#VectorizedPoint"
+  },
+  {
+    "name": "Code 代码高亮",
+    "kind": "section",
+    "path": "/ch/ch03/code-highlight"
+  },
+  {
+    "name": "Code",
+    "kind": "class",
+    "path": "/ch/ch03/code-highlight#Code"
+  },
+  {
+    "name": "列表与标题",
+    "kind": "section",
+    "path": "/ch/ch03/lists-and-title"
+  },
+  {
+    "name": "BulletedList",
+    "kind": "class",
+    "path": "/ch/ch03/lists-and-title#BulletedList"
+  },
+  {
+    "name": "Title",
+    "kind": "class",
+    "path": "/ch/ch03/lists-and-title#Title"
+  },
+  {
+    "name": "MarkupText",
+    "kind": "section",
+    "path": "/ch/ch03/markup-text"
+  },
+  {
+    "name": "MarkupText",
+    "kind": "class",
+    "path": "/ch/ch03/markup-text#MarkupText"
+  },
+  {
+    "name": "数字与变量",
+    "kind": "section",
+    "path": "/ch/ch03/numbers"
+  },
+  {
+    "name": "DecimalNumber",
+    "kind": "class",
+    "path": "/ch/ch03/numbers#DecimalNumber"
+  },
+  {
+    "name": "Integer",
+    "kind": "class",
+    "path": "/ch/ch03/numbers#Integer"
+  },
+  {
+    "name": "Variable",
+    "kind": "class",
+    "path": "/ch/ch03/numbers#Variable"
+  },
+  {
+    "name": "Tex 与 MathTex",
+    "kind": "section",
+    "path": "/ch/ch03/tex-and-mathtex"
+  },
+  {
+    "name": "MathTex",
+    "kind": "class",
+    "path": "/ch/ch03/tex-and-mathtex#MathTex"
+  },
+  {
+    "name": "MathTexPart",
+    "kind": "class",
+    "path": "/ch/ch03/tex-and-mathtex#MathTexPart"
+  },
+  {
+    "name": "SingleStringMathTex",
+    "kind": "class",
+    "path": "/ch/ch03/tex-and-mathtex#SingleStringMathTex"
+  },
+  {
+    "name": "Tex",
+    "kind": "class",
+    "path": "/ch/ch03/tex-and-mathtex#Tex"
+  },
+  {
+    "name": "TeX 模板定制",
+    "kind": "section",
+    "path": "/ch/ch03/tex-templates"
+  },
+  {
+    "name": "TexFontTemplates",
+    "kind": "class",
+    "path": "/ch/ch03/tex-templates#TexFontTemplates"
+  },
+  {
+    "name": "TexTemplate",
+    "kind": "class",
+    "path": "/ch/ch03/tex-templates#TexTemplate"
+  },
+  {
+    "name": "TexTemplateLibrary",
+    "kind": "class",
+    "path": "/ch/ch03/tex-templates#TexTemplateLibrary"
+  },
+  {
+    "name": "Text 与段落",
+    "kind": "section",
+    "path": "/ch/ch03/text-and-paragraph"
+  },
+  {
+    "name": "Paragraph",
+    "kind": "class",
+    "path": "/ch/ch03/text-and-paragraph#Paragraph"
+  },
+  {
+    "name": "Text",
+    "kind": "class",
+    "path": "/ch/ch03/text-and-paragraph#Text"
+  },
+  {
+    "name": "register_font",
+    "kind": "function",
+    "path": "/ch/ch03/text-and-paragraph#register_font"
+  },
+  {
+    "name": "remove_invisible_chars",
+    "kind": "function",
+    "path": "/ch/ch03/text-and-paragraph#remove_invisible_chars"
+  },
+  {
+    "name": "文本方案对比",
+    "kind": "section",
+    "path": "/ch/ch03/text-compare"
+  },
+  {
+    "name": "Typst 与 MathTypst (v0.21.0 新增)",
+    "kind": "section",
+    "path": "/ch/ch03/typst"
+  },
+  {
+    "name": "MathTypst",
+    "kind": "class",
+    "path": "/ch/ch03/typst#MathTypst"
+  },
+  {
+    "name": "Typst",
+    "kind": "class",
+    "path": "/ch/ch03/typst#Typst"
+  },
+  {
+    "name": "坐标系家族",
+    "kind": "section",
+    "path": "/ch/ch04/axes-family"
+  },
+  {
+    "name": "Axes",
+    "kind": "class",
+    "path": "/ch/ch04/axes-family#Axes"
+  },
+  {
+    "name": "ComplexPlane",
+    "kind": "class",
+    "path": "/ch/ch04/axes-family#ComplexPlane"
+  },
+  {
+    "name": "CoordinateSystem",
+    "kind": "class",
+    "path": "/ch/ch04/axes-family#CoordinateSystem"
+  },
+  {
+    "name": "NumberPlane",
+    "kind": "class",
+    "path": "/ch/ch04/axes-family#NumberPlane"
+  },
+  {
+    "name": "PolarPlane",
+    "kind": "class",
+    "path": "/ch/ch04/axes-family#PolarPlane"
+  },
+  {
+    "name": "ThreeDAxes",
+    "kind": "class",
+    "path": "/ch/ch04/axes-family#ThreeDAxes"
+  },
+  {
+    "name": "函数绘图",
+    "kind": "section",
+    "path": "/ch/ch04/function-graphs"
+  },
+  {
+    "name": "FunctionGraph",
+    "kind": "class",
+    "path": "/ch/ch04/function-graphs#FunctionGraph"
+  },
+  {
+    "name": "ImplicitFunction",
+    "kind": "class",
+    "path": "/ch/ch04/function-graphs#ImplicitFunction"
+  },
+  {
+    "name": "ParametricFunction",
+    "kind": "class",
+    "path": "/ch/ch04/function-graphs#ParametricFunction"
+  },
+  {
+    "name": "矩阵",
+    "kind": "section",
+    "path": "/ch/ch04/matrices"
+  },
+  {
+    "name": "DecimalMatrix",
+    "kind": "class",
+    "path": "/ch/ch04/matrices#DecimalMatrix"
+  },
+  {
+    "name": "IntegerMatrix",
+    "kind": "class",
+    "path": "/ch/ch04/matrices#IntegerMatrix"
+  },
+  {
+    "name": "Matrix",
+    "kind": "class",
+    "path": "/ch/ch04/matrices#Matrix"
+  },
+  {
+    "name": "MobjectMatrix",
+    "kind": "class",
+    "path": "/ch/ch04/matrices#MobjectMatrix"
+  },
+  {
+    "name": "get_det_text",
+    "kind": "function",
+    "path": "/ch/ch04/matrices#get_det_text"
+  },
+  {
+    "name": "matrix_to_mobject",
+    "kind": "function",
+    "path": "/ch/ch04/matrices#matrix_to_mobject"
+  },
+  {
+    "name": "matrix_to_tex_string",
+    "kind": "function",
+    "path": "/ch/ch04/matrices#matrix_to_tex_string"
+  },
+  {
+    "name": "NumberLine",
+    "kind": "section",
+    "path": "/ch/ch04/number-line"
+  },
+  {
+    "name": "NumberLine",
+    "kind": "class",
+    "path": "/ch/ch04/number-line#NumberLine"
+  },
+  {
+    "name": "UnitInterval",
+    "kind": "class",
+    "path": "/ch/ch04/number-line#UnitInterval"
+  },
+  {
+    "name": "概率与图表",
+    "kind": "section",
+    "path": "/ch/ch04/probability-and-charts"
+  },
+  {
+    "name": "BarChart",
+    "kind": "class",
+    "path": "/ch/ch04/probability-and-charts#BarChart"
+  },
+  {
+    "name": "SampleSpace",
+    "kind": "class",
+    "path": "/ch/ch04/probability-and-charts#SampleSpace"
+  },
+  {
+    "name": "缩放基",
+    "kind": "section",
+    "path": "/ch/ch04/scales"
+  },
+  {
+    "name": "LinearBase",
+    "kind": "class",
+    "path": "/ch/ch04/scales#LinearBase"
+  },
+  {
+    "name": "LogBase",
+    "kind": "class",
+    "path": "/ch/ch04/scales#LogBase"
+  },
+  {
+    "name": "表格",
+    "kind": "section",
+    "path": "/ch/ch04/tables"
+  },
+  {
+    "name": "DecimalTable",
+    "kind": "class",
+    "path": "/ch/ch04/tables#DecimalTable"
+  },
+  {
+    "name": "IntegerTable",
+    "kind": "class",
+    "path": "/ch/ch04/tables#IntegerTable"
+  },
+  {
+    "name": "MathTable",
+    "kind": "class",
+    "path": "/ch/ch04/tables#MathTable"
+  },
+  {
+    "name": "MobjectTable",
+    "kind": "class",
+    "path": "/ch/ch04/tables#MobjectTable"
+  },
+  {
+    "name": "Table",
+    "kind": "class",
+    "path": "/ch/ch04/tables#Table"
+  },
+  {
+    "name": "向量空间场景",
+    "kind": "section",
+    "path": "/ch/ch04/vector-space-scenes"
+  },
+  {
+    "name": "LinearTransformationScene",
+    "kind": "class",
+    "path": "/ch/ch04/vector-space-scenes#LinearTransformationScene"
+  },
+  {
+    "name": "VectorScene",
+    "kind": "class",
+    "path": "/ch/ch04/vector-space-scenes#VectorScene"
+  },
+  {
+    "name": "Animation 机制",
+    "kind": "section",
+    "path": "/ch/ch05/animation-mechanism"
+  },
+  {
+    "name": "Add",
+    "kind": "class",
+    "path": "/ch/ch05/animation-mechanism#Add"
+  },
+  {
+    "name": "Animation",
+    "kind": "class",
+    "path": "/ch/ch05/animation-mechanism#Animation"
+  },
+  {
+    "name": "Wait",
+    "kind": "class",
+    "path": "/ch/ch05/animation-mechanism#Wait"
+  },
+  {
+    "name": "override_animation",
+    "kind": "function",
+    "path": "/ch/ch05/animation-mechanism#override_animation"
+  },
+  {
+    "name": "prepare_animation",
+    "kind": "function",
+    "path": "/ch/ch05/animation-mechanism#prepare_animation"
+  },
+  {
+    "name": "组合与编排",
+    "kind": "section",
+    "path": "/ch/ch05/composition"
+  },
+  {
+    "name": "AnimationGroup",
+    "kind": "class",
+    "path": "/ch/ch05/composition#AnimationGroup"
+  },
+  {
+    "name": "LaggedStart",
+    "kind": "class",
+    "path": "/ch/ch05/composition#LaggedStart"
+  },
+  {
+    "name": "LaggedStartMap",
+    "kind": "class",
+    "path": "/ch/ch05/composition#LaggedStartMap"
+  },
+  {
+    "name": "Succession",
+    "kind": "class",
+    "path": "/ch/ch05/composition#Succession"
+  },
+  {
+    "name": "创建家族",
+    "kind": "section",
+    "path": "/ch/ch05/creation"
+  },
+  {
+    "name": "AddTextLetterByLetter",
+    "kind": "class",
+    "path": "/ch/ch05/creation#AddTextLetterByLetter"
+  },
+  {
+    "name": "AddTextWordByWord",
+    "kind": "class",
+    "path": "/ch/ch05/creation#AddTextWordByWord"
+  },
+  {
+    "name": "Create",
+    "kind": "class",
+    "path": "/ch/ch05/creation#Create"
+  },
+  {
+    "name": "DrawBorderThenFill",
+    "kind": "class",
+    "path": "/ch/ch05/creation#DrawBorderThenFill"
+  },
+  {
+    "name": "RemoveTextLetterByLetter",
+    "kind": "class",
+    "path": "/ch/ch05/creation#RemoveTextLetterByLetter"
+  },
+  {
+    "name": "ShowIncreasingSubsets",
+    "kind": "class",
+    "path": "/ch/ch05/creation#ShowIncreasingSubsets"
+  },
+  {
+    "name": "ShowPartial",
+    "kind": "class",
+    "path": "/ch/ch05/creation#ShowPartial"
+  },
+  {
+    "name": "ShowSubmobjectsOneByOne",
+    "kind": "class",
+    "path": "/ch/ch05/creation#ShowSubmobjectsOneByOne"
+  },
+  {
+    "name": "SpiralIn",
+    "kind": "class",
+    "path": "/ch/ch05/creation#SpiralIn"
+  },
+  {
+    "name": "TypeWithCursor",
+    "kind": "class",
+    "path": "/ch/ch05/creation#TypeWithCursor"
+  },
+  {
+    "name": "Uncreate",
+    "kind": "class",
+    "path": "/ch/ch05/creation#Uncreate"
+  },
+  {
+    "name": "UntypeWithCursor",
+    "kind": "class",
+    "path": "/ch/ch05/creation#UntypeWithCursor"
+  },
+  {
+    "name": "Unwrite",
+    "kind": "class",
+    "path": "/ch/ch05/creation#Unwrite"
+  },
+  {
+    "name": "Write",
+    "kind": "class",
+    "path": "/ch/ch05/creation#Write"
+  },
+  {
+    "name": "生长与淡入淡出",
+    "kind": "section",
+    "path": "/ch/ch05/grow-and-fade"
+  },
+  {
+    "name": "FadeIn",
+    "kind": "class",
+    "path": "/ch/ch05/grow-and-fade#FadeIn"
+  },
+  {
+    "name": "FadeOut",
+    "kind": "class",
+    "path": "/ch/ch05/grow-and-fade#FadeOut"
+  },
+  {
+    "name": "GrowArrow",
+    "kind": "class",
+    "path": "/ch/ch05/grow-and-fade#GrowArrow"
+  },
+  {
+    "name": "GrowFromCenter",
+    "kind": "class",
+    "path": "/ch/ch05/grow-and-fade#GrowFromCenter"
+  },
+  {
+    "name": "GrowFromEdge",
+    "kind": "class",
+    "path": "/ch/ch05/grow-and-fade#GrowFromEdge"
+  },
+  {
+    "name": "GrowFromPoint",
+    "kind": "class",
+    "path": "/ch/ch05/grow-and-fade#GrowFromPoint"
+  },
+  {
+    "name": "SpinInFromNothing",
+    "kind": "class",
+    "path": "/ch/ch05/grow-and-fade#SpinInFromNothing"
+  },
+  {
+    "name": "强调与指示",
+    "kind": "section",
+    "path": "/ch/ch05/indication"
+  },
+  {
+    "name": "ApplyWave",
+    "kind": "class",
+    "path": "/ch/ch05/indication#ApplyWave"
+  },
+  {
+    "name": "Blink",
+    "kind": "class",
+    "path": "/ch/ch05/indication#Blink"
+  },
+  {
+    "name": "Broadcast",
+    "kind": "class",
+    "path": "/ch/ch05/indication#Broadcast"
+  },
+  {
+    "name": "Circumscribe",
+    "kind": "class",
+    "path": "/ch/ch05/indication#Circumscribe"
+  },
+  {
+    "name": "Flash",
+    "kind": "class",
+    "path": "/ch/ch05/indication#Flash"
+  },
+  {
+    "name": "FocusOn",
+    "kind": "class",
+    "path": "/ch/ch05/indication#FocusOn"
+  },
+  {
+    "name": "Indicate",
+    "kind": "class",
+    "path": "/ch/ch05/indication#Indicate"
+  },
+  {
+    "name": "ShowPassingFlash",
+    "kind": "class",
+    "path": "/ch/ch05/indication#ShowPassingFlash"
+  },
+  {
+    "name": "ShowPassingFlashWithThinningStrokeWidth",
+    "kind": "class",
+    "path": "/ch/ch05/indication#ShowPassingFlashWithThinningStrokeWidth"
+  },
+  {
+    "name": "Wiggle",
+    "kind": "class",
+    "path": "/ch/ch05/indication#Wiggle"
+  },
+  {
+    "name": "匹配变换",
+    "kind": "section",
+    "path": "/ch/ch05/matching-transforms"
+  },
+  {
+    "name": "TransformMatchingAbstractBase",
+    "kind": "class",
+    "path": "/ch/ch05/matching-transforms#TransformMatchingAbstractBase"
+  },
+  {
+    "name": "TransformMatchingShapes",
+    "kind": "class",
+    "path": "/ch/ch05/matching-transforms#TransformMatchingShapes"
+  },
+  {
+    "name": "TransformMatchingTex",
+    "kind": "class",
+    "path": "/ch/ch05/matching-transforms#TransformMatchingTex"
+  },
+  {
+    "name": "运动变形",
+    "kind": "section",
+    "path": "/ch/ch05/motion"
+  },
+  {
+    "name": "ComplexHomotopy",
+    "kind": "class",
+    "path": "/ch/ch05/motion#ComplexHomotopy"
+  },
+  {
+    "name": "Homotopy",
+    "kind": "class",
+    "path": "/ch/ch05/motion#Homotopy"
+  },
+  {
+    "name": "MoveAlongPath",
+    "kind": "class",
+    "path": "/ch/ch05/motion#MoveAlongPath"
+  },
+  {
+    "name": "PhaseFlow",
+    "kind": "class",
+    "path": "/ch/ch05/motion#PhaseFlow"
+  },
+  {
+    "name": "SmoothedVectorizedHomotopy",
+    "kind": "class",
+    "path": "/ch/ch05/motion#SmoothedVectorizedHomotopy"
+  },
+  {
+    "name": "数值动画",
+    "kind": "section",
+    "path": "/ch/ch05/number-animations"
+  },
+  {
+    "name": "ChangeDecimalToValue",
+    "kind": "class",
+    "path": "/ch/ch05/number-animations#ChangeDecimalToValue"
+  },
+  {
+    "name": "ChangingDecimal",
+    "kind": "class",
+    "path": "/ch/ch05/number-animations#ChangingDecimal"
+  },
+  {
+    "name": "Rate Functions 全解",
+    "kind": "section",
+    "path": "/ch/ch05/rate-functions"
+  },
+  {
+    "name": "旋转",
+    "kind": "section",
+    "path": "/ch/ch05/rotation"
+  },
+  {
+    "name": "Rotate",
+    "kind": "class",
+    "path": "/ch/ch05/rotation#Rotate"
+  },
+  {
+    "name": "Rotating",
+    "kind": "class",
+    "path": "/ch/ch05/rotation#Rotating"
+  },
+  {
+    "name": "变速",
+    "kind": "section",
+    "path": "/ch/ch05/speed"
+  },
+  {
+    "name": "ChangeSpeed",
+    "kind": "class",
+    "path": "/ch/ch05/speed#ChangeSpeed"
+  },
+  {
+    "name": "追踪与边界",
+    "kind": "section",
+    "path": "/ch/ch05/tracing"
+  },
+  {
+    "name": "AnimatedBoundary",
+    "kind": "class",
+    "path": "/ch/ch05/tracing#AnimatedBoundary"
+  },
+  {
+    "name": "TracedPath",
+    "kind": "class",
+    "path": "/ch/ch05/tracing#TracedPath"
+  },
+  {
+    "name": "Transform 家族",
+    "kind": "section",
+    "path": "/ch/ch05/transforms"
+  },
+  {
+    "name": "ApplyComplexFunction",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#ApplyComplexFunction"
+  },
+  {
+    "name": "ApplyFunction",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#ApplyFunction"
+  },
+  {
+    "name": "ApplyMatrix",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#ApplyMatrix"
+  },
+  {
+    "name": "ApplyMethod",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#ApplyMethod"
+  },
+  {
+    "name": "ApplyPointwiseFunction",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#ApplyPointwiseFunction"
+  },
+  {
+    "name": "ApplyPointwiseFunctionToCenter",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#ApplyPointwiseFunctionToCenter"
+  },
+  {
+    "name": "ClockwiseTransform",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#ClockwiseTransform"
+  },
+  {
+    "name": "CounterclockwiseTransform",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#CounterclockwiseTransform"
+  },
+  {
+    "name": "CyclicReplace",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#CyclicReplace"
+  },
+  {
+    "name": "FadeToColor",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#FadeToColor"
+  },
+  {
+    "name": "FadeTransform",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#FadeTransform"
+  },
+  {
+    "name": "FadeTransformPieces",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#FadeTransformPieces"
+  },
+  {
+    "name": "MoveToTarget",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#MoveToTarget"
+  },
+  {
+    "name": "ReplacementTransform",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#ReplacementTransform"
+  },
+  {
+    "name": "Restore",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#Restore"
+  },
+  {
+    "name": "ScaleInPlace",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#ScaleInPlace"
+  },
+  {
+    "name": "ShrinkToCenter",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#ShrinkToCenter"
+  },
+  {
+    "name": "Swap",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#Swap"
+  },
+  {
+    "name": "Transform",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#Transform"
+  },
+  {
+    "name": "TransformAnimations",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#TransformAnimations"
+  },
+  {
+    "name": "TransformFromCopy",
+    "kind": "class",
+    "path": "/ch/ch05/transforms#TransformFromCopy"
+  },
+  {
+    "name": "Updater 系统",
+    "kind": "section",
+    "path": "/ch/ch05/updaters"
+  },
+  {
+    "name": "MaintainPositionRelativeTo",
+    "kind": "class",
+    "path": "/ch/ch05/updaters#MaintainPositionRelativeTo"
+  },
+  {
+    "name": "UpdateFromAlphaFunc",
+    "kind": "class",
+    "path": "/ch/ch05/updaters#UpdateFromAlphaFunc"
+  },
+  {
+    "name": "UpdateFromFunc",
+    "kind": "class",
+    "path": "/ch/ch05/updaters#UpdateFromFunc"
+  },
+  {
+    "name": "ValueTracker",
+    "kind": "class",
+    "path": "/ch/ch05/updaters#ValueTracker"
+  },
+  {
+    "name": "add_updater",
+    "kind": "function",
+    "path": "/ch/ch05/updaters#add_updater"
+  },
+  {
+    "name": "always_redraw",
+    "kind": "function",
+    "path": "/ch/ch05/updaters#always_redraw"
+  },
+  {
+    "name": "always_rotate",
+    "kind": "function",
+    "path": "/ch/ch05/updaters#always_rotate"
+  },
+  {
+    "name": "always_shift",
+    "kind": "function",
+    "path": "/ch/ch05/updaters#always_shift"
+  },
+  {
+    "name": "clear_updaters",
+    "kind": "function",
+    "path": "/ch/ch05/updaters#clear_updaters"
+  },
+  {
+    "name": "cycle_animation",
+    "kind": "function",
+    "path": "/ch/ch05/updaters#cycle_animation"
+  },
+  {
+    "name": "f_always",
+    "kind": "function",
+    "path": "/ch/ch05/updaters#f_always"
+  },
+  {
+    "name": "remove_updater",
+    "kind": "function",
+    "path": "/ch/ch05/updaters#remove_updater"
+  },
+  {
+    "name": "turn_animation_into_updater",
+    "kind": "function",
+    "path": "/ch/ch05/updaters#turn_animation_into_updater"
+  },
+  {
+    "name": "Camera 基类与扩展",
+    "kind": "section",
+    "path": "/ch/ch06/camera-internals"
+  },
+  {
+    "name": "Camera",
+    "kind": "class",
+    "path": "/ch/ch06/camera-internals#Camera"
+  },
+  {
+    "name": "MappingCamera",
+    "kind": "class",
+    "path": "/ch/ch06/camera-internals#MappingCamera"
+  },
+  {
+    "name": "OldMultiCamera",
+    "kind": "class",
+    "path": "/ch/ch06/camera-internals#OldMultiCamera"
+  },
+  {
+    "name": "SplitScreenCamera",
+    "kind": "class",
+    "path": "/ch/ch06/camera-internals#SplitScreenCamera"
+  },
+  {
+    "name": "移动摄像机",
+    "kind": "section",
+    "path": "/ch/ch06/moving-camera"
+  },
+  {
+    "name": "MovingCamera",
+    "kind": "class",
+    "path": "/ch/ch06/moving-camera#MovingCamera"
+  },
+  {
+    "name": "MovingCameraScene",
+    "kind": "class",
+    "path": "/ch/ch06/moving-camera#MovingCameraScene"
+  },
+  {
+    "name": "多面体",
+    "kind": "section",
+    "path": "/ch/ch06/polyhedra"
+  },
+  {
+    "name": "ConvexHull3D",
+    "kind": "class",
+    "path": "/ch/ch06/polyhedra#ConvexHull3D"
+  },
+  {
+    "name": "Dodecahedron",
+    "kind": "class",
+    "path": "/ch/ch06/polyhedra#Dodecahedron"
+  },
+  {
+    "name": "Icosahedron",
+    "kind": "class",
+    "path": "/ch/ch06/polyhedra#Icosahedron"
+  },
+  {
+    "name": "Octahedron",
+    "kind": "class",
+    "path": "/ch/ch06/polyhedra#Octahedron"
+  },
+  {
+    "name": "Polyhedron",
+    "kind": "class",
+    "path": "/ch/ch06/polyhedra#Polyhedron"
+  },
+  {
+    "name": "Tetrahedron",
+    "kind": "class",
+    "path": "/ch/ch06/polyhedra#Tetrahedron"
+  },
+  {
+    "name": "渲染器",
+    "kind": "section",
+    "path": "/ch/ch06/renderers"
+  },
+  {
+    "name": "3D 几何",
+    "kind": "section",
+    "path": "/ch/ch06/three-d-mobjects"
+  },
+  {
+    "name": "Arrow3D",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-mobjects#Arrow3D"
+  },
+  {
+    "name": "Cone",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-mobjects#Cone"
+  },
+  {
+    "name": "Cube",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-mobjects#Cube"
+  },
+  {
+    "name": "Cylinder",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-mobjects#Cylinder"
+  },
+  {
+    "name": "Dot3D",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-mobjects#Dot3D"
+  },
+  {
+    "name": "Line3D",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-mobjects#Line3D"
+  },
+  {
+    "name": "Prism",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-mobjects#Prism"
+  },
+  {
+    "name": "Sphere",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-mobjects#Sphere"
+  },
+  {
+    "name": "Surface",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-mobjects#Surface"
+  },
+  {
+    "name": "ThreeDVMobject",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-mobjects#ThreeDVMobject"
+  },
+  {
+    "name": "Torus",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-mobjects#Torus"
+  },
+  {
+    "name": "ThreeDScene",
+    "kind": "section",
+    "path": "/ch/ch06/three-d-scene"
+  },
+  {
+    "name": "SpecialThreeDScene",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-scene#SpecialThreeDScene"
+  },
+  {
+    "name": "ThreeDScene",
+    "kind": "class",
+    "path": "/ch/ch06/three-d-scene#ThreeDScene"
+  },
+  {
+    "name": "局部放大",
+    "kind": "section",
+    "path": "/ch/ch06/zoomed-scene"
+  },
+  {
+    "name": "ImageMobjectFromCamera",
+    "kind": "class",
+    "path": "/ch/ch06/zoomed-scene#ImageMobjectFromCamera"
+  },
+  {
+    "name": "MultiCamera",
+    "kind": "class",
+    "path": "/ch/ch06/zoomed-scene#MultiCamera"
+  },
+  {
+    "name": "ZoomedScene",
+    "kind": "class",
+    "path": "/ch/ch06/zoomed-scene#ZoomedScene"
+  },
+  {
+    "name": "CLI 深度",
+    "kind": "section",
+    "path": "/ch/ch07/cli-deep-dive"
+  },
+  {
+    "name": "配置系统深度",
+    "kind": "section",
+    "path": "/ch/ch07/config-deep-dive"
+  },
+  {
+    "name": "自定义 Animation",
+    "kind": "section",
+    "path": "/ch/ch07/custom-animations"
+  },
+  {
+    "name": "自定义 Mobject",
+    "kind": "section",
+    "path": "/ch/ch07/custom-mobjects"
+  },
+  {
+    "name": "杂项",
+    "kind": "section",
+    "path": "/ch/ch07/misc"
+  },
+  {
+    "name": "add_sound",
+    "kind": "function",
+    "path": "/ch/ch07/misc#add_sound"
+  },
+  {
+    "name": "interactive_embed",
+    "kind": "function",
+    "path": "/ch/ch07/misc#interactive_embed"
+  },
+  {
+    "name": "性能与缓存",
+    "kind": "section",
+    "path": "/ch/ch07/performance"
+  },
+  {
+    "name": "插件机制",
+    "kind": "section",
+    "path": "/ch/ch07/plugins"
+  },
+  {
+    "name": "脚本化调用",
+    "kind": "section",
+    "path": "/ch/ch07/scripting"
+  },
+  {
+    "name": "实用工具速览",
+    "kind": "section",
+    "path": "/ch/ch07/utils-overview"
+  }
+]

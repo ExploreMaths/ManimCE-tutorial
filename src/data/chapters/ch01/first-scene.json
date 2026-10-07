@@ -1,0 +1,365 @@
+{
+  "part": "ch01",
+  "id": "first-scene",
+  "title": "你的第一个场景",
+  "partTitle": "入门",
+  "prev": {
+    "part": "ch01",
+    "id": "installation",
+    "title": "安装与运行环境",
+    "path": "/ch/ch01/installation"
+  },
+  "next": {
+    "part": "ch01",
+    "id": "render-pipeline",
+    "title": "渲染流程与输出结构",
+    "path": "/ch/ch01/render-pipeline"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>欢迎来到 Manim 社区版（ManimCE）教程。本节带你写出第一个可渲染的场景，并理解三个最核心的概念：<code>Scene</code>、<code>play()</code> 与 <code>wait()</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Scene",
+      "text": "Scene"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Scene</code> 是 Manim 中一切场景的基类：<strong>编写场景就是继承 <code>Scene</code> 并实现 <code>construct()</code> 方法</strong>。渲染器负责实例化场景，并依次调用生命周期方法 <code>setup() → construct() → tear_down()</code>，其中 <code>construct()</code> 是你写动画逻辑的地方。渲染入口是 <code>render(preview=False)</code>，通常由 CLI 自动调用，不必手动执行。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Scene",
+        "object"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>注意 <code>Scene</code> 与摄像机是<strong>组合</strong>关系而非继承关系：场景通过构造函数持有 <code>camera_class</code>（默认 <code>Camera</code>）实例，访问方式为 <code>self.camera</code>。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>renderer</code>",
+          "type": "CairoRenderer \\",
+          "default": "OpenGLRenderer \\",
+          "desc": "None"
+        },
+        {
+          "name": "<code>camera_class</code>",
+          "type": "type[Camera]",
+          "default": "Camera",
+          "desc": "场景使用的摄像机类"
+        },
+        {
+          "name": "<code>always_update_mobjects</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "为 True 时即使无动画也每帧更新 mobject"
+        },
+        {
+          "name": "<code>random_seed</code>",
+          "type": "int \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>skip_animations</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "跳过所有动画，只走逻辑（配合 <code>-n</code> 使用）"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>最小可运行示例：</p>\n<pre><code class=\"language-python\">from manim import *\n\n\nclass MyScene(Scene):\n    def construct(self):\n        self.play(FadeIn(Text(&quot;你好，Manim！&quot;)))\n</code></pre>\n<p>用 CLI 渲染它：</p>\n<pre><code class=\"language-bash\">manim -pqm scene.py MyScene\n</code></pre>\n<p>约定与注意事项：</p>\n<ul>\n<li>每个 <code>.py</code> 示例文件只包含<strong>一个</strong>场景类，类名就是输出视频的文件名。</li>\n<li><code>construct()</code> 由渲染器自动调用，不需要手动执行。</li>\n<li>文件中必须有 <code>from manim import *</code>（或等价的显式导入）。</li>\n</ul>"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "construct-方法",
+      "text": "construct 方法"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>construct(self)</code> 是场景的入口。场景中所有的 <code>self.add(...)</code>、<code>self.play(...)</code>、<code>self.wait(...)</code> 都写在这里。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 4,
+      "id": "self-是什么",
+      "text": "self 是什么"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>self</code> 就是当前场景实例。通过它访问场景上的方法，例如 <code>self.camera.frame_center</code>、<code>self.mobjects</code> 等。</p>\n<p>下面这个示例演示了 <code>Scene</code> 的两组基础操作——无动画的 <code>add</code> / <code>remove</code> 与有动画的 <code>play</code> / <code>wait</code>：</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch01/scene_basics",
+      "scene": "SceneBasics",
+      "caption": "<p><code>add</code> 与 <code>remove</code> 瞬间改变画面，不产生任何动画；<code>play</code> 才有逐帧的动画过程。</p>",
+      "code": "\"\"\"SceneBasics: add / play / wait / remove on a single Scene.\"\"\"\n\nfrom manim import *\n\n\nclass SceneBasics(Scene):\n    def construct(self):\n        square = Square()\n        square.set_fill(BLUE_E, opacity=0.6)\n        label = Text(\"play 才有动画\", font_size=36)\n        label.next_to(square, DOWN)\n\n        # add 不播放动画，物体瞬间出现在画面里\n        self.add(square)\n        self.wait(0.5)\n\n        # play 才有逐帧的动画过程\n        self.play(FadeIn(label), run_time=1.0)\n        self.play(square.animate.shift(LEFT * 2), run_time=1.0)\n        self.play(FadeOut(label), run_time=0.5)\n\n        # remove 与 add 一样没有动画，物体瞬间消失\n        self.remove(square)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "play",
+      "text": "play"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>self.play()</code> 用来播放动画。签名中 <code>*args</code> 接收 <code>Animation</code> 或 <code>.animate</code> 构造器（<code>_AnimationBuilder</code>），多个动画默认同时开始：</p>\n<ul>\n<li><code>self.play(FadeIn(circle))</code> —— 播放单个动画</li>\n<li><code>self.play(FadeIn(circle), Write(label))</code> —— 两个动画同时播放</li>\n<li><code>self.play(circle.animate.shift(LEFT))</code> —— 由 <code>.animate</code> 生成方法动画</li>\n<li>用 <code>lag_ratio</code> 可以让多个动画错峰开始</li>\n</ul>"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "play-的参数",
+      "text": "play 的参数"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>*args</code>",
+          "type": "Animation \\",
+          "default": "_AnimationBuilder",
+          "desc": "—"
+        },
+        {
+          "name": "<code>run_time</code>",
+          "type": "float",
+          "default": "1.0",
+          "desc": "动画时长（秒）"
+        },
+        {
+          "name": "<code>rate_func</code>",
+          "type": "function",
+          "default": "<code>smooth</code>",
+          "desc": "速率函数，见 Rate Functions 章节"
+        },
+        {
+          "name": "<code>lag_ratio</code>",
+          "type": "float",
+          "default": "0.0",
+          "desc": "多动画之间的错峰比例"
+        },
+        {
+          "name": "<code>subcaption</code>",
+          "type": "str \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "wait",
+      "text": "wait"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>self.wait()</code> 让画面静止一段时间，常用来给观众留出阅读时间，例如 <code>self.wait(2)</code> 停顿 2 秒。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "wait-的参数",
+      "text": "wait 的参数"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>duration</code>",
+          "type": "float",
+          "default": "1.0",
+          "desc": "静止时长（秒），可以是小数"
+        },
+        {
+          "name": "<code>stop_condition</code>",
+          "type": "callable \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>frozen_frame</code>",
+          "type": "bool \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>相关便捷方法：</p>\n<ul>\n<li><code>self.pause(duration=1.0)</code> —— <code>wait</code> 的别名，语义完全相同</li>\n<li><code>self.wait_until(stop_condition, max_time=60)</code> —— 等到条件满足为止，最多等 <code>max_time</code> 秒</li>\n</ul>\n<p>静止等待默认只写一帧再按时长延展，几乎不占渲染时间；如果场景里有 updater，默认会逐帧模拟，此时传 <code>frozen_frame=True</code> 可强制按静止帧处理（代价是 updater 不会运行）。</p>\n<p>下面是一个完整的官方风格示例——正方形变换成圆，随后停顿：</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch01/square_to_circle",
+      "scene": "SquareToCircle",
+      "caption": "<p><code>Transform</code> 让正方形<strong>逐步变形</strong>为圆，最后的 <code>wait()</code> 让成品画面停留一秒。</p>",
+      "code": "\"\"\"SquareToCircle: the classic first Manim scene.\n\nRendered by scripts/render_examples.py (one Scene class per file).\n\"\"\"\n\nfrom manim import *\n\n\nclass SquareToCircle(Scene):\n    def construct(self):\n        circle = Circle()\n        circle.set_fill(PINK, opacity=0.5)\n        square = Square()\n        square.flip(RIGHT)\n        square.rotate(-3 * TAU / 8)\n        circle.set_stroke(BLUE, width=4)\n\n        self.play(Create(square))\n        self.play(Transform(square, circle))\n        self.play(FadeOut(square))\n        self.wait()\n",
+      "video": null
+    },
+    {
+      "type": "html",
+      "html": "<p>同一个示例也可以用不带扩展名的路径引用，二者等价：</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch02/circle_intro",
+      "scene": "CircleIntro",
+      "caption": "<p><code>CircleIntro</code> 演示了 <code>FadeIn</code> 与 <code>Write</code> 的组合。</p>",
+      "code": "\"\"\"CircleIntro: a Circle with a FadeIn entrance and a text label.\"\"\"\n\nfrom manim import *\n\n\nclass CircleIntro(Scene):\n    def construct(self):\n        circle = Circle(radius=1.5)\n        circle.set_fill(BLUE_E, opacity=0.6)\n        circle.set_stroke(BLUE, width=4)\n\n        label = Text(\"Circle\", font_size=36)\n        label.next_to(circle, DOWN)\n\n        self.play(FadeIn(circle))\n        self.play(Write(label))\n        self.wait(2)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "渲染质量对比",
+      "text": "渲染质量对比"
+    },
+    {
+      "type": "html",
+      "html": "<p>不同质量标志对应的输出：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "标志",
+        "分辨率",
+        "帧率",
+        "用途"
+      ],
+      "rows": [
+        [
+          "<code>-ql</code>",
+          "854×480",
+          "15",
+          "快速预览"
+        ],
+        [
+          "<code>-qm</code>",
+          "1280×720",
+          "30",
+          "日常调试"
+        ],
+        [
+          "<code>-qh</code>",
+          "1920×1080",
+          "60",
+          "正式发布"
+        ]
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>普通管道表格（不在 <code>:::</code> 容器中）同样有效：</p>\n<table>\n<thead>\n<tr>\n<th>命令</th>\n<th>作用</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>manim -p</code></td>\n<td>渲染结束后预览</td>\n</tr>\n<tr>\n<td><code>manim -f</code></td>\n<td>渲染结束后打开输出目录</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>construct()</code> 只能有 <code>self</code> 一个参数。写 <code>def construct(self, t):</code> 之类的签名，渲染时会被静默忽略或报错——需要参数时请改用 <code>self.time</code>、updater 或构造时把值存到实例属性上。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>不要把 <code>Mobject</code> 直接传给 <code>play()</code>：<code>self.play(Square())</code> 会抛 <code>TypeError: Unexpected argument</code>。正确写法是 <code>self.play(FadeIn(Square()))</code> 或 <code>self.play(Square().animate.shift(LEFT))</code>。旧版支持的“把 mobject 方法当参数传”也已被移除，统一使用 <code>.animate</code>。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>wait()</code> 只是“画面静止”，updater 与 <code>self.time</code> 仍在推进。若想让某个带随机效果的场景每次渲染结果一致，用 CLI <code>--seed</code> 或构造参数 <code>Scene(random_seed=42)</code> 固定随机种子。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>本教程所有示例均基于 <code>manim 0.21.0</code>，与其他大版本的 API 可能存在差异。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "deprecated",
+      "title": "废弃提醒",
+      "html": "<p>旧教程中的 <code>self.add_foreground_mobjects</code> 已被 <code>self.add_foreground_mobject</code> 取代，请使用新写法。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>如何让一个动画播放完毕后停顿 2 秒，再播放下一个动画？</p>",
+      "answerHtml": "<p>在两次 <code>play</code> 之间调用 <code>self.wait(2)</code>。<code>wait</code> 的参数单位是秒，可以是小数。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>self.play(a, b)</code> 与先后写两行 <code>self.play(a)</code>、<code>self.play(b)</code> 有什么区别？</p>",
+      "answerHtml": "<p>前者两个动画<strong>同时</strong>开始（总时长取两者较大值）；后者串行执行，总时长为两者之和。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>场景里有一个 updater 在不停移动圆点，此时 <code>self.wait(2, frozen_frame=True)</code> 会发生什么？</p>",
+      "answerHtml": "<p>这 2 秒会按静止帧处理：圆点停在原地、不随 updater 移动，但视频时长仍然延长 2 秒。想要 updater 生效就不要传 <code>frozen_frame=True</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "场景类的继承关系",
+      "text": "场景类的继承关系"
+    },
+    {
+      "type": "html",
+      "html": "<p>常见场景子类的两条继承链：</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Scene",
+        "MovingCameraScene",
+        "ZoomedScene"
+      ]
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Scene",
+        "ThreeDScene"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>这些子类会在“3D 与摄像机”板块详细介绍。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>到这里你已经掌握了最小工作流。下一节将拆解一次渲染背后的完整流程与输出目录结构。</p>"
+    }
+  ]
+}

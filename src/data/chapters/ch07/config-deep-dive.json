@@ -1,0 +1,296 @@
+{
+  "part": "ch07",
+  "id": "config-deep-dive",
+  "title": "配置系统深度",
+  "partTitle": "高级主题",
+  "prev": {
+    "part": "ch07",
+    "id": "plugins",
+    "title": "插件机制",
+    "path": "/ch/ch07/plugins"
+  },
+  "next": {
+    "part": "ch07",
+    "id": "performance",
+    "title": "性能与缓存",
+    "path": "/ch/ch07/performance"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>ch01 用过 <code>-qm</code>、<code>--media_dir</code> 等 CLI 选项。这些选项背后是一个统一的配置系统：<code>manim._config.config</code>（一个 <code>ManimConfig</code> 实例）。本节讲清它的优先级链、配置文件格式与常用字段。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "优先级链",
+      "text": "优先级链"
+    },
+    {
+      "type": "html",
+      "html": "<p>一次渲染的最终配置由五层来源合并而成，<strong>高优先级覆盖低优先级</strong>：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "优先级",
+        "来源",
+        "说明"
+      ],
+      "rows": [
+        [
+          "最高",
+          "CLI 命令行选项",
+          "如 <code>-qm</code>、<code>--format gif</code>，只影响本次运行"
+        ],
+        [
+          "高",
+          "<code>-c/--config_file</code> 指定的文件",
+          "只影响本次运行；<strong>替代</strong>目录级 <code>manim.cfg</code>"
+        ],
+        [
+          "中",
+          "目录级 <code>manim.cfg</code>",
+          "当前工作目录下的 <code>manim.cfg</code>，只对目录内场景生效"
+        ],
+        [
+          "低",
+          "用户级 <code>manim.cfg</code>",
+          "对该用户所有项目生效"
+        ],
+        [
+          "最低",
+          "库自带 <code>default.cfg</code>",
+          "Manim 安装目录内的默认值，保证每个选项都有值"
+        ]
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>三个 <code>manim.cfg</code> 的搜索位置（由 <code>manim._config.config_file_paths()</code> 定义）：</p>\n<ul>\n<li><strong>库级</strong>：安装目录内的 <code>manim/_config/default.cfg</code>（只读基准，无需关心路径）</li>\n<li><strong>用户级</strong>：Windows 为 <code>%APPDATA%\\Manim\\manim.cfg</code>（即 <code>C:\\Users\\&lt;用户名&gt;\\AppData\\Roaming\\Manim\\manim.cfg</code>）；macOS / Linux 为 <code>~/.config/manim/manim.cfg</code></li>\n<li><strong>目录级</strong>：运行 <code>manim</code> 命令时<strong>当前工作目录</strong>下的 <code>manim.cfg</code></li>\n</ul>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>注意用户级路径随操作系统变化。老教程常见的 <code>~/.manim.cfg</code> 写法在 Windows 上不生效——Windows 的正确位置是 <code>%APPDATA%\\Manim\\manim.cfg</code>。不确定时，用 <code>manim cfg show</code> 查看实际生效的值。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "manimcfg-文件格式",
+      "text": "manim.cfg 文件格式"
+    },
+    {
+      "type": "html",
+      "html": "<p>配置文件是 INI 格式，最常用的两个小节是 <code>[CLI]</code>（渲染行为）和 <code>[custom_folders]</code>（自定义输出目录结构）。一个项目级 <code>manim.cfg</code> 示例：</p>\n<pre><code class=\"language-ini\">[CLI]\n; 默认中画质，日常调试不用每次敲 -qm\npixel_width = 1280\npixel_height = 720\nframe_rate = 30\n; 输出格式与目录\nformat = mp4\nmedia_dir = ./media\n; 关掉进度条，便于在 CI 日志里阅读输出\nprogress_bar = none\n; 随机种子固定，保证多人协作结果一致\nseed = 42\n; 声明本项目依赖的插件（缺失时报警）\nplugins = manim_mobject_svg\n\n[custom_folders]\n; 配合 CLI --custom_folders 使用，定义输出目录结构\nmedia_dir = videos\nvideo_dir = {media_dir}\n</code></pre>\n<p><code>{media_dir}</code>、<code>{module_name}</code>、<code>{quality}</code>、<code>{scene_name}</code> 是占位符，会在运行时被替换为实际值。大部分选项的键名与 CLI 长选项一致（如 <code>frame_rate</code>、<code>disable_caching</code>），但也有例外：画质档位（<code>-q</code>）没有对应的配置键，要用 <code>pixel_width/pixel_height/frame_rate</code> 三件套表达。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "manimconfig-常用字段",
+      "text": "ManimConfig 常用字段"
+    },
+    {
+      "type": "html",
+      "html": "<p>脚本里可以通过 <code>from manim import config</code> 访问 <code>ManimConfig</code> 实例。常用字段（默认值来自库自带 <code>default.cfg</code>）：</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>media_dir</code>",
+          "type": "str",
+          "default": "<code>./media</code>",
+          "desc": "输出根目录"
+        },
+        {
+          "name": "<code>video_dir</code>",
+          "type": "str",
+          "default": "<code>{media_dir}/videos/{module_name}/{quality}</code>",
+          "desc": "视频输出目录模板"
+        },
+        {
+          "name": "<code>images_dir</code>",
+          "type": "str",
+          "default": "<code>{media_dir}/images/{module_name}</code>",
+          "desc": "图片输出目录模板"
+        },
+        {
+          "name": "<code>pixel_width</code> / <code>pixel_height</code>",
+          "type": "int",
+          "default": "1920 / 1080",
+          "desc": "帧分辨率"
+        },
+        {
+          "name": "<code>frame_rate</code>",
+          "type": "float",
+          "default": "60",
+          "desc": "帧率"
+        },
+        {
+          "name": "<code>frame_width</code> / <code>frame_height</code>",
+          "type": "float",
+          "default": "14.222… / 8",
+          "desc": "逻辑坐标系尺寸（帧宽/高，只读派生）"
+        },
+        {
+          "name": "<code>format</code>",
+          "type": "str",
+          "default": "<code>mp4</code>",
+          "desc": "输出格式（png/gif/mp4/webm/mov）"
+        },
+        {
+          "name": "<code>renderer</code>",
+          "type": "str",
+          "default": "<code>cairo</code>",
+          "desc": "渲染器（cairo/opengl）"
+        },
+        {
+          "name": "<code>background_color</code>",
+          "type": "ManimColor",
+          "default": "BLACK",
+          "desc": "背景色"
+        },
+        {
+          "name": "<code>background_opacity</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "背景不透明度"
+        },
+        {
+          "name": "<code>quality</code>",
+          "type": "str",
+          "default": "<code>high_quality</code>",
+          "desc": "画质档位名（由 -q 或分辨率决定）"
+        },
+        {
+          "name": "<code>save_last_frame</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "只保存最后一帧"
+        },
+        {
+          "name": "<code>write_to_movie</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "是否输出视频文件"
+        },
+        {
+          "name": "<code>disable_caching</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "不使用部分视频缓存"
+        },
+        {
+          "name": "<code>flush_cache</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "渲染前清空部分视频缓存"
+        },
+        {
+          "name": "<code>max_files_cached</code>",
+          "type": "int",
+          "default": "100",
+          "desc": "部分视频缓存保留的文件数上限"
+        },
+        {
+          "name": "<code>max_inflight_encoders</code>",
+          "type": "int",
+          "default": "1",
+          "desc": "并行编码的动画数上限"
+        },
+        {
+          "name": "<code>partial_movie_dir</code>",
+          "type": "str",
+          "default": "<code>{video_dir}/partial_movie_files/{scene_name}</code>",
+          "desc": "部分视频文件目录"
+        },
+        {
+          "name": "<code>verbosity</code>",
+          "type": "str",
+          "default": "INFO",
+          "desc": "日志级别（DEBUG/INFO/WARNING/ERROR/CRITICAL）"
+        },
+        {
+          "name": "<code>progress_bar</code>",
+          "type": "str",
+          "default": "display",
+          "desc": "进度条（display/leave/none）"
+        },
+        {
+          "name": "<code>seed</code>",
+          "type": "int \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>tex_dir</code> / <code>text_dir</code>",
+          "type": "str",
+          "default": "<code>{media_dir}/Tex</code>、<code>{media_dir}/texts</code>",
+          "desc": "LaTeX / 文本中间产物目录"
+        },
+        {
+          "name": "<code>assets_dir</code>",
+          "type": "str",
+          "default": "<code>./</code>",
+          "desc": "<code>add_sound</code> 等查找素材的目录"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>用法示例：</p>\n<pre><code class=\"language-python\">from manim import *\n\nconfig.background_color = &quot;#1a1a2e&quot;   # 改背景\nconfig.verbosity = &quot;WARNING&quot;          # 减少日志输出\nconfig.media_dir = &quot;./my_media&quot;       # 改输出目录\n\nclass MyScene(Scene):\n    def construct(self):\n        ...\n</code></pre>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>在场景文件里给 <code>config</code> 赋值会<strong>覆盖</strong>同一次运行的 CLI 选项与配置文件值。执行顺序是：<code>import manim</code> 时消化配置文件 → CLI 消化命令行选项 → <strong>之后</strong>才导入场景文件，所以场景文件顶部的 <code>config.xxx = ...</code> 是最后写入的、最终生效。想让 CLI 说了算，就不要在场景文件里设置同一字段；脚本赋值只适合作为“无 CLI 对应项时的默认值”（已实渲验证：场景里 <code>config.background_color = \"#112233\"</code> 会盖过 <code>-c</code> 配置文件中的 <code>background_color = RED</code>）。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>manim cfg show</code> 打印当前生效的全部配置；<code>manim cfg write</code> 交互式生成用户级（<code>--level user</code>）或目录级（<code>--level cwd</code>）配置模板；<code>manim cfg export</code> 把当前配置导出到文件。三个子命令的具体用法见“CLI 深度”一节。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>目录级 <code>manim.cfg</code> 只在<strong>当前工作目录</strong>生效，不随场景文件位置自动切换。在别的目录运行 <code>manim path/to/scene.py</code> 时，读的是运行命令时所在目录的 <code>manim.cfg</code>，不是场景文件旁边的那个。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想让某个项目默认以 1280×720@30fps 渲染、且输出目录为项目内的 <code>./media</code>，最少要写哪些配置？写在哪？</p>",
+      "answerHtml": "<p>在项目根目录建 <code>manim.cfg</code>，在 <code>[CLI]</code> 小节写：</p>\n<pre><code class=\"language-ini\">[CLI]\npixel_width = 1280\npixel_height = 720\nframe_rate = 30\nmedia_dir = ./media\n</code></pre>\n<p>注意 <code>-q</code> 画质档没有配置键，必须用分辨率 + 帧率三件套表达。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>脚本里写了 <code>config.background_color = \"#112233\"</code>，又用 <code>manim -ql -c my.cfg scene.py MyScene</code> 渲染，其中 <code>my.cfg</code> 写着 <code>background_color = RED</code>。最终背景是什么颜色？</p>",
+      "answerHtml": "<p><code>#112233</code>（脚本里的值）。CLI 的 <code>-c</code> 在场景文件导入之前消化，而场景文件里的 <code>config.background_color = \"#112233\"</code> 是最后写入的，直接覆盖配置文件。实测背景像素即 (17, 34, 51) = #112233。要让配置文件说了算，就不要在场景文件里赋值同一字段。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>配置决定了“渲染成什么样”，下一节看“渲染得有多快”：性能优化与缓存机制。</p>"
+    }
+  ]
+}

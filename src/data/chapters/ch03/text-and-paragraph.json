@@ -1,0 +1,380 @@
+{
+  "part": "ch03",
+  "id": "text-and-paragraph",
+  "title": "Text 与段落",
+  "partTitle": "文本与公式",
+  "prev": {
+    "part": "ch02",
+    "id": "colors",
+    "title": "颜色系统",
+    "path": "/ch/ch02/colors"
+  },
+  "next": {
+    "part": "ch03",
+    "id": "markup-text",
+    "title": "MarkupText",
+    "path": "/ch/ch03/markup-text"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>Manim 中最常用的文本类是 <code>Text</code>：它把字符串交给 Pango 排版、再转成 SVG 矢量图形，因此<strong>无需安装 TeX 就能显示包括中文在内的 Unicode 文本</strong>。本节覆盖 <code>Text</code> 的完整参数体系、两种索引约定、多行排版 <code>Paragraph</code>，以及自定义字体 <code>register_font</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Text",
+      "text": "Text"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Text</code> 用于渲染一段纯文本，每个可见字符对应一个子对象（submobject），可以按索引或切片单独着色、移动、替换。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Text",
+        "SVGMobject",
+        "VMobject",
+        "Mobject"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Text(\n    text: str,\n    fill_opacity: float = 1.0,\n    stroke_width: float = 0,\n    color: ParsableManimColor | None = None,\n    font_size: float = 48,\n    line_spacing: float = -1,\n    font: str = &quot;&quot;,\n    slant: str = &quot;NORMAL&quot;,\n    weight: str = &quot;NORMAL&quot;,\n    t2c: dict[str, str] | None = None,\n    t2f: dict[str, str] | None = None,\n    t2g: dict[str, Iterable[ParsableManimColor]] | None = None,\n    t2s: dict[str, str] | None = None,\n    t2w: dict[str, str] | None = None,\n    gradient: Iterable[ParsableManimColor] | None = None,\n    tab_width: int = 4,\n    warn_missing_font: bool = True,\n    height: float | None = None,\n    width: float | None = None,\n    should_center: bool = True,\n    disable_ligatures: bool = False,\n    use_svg_cache: bool = False,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>text</code>",
+          "type": "str",
+          "default": "—",
+          "desc": "要渲染的文本"
+        },
+        {
+          "name": "<code>font_size</code>",
+          "type": "float",
+          "default": "48",
+          "desc": "字号（Manim 字体单位，非像素）"
+        },
+        {
+          "name": "<code>font</code>",
+          "type": "str",
+          "default": "\"\"",
+          "desc": "字体名或字体文件路径；空串用 Pango 默认字体"
+        },
+        {
+          "name": "<code>weight</code>",
+          "type": "str",
+          "default": "\"NORMAL\"",
+          "desc": "字重：<code>NORMAL</code>/<code>BOLD</code> 等，也可用常量 <code>BOLD</code>"
+        },
+        {
+          "name": "<code>slant</code>",
+          "type": "str",
+          "default": "\"NORMAL\"",
+          "desc": "字态：<code>NORMAL</code>/<code>ITALIC</code>/<code>OBLIQUE</code>"
+        },
+        {
+          "name": "<code>color</code>",
+          "type": "ParsableManimColor \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>gradient</code>",
+          "type": "Iterable[color] \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>t2c</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>t2f</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>t2g</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>t2s</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>t2w</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>line_spacing</code>",
+          "type": "float",
+          "default": "-1",
+          "desc": "行距倍数，-1 时用字体默认行距"
+        },
+        {
+          "name": "<code>tab_width</code>",
+          "type": "int",
+          "default": "4",
+          "desc": "制表符展开为空格数"
+        },
+        {
+          "name": "<code>disable_ligatures</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "禁用连字，强制字符与字形一一对应"
+        },
+        {
+          "name": "<code>warn_missing_font</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "字体找不到时是否告警"
+        },
+        {
+          "name": "<code>height</code> / <code>width</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>should_center</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "构造后是否居中到原点"
+        },
+        {
+          "name": "<code>use_svg_cache</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "相同文本复用 SVG 缓存"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>下面这个示例依次演示 <code>gradient</code> 整体渐变、<code>t2c</code> 子串着色、<code>weight</code>/<code>slant</code> 字重字态：</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch03/text_basics",
+      "scene": "TextBasics",
+      "caption": "<p><code>gradient</code> 接受颜色列表做线性渐变；<code>t2c</code> 按子串匹配着色；<code>weight</code> 与 <code>slant</code> 控制整段字的粗斜体。</p>",
+      "code": "\"\"\"TextBasics: Text 的渐变、局部着色与字重字态。\"\"\"\n\nfrom manim import *\n\n\nclass TextBasics(Scene):\n    def construct(self):\n        gradient_text = Text(\"渐变文字\", gradient=(BLUE, GREEN))\n        keycolored_text = Text(\"关键词着色：ManimCE 教程\", t2c={\"ManimCE\": YELLOW})\n        styled_text = Text(\"粗体与斜体\", weight=BOLD, slant=ITALIC)\n\n        self.play(Write(gradient_text))\n        self.play(FadeOut(gradient_text), FadeIn(keycolored_text))\n        self.play(FadeOut(keycolored_text), FadeIn(styled_text))\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "t2c-与切片的索引约定",
+      "text": "t2c 与切片的索引约定"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>t2c</code> 等映射的键除了子串，还可以是<strong>作用于原始字符串的切片</strong>（如 <code>\"[3:7]\"</code>）。这里有一个极易踩坑的地方：两种索引方式对空白的处理<strong>不一致</strong>（v0.21.0 源码中的明确行为）：</p>\n<ul>\n<li><code>my_text[3:5]</code>：索引到<strong>渲染出的字符</strong>，即“去掉空白后的文本”。<code>Text(\"Hello world\")</code> 的索引 <code>5</code> 指的是 <code>\"w\"</code>，而不是空格。</li>\n<li><code>t2c={\"[3:7]\": RED}</code>：切片作用于<strong>原始 <code>text</code> 参数</strong>，空白也算在内。<code>t2c={\"[3:7]\": RED}</code> 着色的会是 <code>\"llo W\"</code>。</li>\n</ul>"
+    },
+    {
+      "type": "demo",
+      "example": "ch03/text_index_slice",
+      "scene": "TextIndexSlice",
+      "caption": "<p><code>direct_text[0:5]</code> 按去空白后的渲染字符计数（空格不占位），而 <code>t2c={\"[0:3]\": ...}</code> 按原始字符串切片——两套约定不要混用。</p>",
+      "code": "\"\"\"TextIndexSlice: Text 两种索引约定——渲染字符索引与原文切片。\"\"\"\n\nfrom manim import *\n\n\nclass TextIndexSlice(Scene):\n    def construct(self):\n        t2c_text = Text(\"t2c 按原文切片着色\", t2c={\"[0:3]\": YELLOW}, font_size=36)\n        direct_text = Text(\"Hello World\", font_size=48)\n\n        self.play(Write(t2c_text))\n        self.play(FadeOut(t2c_text), Write(direct_text))\n        # direct_text[0:5] 按“去掉空白后的渲染字符”计数：Hello\n        # 空格不占位，World 从索引 5 开始\n        self.play(\n            direct_text[0:5].animate.set_color(BLUE),\n            direct_text[5:10].animate.set_color(RED),\n        )\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "常见坑",
+      "text": "常见坑"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>连字（ligature）会让多个字符合并成一个字形，破坏“一字符一字形”的对应关系，直接索引会错位。涉及逐字符动画时传 <code>disable_ligatures=True</code>。若排版后字形数仍少于非空白字符数，v0.21.0 会直接抛出 <code>ValueError</code>，提示选择实现连字方式不同的字体（例如带 <code>calt</code> 特性的编程连字字体 Fira Code）。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>font</code> 传不存在的字体名不会报错，只会静默回退到默认字体并在日志告警（可用 <code>warn_missing_font=False</code> 关闭）。要确认字体是否真正生效，渲染后用 <code>text.submobjects[0]</code> 的实际字形核对，或直接指定字体文件路径。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>gradient</code> 与 <code>t2c</code> 互斥：同时传入时按 <code>t2c</code> 优先处理。想“整体渐变 + 局部改色”，请先 <code>gradient</code> 再对子对象 <code>set_color</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Paragraph",
+      "text": "Paragraph"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Paragraph</code> 用于<strong>多行段落</strong>：每个位置参数是一行文本，整体是一个 <code>VGroup</code>，每行是一个子对象，可单独取出行做动画。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Paragraph",
+        "VGroup",
+        "VMobject",
+        "Mobject"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Paragraph(*text: str, line_spacing: float = -1, alignment: str | None = None, **kwargs)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>*text</code>",
+          "type": "str",
+          "default": "—",
+          "desc": "每一行一个位置参数"
+        },
+        {
+          "name": "<code>line_spacing</code>",
+          "type": "float",
+          "default": "-1",
+          "desc": "行距倍数，-1 时用默认行距"
+        },
+        {
+          "name": "<code>alignment</code>",
+          "type": "str \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>其余 <code>**kwargs</code>（<code>font_size</code>、<code>t2c</code>、<code>font</code> 等）原样传给内部的 <code>Text</code>。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch03/paragraph_demo",
+      "scene": "ParagraphDemo",
+      "caption": "<p><code>Paragraph</code> 每行是一个子对象，<code>para[2]</code> 直接取出行设置颜色；<code>alignment=\"center\"</code> 让每行居中。</p>",
+      "code": "\"\"\"ParagraphDemo: Paragraph 多行对齐。\"\"\"\n\nfrom manim import *\n\n\nclass ParagraphDemo(Scene):\n    def construct(self):\n        para = Paragraph(\n            \"Paragraph 把多行文本\",\n            \"排列成一个整体对象\",\n            \"支持逐行设置对齐\",\n            alignment=\"center\",\n            font_size=32,\n        )\n        self.play(FadeIn(para, shift=UP))\n        self.play(para[2].animate.set_color(YELLOW))\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Text</code> 与 <code>Paragraph</code> 的分工：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "",
+        "Text",
+        "Paragraph"
+      ],
+      "rows": [
+        [
+          "-",
+          "<hr />",
+          "<hr />"
+        ],
+        [
+          "输入",
+          "单个字符串（含 <code>\\n</code>）",
+          "每行一个参数"
+        ],
+        [
+          "结构",
+          "每个字符一个子对象",
+          "每行一个子对象"
+        ],
+        [
+          "逐字动画",
+          "直接支持 <code>text[3]</code>",
+          "需先取行再索引"
+        ],
+        [
+          "逐行对齐",
+          "不支持（整体对齐）",
+          "支持 <code>alignment</code>"
+        ],
+        [
+          "适用场景",
+          "标题、标注、逐字效果",
+          "正文段落、行级动画"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "register_font",
+      "text": "register_font"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>register_font</code> 把字体文件临时加入 Pango 搜索路径，让 <code>Text(..., font=...)</code> 能用未安装到系统的字体。<strong>必须用上下文管理器 <code>with</code> 使用</strong>，退出后字体即从搜索路径移除。</p>\n<pre><code class=\"language-python\">from manim import *\n\nclass CustomFont(Scene):\n    def construct(self):\n        with register_font(&quot;assets/MyFont.ttf&quot;):\n            text = Text(&quot;自定义字体&quot;, font=&quot;My Font Name&quot;)\n        self.play(Write(text))\n</code></pre>\n<p>文件查找顺序：绝对路径 → <code>assets/fonts/</code> → <code>fonts/</code> → 当前目录。找不到文件抛 <code>FileNotFoundError</code>。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "平台注意",
+      "html": "<p><code>register_font</code> 在 macOS 上依赖 <code>ManimPango&gt;=0.2.3</code>，更早版本会抛 <code>AttributeError</code>。Windows 与 Linux 无此限制。CI 环境若缺字体，渲染结果会回退为默认字体——建议把字体文件随仓库放在 <code>assets/fonts/</code> 下。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "remove_invisible_chars",
+      "text": "remove_invisible_chars"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>remove_invisible_chars(mobject)</code> 返回一个去掉不可见字符（空格等宽度为零的占位）的副本，常用于 <code>TransformMatchingShapes</code> 等需要“按可见字形配对”的场景，避免空白占位干扰匹配。</p>\n<pre><code class=\"language-python\">def remove_invisible_chars(mobject: VMobject) -&gt; VMobject\n</code></pre>"
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>v0.21.0 起，字形缺失/不对应时的报错信息显著改进：错误信息会明确指出是连字（含 <code>calt</code> 类编程连字）导致字符与字形无法一一对应，并建议更换字体。另外空白与换行<strong>从不成为子对象</strong>，索引约定与文档字符串中的描述完全一致（见上文「t2c 与切片的索引约定」）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>Text(\"Hello World\")[6]</code> 选中的是哪个字符？<code>t2c={\"[6:11]\": RED}</code> 着色的又是哪段？</p>",
+      "answerHtml": "<p><code>text[6]</code> 按去空白后的渲染字符计数，<code>\"HelloWorld\"</code> 索引 6 是 <code>\"o\"</code>（World 的第二个字母）。<code>t2c</code> 切片按原始字符串计空白，<code>\"[6:11]\"</code> 着色的是 <code>\"World\"</code>。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>要对 <code>\"efficient\"</code> 中的 <code>ffi</code> 连字做逐字变色动画，只按索引取子对象会发生什么？怎么避免？</p>",
+      "answerHtml": "<p>默认情况下 <code>ffi</code> 可能被排成一个连字字形，索引与子对象错位。构造时传 <code>disable_ligatures=True</code> 强制一字符一字形，再按索引操作；若字形数仍对不上，v0.21.0 会抛 <code>ValueError</code> 并提示换用连字实现方式不同的字体。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>纯文本之外，<code>MarkupText</code> 让你用 Pango 标记语言直接控制字号、颜色、上下标等富文本效果。</p>"
+    }
+  ]
+}

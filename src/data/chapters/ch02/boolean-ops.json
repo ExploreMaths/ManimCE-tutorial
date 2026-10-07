@@ -1,0 +1,252 @@
+{
+  "part": "ch02",
+  "id": "boolean-ops",
+  "title": "布尔运算",
+  "partTitle": "基础图形",
+  "prev": {
+    "part": "ch02",
+    "id": "dots-and-clouds",
+    "title": "点与点云",
+    "path": "/ch/ch02/dots-and-clouds"
+  },
+  "next": {
+    "part": "ch02",
+    "id": "annotations",
+    "title": "标注与装饰",
+    "path": "/ch/ch02/annotations"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>布尔运算把多个 <code>VMobject</code> 的填充区域按集合规则组合成新形状：并集、交集、差集、异或。它们定义在 <code>manim.mobject.geometry.boolean_ops</code> 模块，底层由 skia-pathops 完成路径运算，无需额外安装 shapely。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Union",
+        "_BooleanOps",
+        "VMobject"
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>布尔运算类在 v0.21.0 位于模块 <code>manim.mobject.geometry.boolean_ops</code>（<code>manim.mobject.geometry.bool_ops</code> 是旧路径）。顶级命名空间 <code>from manim import Union</code> 仍然有效，但写文档、插件或自动补全时请以新模块路径为准。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Union",
+      "text": "Union"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Union</code> 取所有输入图形填充区域的<strong>并集</strong>。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>*vmobjects</code>",
+          "type": "VMobject",
+          "default": "—",
+          "desc": "任意多个参与运算的图形"
+        },
+        {
+          "name": "<code>**kwargs</code>",
+          "type": "Any",
+          "default": "—",
+          "desc": "传给 VMobject 的样式，如 <code>fill_opacity</code>、<code>color</code>"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Union(circle, square, fill_opacity=1, color=GREEN)\n</code></pre>\n<p>常见坑：样式（颜色、填充）取结果对象的 <code>kwargs</code>，不会继承输入图形的样式；不设置 <code>fill_opacity</code> 时结果默认不可见（继承 VMobject 默认 fill_opacity=0）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Intersection",
+      "text": "Intersection"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Intersection</code> 取所有输入图形填充区域的<strong>交集</strong>：只有被所有图形共同覆盖的部分会保留。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>*vmobjects</code>",
+          "type": "VMobject",
+          "default": "—",
+          "desc": "任意多个参与运算的图形"
+        },
+        {
+          "name": "<code>**kwargs</code>",
+          "type": "Any",
+          "default": "—",
+          "desc": "结果样式"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>常见坑：只有两个以上图形重叠时结果才非空；完全不相交的输入会得到空图形，渲染时不报错但“什么也看不见”。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Difference",
+      "text": "Difference"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Difference</code> 从 <code>subject</code> 中减去 <code>clip</code> 覆盖的区域（<code>subject - clip</code>）。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>subject</code>",
+          "type": "VMobject",
+          "default": "—",
+          "desc": "被裁剪的主体"
+        },
+        {
+          "name": "<code>clip</code>",
+          "type": "VMobject",
+          "default": "—",
+          "desc": "减去的部分"
+        },
+        {
+          "name": "<code>**kwargs</code>",
+          "type": "Any",
+          "default": "—",
+          "desc": "结果样式"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Difference(square, circle)  # 正方形挖掉圆\n</code></pre>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Exclusion",
+      "text": "Exclusion"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Exclusion</code> 取<strong>对称差</strong>（异或）：只保留恰好被一个图形覆盖的区域，重叠部分被挖掉。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>subject</code>",
+          "type": "VMobject",
+          "default": "—",
+          "desc": "第一个图形"
+        },
+        {
+          "name": "<code>clip</code>",
+          "type": "VMobject",
+          "default": "—",
+          "desc": "第二个图形"
+        },
+        {
+          "name": "<code>**kwargs</code>",
+          "type": "Any",
+          "default": "—",
+          "desc": "结果样式"
+        }
+      ]
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "运算",
+        "语义",
+        "参数形式",
+        "形象理解"
+      ],
+      "rows": [
+        [
+          "<code>Union</code>",
+          "覆盖任一图形的区域",
+          "<code>*vmobjects</code> 多输入",
+          "图形“溶”在一起"
+        ],
+        [
+          "<code>Intersection</code>",
+          "同时被所有图形覆盖的区域",
+          "<code>*vmobjects</code> 多输入",
+          "只留下重叠 Lens"
+        ],
+        [
+          "<code>Difference</code>",
+          "主体减去裁剪",
+          "<code>subject, clip</code> 两个",
+          "饼干模子抠洞"
+        ],
+        [
+          "<code>Exclusion</code>",
+          "恰好被一个图形覆盖的区域",
+          "<code>subject, clip</code> 两个",
+          "两图形互相挖掉重叠"
+        ]
+      ]
+    },
+    {
+      "type": "demo",
+      "example": "ch02/boolean_ops_demo",
+      "scene": "BooleanOpsDemo",
+      "caption": "<p>正方形与圆先做原始展示，随后淡出，换成四个布尔结果：并集、交集、差集、异或。注意四个结果都显式传了 <code>fill_opacity=1</code>，否则默认填充为 0 不可见。</p>",
+      "code": "\"\"\"BooleanOpsDemo: Union / Intersection / Difference / Exclusion.\"\"\"\n\nfrom manim import *\n\n\nclass BooleanOpsDemo(Scene):\n    def construct(self):\n        sq = Square(side_length=1.8, fill_opacity=1, color=BLUE).shift(LEFT * 0.6)\n        ci = Circle(radius=1.1, fill_opacity=1, color=RED).shift(RIGHT * 0.6)\n        self.play(FadeIn(sq), FadeIn(ci))\n        self.wait(0.5)\n\n        union = Union(sq, ci, fill_opacity=1, color=GREEN).shift(DOWN * 2.2 + LEFT * 4)\n        inter = Intersection(sq, ci, fill_opacity=1, color=YELLOW).shift(DOWN * 2.2 + LEFT * 1.3)\n        diff = Difference(sq, ci, fill_opacity=1, color=ORANGE).shift(DOWN * 2.2 + RIGHT * 1.3)\n        excl = Exclusion(sq, ci, fill_opacity=1, color=PURPLE).shift(DOWN * 2.2 + RIGHT * 4)\n\n        self.play(FadeOut(sq), FadeOut(ci))\n        self.play(\n            FadeIn(union),\n            FadeIn(inter),\n            FadeIn(diff),\n            FadeIn(excl),\n        )\n        self.wait(1)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>布尔运算作用于<strong>填充路径</strong>：纯描边（<code>fill_opacity=0</code>）的图形没有可运算的内部，结果会退化或为空。参与运算前确保输入有实际填充，或者接受结果按 <code>kwargs</code> 重新设置填充。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>布尔运算结果仍是普通 <code>VMobject</code>，可以继续 <code>set_fill</code>、参与 <code>Transform</code>、或作为下一个布尔运算的输入。复杂路径的运算较慢，调试时先用 <code>-ql</code> 低画质快速迭代。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想画一个“圆角矩形挖掉中间圆形”的甜甜圈状图形，但 <code>Difference(rounded_rect, circle)</code> 的结果一片空白，最可能的原因是什么？</p>",
+      "answerHtml": "<p>结果对象的 <code>fill_opacity</code> 默认是 0（不继承输入图形）。给 <code>Difference</code> 显式传 <code>fill_opacity=1</code>（以及想要的颜色）即可看到结果。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>下一节介绍标注与装饰：包围框、背景框、删除线、带标签的线与多边形，以及大括号族。</p>"
+    }
+  ]
+}

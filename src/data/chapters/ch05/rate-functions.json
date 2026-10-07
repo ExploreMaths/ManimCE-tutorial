@@ -1,0 +1,272 @@
+{
+  "part": "ch05",
+  "id": "rate-functions",
+  "title": "Rate Functions 全解",
+  "partTitle": "动画进阶",
+  "prev": {
+    "part": "ch05",
+    "id": "speed",
+    "title": "变速",
+    "path": "/ch/ch05/speed"
+  },
+  "next": {
+    "part": "ch06",
+    "id": "three-d-scene",
+    "title": "ThreeDScene",
+    "path": "/ch/ch06/three-d-scene"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p><code>rate_func</code> 决定动画\"进度怎么走\"：给定归一化时间 <code>t ∈ [0, 1]</code>，返回归一化进度。合格的速率函数满足契约 <code>f(0)=0, f(1)=1</code>；<code>self.play(..., rate_func=smooth)</code> 里的就是它。本节以 <code>manim.utils.rate_functions</code> 在 v0.21.0 的<strong>实际导出</strong>为准做全量速查。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "核心速率函数",
+      "text": "核心速率函数"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "函数",
+        "形状",
+        "典型用途"
+      ],
+      "rows": [
+        [
+          "<code>linear</code>",
+          "直线",
+          "匀速；机械运动、倒计时"
+        ],
+        [
+          "<code>smooth</code>",
+          "S 形缓入缓出（sigmoid，inflection=10 可调）",
+          "通用默认，最自然的启停"
+        ],
+        [
+          "<code>double_smooth</code>",
+          "更平缓的 S 形",
+          "极柔和的长过渡"
+        ],
+        [
+          "<code>smoothstep</code> / <code>smootherstep</code> / <code>smoothererstep</code>",
+          "经典多项式 S 形，阶数逐次升高",
+          "需要\"钉\"在端点的平滑运动"
+        ],
+        [
+          "<code>rush_from</code>",
+          "起步猛、后段缓",
+          "物体冲入画面"
+        ],
+        [
+          "<code>rush_into</code>",
+          "前段缓、收尾猛",
+          "物体精准落位"
+        ],
+        [
+          "<code>slow_into</code>",
+          "起步极慢、后程加速",
+          "反差的急停变急起"
+        ],
+        [
+          "<code>running_start</code>",
+          "先小幅回拉（负值）再冲出",
+          "投掷、起跑类预备动作"
+        ],
+        [
+          "<code>lingering</code>",
+          "起点终点各留约 20% 静止段",
+          "强调\"停稳了再走\""
+        ],
+        [
+          "<code>there_and_back</code>",
+          "走到 1 再折返 0",
+          "强调、抖动、往返"
+        ],
+        [
+          "<code>there_and_back_with_pause(t, pause_ratio=1/3)</code>",
+          "去程、停留、返程三等分",
+          "展示—停留—收回"
+        ],
+        [
+          "<code>wiggle(t, wiggles=2)</code>",
+          "波浪起伏、会跌破 0 越过 1",
+          "悬浮、抖动"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ease-系列30-个",
+      "text": "ease 系列（30 个）"
+    },
+    {
+      "type": "html",
+      "html": "<p>标准缓动家族：<code>ease_in_*</code>（慢起步）、<code>ease_out_*</code>（慢收尾）、<code>ease_in_out_*</code>（两头慢），各 10 种曲线：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "曲线",
+        "ease_in",
+        "ease_out",
+        "ease_in_out"
+      ],
+      "rows": [
+        [
+          "二次",
+          "<code>ease_in_quad</code>",
+          "<code>ease_out_quad</code>",
+          "<code>ease_in_out_quad</code>"
+        ],
+        [
+          "三次",
+          "<code>ease_in_cubic</code>",
+          "<code>ease_out_cubic</code>",
+          "<code>ease_in_out_cubic</code>"
+        ],
+        [
+          "四次",
+          "<code>ease_in_quart</code>",
+          "<code>ease_out_quart</code>",
+          "<code>ease_in_out_quart</code>"
+        ],
+        [
+          "五次",
+          "<code>ease_in_quint</code>",
+          "<code>ease_out_quint</code>",
+          "<code>ease_in_out_quint</code>"
+        ],
+        [
+          "正弦",
+          "<code>ease_in_sine</code>",
+          "<code>ease_out_sine</code>",
+          "<code>ease_in_out_sine</code>"
+        ],
+        [
+          "指数",
+          "<code>ease_in_expo</code>",
+          "<code>ease_out_expo</code>",
+          "<code>ease_in_out_expo</code>"
+        ],
+        [
+          "圆弧",
+          "<code>ease_in_circ</code>",
+          "<code>ease_out_circ</code>",
+          "<code>ease_in_out_circ</code>"
+        ],
+        [
+          "回拉",
+          "<code>ease_in_back</code>",
+          "<code>ease_out_back</code>",
+          "<code>ease_in_out_back</code>"
+        ],
+        [
+          "弹性",
+          "<code>ease_in_elastic</code>",
+          "<code>ease_out_elastic</code>",
+          "<code>ease_in_out_elastic</code>"
+        ],
+        [
+          "弹跳",
+          "<code>ease_in_bounce</code>",
+          "<code>ease_out_bounce</code>",
+          "<code>ease_in_out_bounce</code>"
+        ]
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>后三种带\"越过端点再回弹\"的效果：<code>back</code> 小幅回冲、<code>elastic</code> 弹性振荡、<code>bounce</code> 落地弹跳。日常用 <code>smooth</code> 即可，需要\"活泼感\"时换 <code>ease_out_back</code> / <code>ease_out_elastic</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "修饰与组合工具",
+      "text": "修饰与组合工具"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "工具",
+        "签名",
+        "作用"
+      ],
+      "rows": [
+        [
+          "<code>squish_rate_func(func, a=0.4, b=0.6)</code>",
+          "函数",
+          "把 func 压缩到 [a, b] 区间，区间外冻结在端点值"
+        ],
+        [
+          "<code>not_quite_there(func=smooth, proportion=0.7)</code>",
+          "函数",
+          "把终点缩到 proportion：动画\"差一步到位\"，f(1)=0.7"
+        ],
+        [
+          "<code>zero(function)</code>",
+          "装饰器",
+          "包一层：t 在 [0,1] 内原样转发，之外返回 0"
+        ],
+        [
+          "<code>unit_interval(function)</code>",
+          "装饰器",
+          "包一层：t&lt;0 钳到 0，t&gt;1 钳到 1（保证契约）"
+        ],
+        [
+          "<code>exponential_decay(t, half_life=0.1)</code>",
+          "函数",
+          "指数逼近 1（经 unit_interval 钳制），适合透明度/亮度衰减"
+        ]
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>不是所有导出都满足 <code>f(0)=0, f(1)=1</code>：<code>sigmoid</code> 是原始逻辑斯蒂函数（f(0)=0.5，仅供 <code>smooth</code> 等底层调用）；<code>not_quite_there</code> 故意停在 proportion；<code>wiggle</code> 中途会跌破 0。把它们传给位移类动画可能出现\"反向移动\"或\"不到位\"，用于缩放/透明度时才安全。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch05/rate_functions",
+      "scene": "RateFunctionsRace",
+      "caption": "<p>六个小球同时下落、各挂一种 rate_func：linear 匀速、smooth 缓入缓出、rush_from 先快后慢、rush_into 先慢后快、there_and_back 走一半折返、wiggle 波浪前进——一张图看懂曲线形状差异。</p>",
+      "code": "\"\"\"RateFunctionsRace: 多个小球以不同 rate_func 同向下落，直观对比速率曲线。\"\"\"\n\nfrom manim import *\n\n\nclass RateFunctionsRace(Scene):\n    def construct(self):\n        funcs = [linear, smooth, rush_from, rush_into, there_and_back, wiggle]\n        colors = [WHITE, BLUE, GREEN, ORANGE, PURPLE, RED]\n\n        dots = VGroup(\n            *[\n                Dot(color=color).to_edge(UP).shift(RIGHT * x)\n                for color, x in zip(colors, [-4, -2.4, -0.8, 0.8, 2.4, 4])\n            ]\n        )\n        labels = VGroup(\n            *[\n                Text(f.__name__, font_size=18).next_to(dot, DOWN, buff=0.15)\n                for dot, f in zip(dots, funcs)\n            ]\n        )\n        finish = Line(LEFT * 5, RIGHT * 5, color=GREY).to_edge(DOWN, buff=1.5)\n        self.add(dots, labels, finish)\n\n        self.play(\n            *[\n                dot.animate(rate_func=f, run_time=3).shift(DOWN * 4.2)\n                for dot, f in zip(dots, funcs)\n            ]\n        )\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>速率函数不改变动画时长，只改变节奏；想拉长/压缩时长用 <code>run_time</code>，想在播放中途变速用上一节的 <code>ChangeSpeed</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想要\"物体先慢慢挪、越接近目标越快、最后精准停在目标点\"的效果，选哪个速率函数？</p>",
+      "answerHtml": "<p><code>rush_into</code>（前缓后急，收尾猛而准）；如果想更\"俏皮\"一点可以选 <code>ease_in_quad</code> / <code>ease_in_cubic</code> 系列。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>self.play(mob.animate.shift(RIGHT), rate_func=there_and_back)</code> 结束后 mob 在哪里？</p>",
+      "answerHtml": "<p>回到原点。<code>there_and_back</code> 的进度从 0 到 1 再折返 0，位移量同步伸缩，动画播完净位移为零——这正是它适合做\"强调一下再回来\"的原因。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>到这里，动画进阶板块收官：机制、更新器、数值、轨迹、路径、旋转、强调、变速与速率函数都已覆盖。下一板块进入三维世界：从 <code>ThreeDScene</code> 与 3D 物体讲起。</p>"
+    }
+  ]
+}

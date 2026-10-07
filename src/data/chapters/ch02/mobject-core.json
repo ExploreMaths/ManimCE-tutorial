@@ -1,0 +1,325 @@
+{
+  "part": "ch02",
+  "id": "mobject-core",
+  "title": "Mobject 核心",
+  "partTitle": "基础图形",
+  "prev": {
+    "part": "ch01",
+    "id": "cli-and-sections",
+    "title": "CLI 基础与章节分段",
+    "path": "/ch/ch01/cli-and-sections"
+  },
+  "next": {
+    "part": "ch02",
+    "id": "vmobject",
+    "title": "VMobject",
+    "path": "/ch/ch02/vmobject"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>Manim 中的一切可见对象都继承自 <code>Mobject</code>（Mathematical Object，数学对象）。本节讲清 <code>Mobject</code> 的职责边界：它管理<strong>子对象树、位置、样式状态</strong>，但本身<strong>没有外观</strong>——真正能被渲染出来的是它的子类。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Mobject",
+      "text": "Mobject"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Mobject</code> 是所有屏幕对象的基类：<strong>写自定义图形就是继承 <code>Mobject</code>（或其子类）</strong>。它约有一百多个公开成员，下面按用途分组介绍最常用的部分。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Mobject",
+        "object"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Mobject(\n    color: ParsableManimColor | list[ParsableManimColor] = WHITE,\n    name: str | None = None,\n    dim: int = 3,\n    target: Mobject | None = None,\n    z_index: float = 0,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>color</code>",
+          "type": "ParsableManimColor \\",
+          "default": "list[ParsableManimColor]",
+          "desc": "WHITE"
+        },
+        {
+          "name": "<code>name</code>",
+          "type": "str \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>dim</code>",
+          "type": "int",
+          "default": "3",
+          "desc": "点坐标的维度，通常保持 3（x, y, z）"
+        },
+        {
+          "name": "<code>target</code>",
+          "type": "Mobject \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>z_index</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "层级，数值大的后绘制（视觉上更靠前）"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "结构操作",
+      "text": "结构操作"
+    },
+    {
+      "type": "html",
+      "html": "<p>管理子对象与整体替换：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "方法",
+        "说明"
+      ],
+      "rows": [
+        [
+          "<code>add(*mobjects)</code>",
+          "追加子对象；同一个对象重复添加会被忽略"
+        ],
+        [
+          "<code>remove(*mobjects)</code>",
+          "移除子对象；移除不存在的对象不会报错"
+        ],
+        [
+          "<code>copy()</code>",
+          "返回深拷贝；要对同一图形用两次必须先拷贝"
+        ],
+        [
+          "<code>become(mobject, match_height=False, match_width=False, match_center=False, stretch=False)</code>",
+          "把自身的数据与样式替换成另一个 mobject（原地修改）"
+        ],
+        [
+          "<code>get_family()</code>",
+          "返回 <code>[自身, 全部后代]</code> 的扁平列表"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "定位方法",
+      "text": "定位方法"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>shift</code> / <code>move_to</code> / <code>next_to</code> / <code>align_to</code> / <code>to_edge</code> / <code>to_corner</code> / <code>center</code> 是最常用的布局七件套：</p>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "方法",
+        "签名（常用部分）",
+        "说明"
+      ],
+      "rows": [
+        [
+          "<code>shift(*vectors)</code>",
+          "—",
+          "按向量平移，如 <code>.shift(2 * LEFT + UP)</code>"
+        ],
+        [
+          "<code>move_to(point_or_mobject)</code>",
+          "<code>aligned_edge=ORIGIN</code>",
+          "把<strong>中心</strong>移到目标点或目标对象中心"
+        ],
+        [
+          "<code>next_to(mobject_or_point, direction=RIGHT, buff=0.25)</code>",
+          "<code>aligned_edge=ORIGIN</code>",
+          "沿 <code>direction</code> 方向排到目标旁边，留 <code>buff</code> 间距"
+        ],
+        [
+          "<code>align_to(mobject_or_point, direction=ORIGIN)</code>",
+          "—",
+          "只对齐指定方向的边缘，不移动其他轴"
+        ],
+        [
+          "<code>to_edge(edge=LEFT, buff=0.5)</code>",
+          "—",
+          "贴到画面某条边"
+        ],
+        [
+          "<code>to_corner(corner=DL, buff=0.5)</code>",
+          "—",
+          "贴到画面某个角"
+        ],
+        [
+          "<code>center()</code>",
+          "—",
+          "移回画面中心"
+        ],
+        [
+          "<code>set_x(x)</code> / <code>set_y(y)</code>",
+          "—",
+          "直接设定某一轴坐标"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "变换方法",
+      "text": "变换方法"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "方法",
+        "签名（常用部分）",
+        "说明"
+      ],
+      "rows": [
+        [
+          "<code>rotate(angle, axis=OUT)</code>",
+          "<code>about_point=None</code>",
+          "绕 <code>axis</code> 轴旋转 <code>angle</code> 弧度，默认绕纸面法线"
+        ],
+        [
+          "<code>scale(scale_factor)</code>",
+          "<code>about_point=None</code>",
+          "等比缩放；<code>about_point</code> 可指定缩放中心"
+        ],
+        [
+          "<code>flip(axis=UP)</code>",
+          "<code>about_point=None</code>",
+          "沿轴镜像翻转"
+        ],
+        [
+          "<code>stretch(factor, dim)</code>",
+          "—",
+          "只沿某一维拉伸"
+        ],
+        [
+          "<code>scale_to_fit_width(width)</code> / <code>scale_to_fit_height(height)</code>",
+          "—",
+          "缩放到指定宽高"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "状态保存与查询",
+      "text": "状态保存与查询"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "成员",
+        "说明"
+      ],
+      "rows": [
+        [
+          "<code>save_state()</code> / <code>restore()</code>",
+          "快照当前位置与样式；<code>restore</code> 也可以配合 <code>.animate</code> 播放成动画"
+        ],
+        [
+          "<code>set(**kwargs)</code>",
+          "批量设属性，如 <code>.set(z_index=5)</code>，常与 <code>.animate</code> 配合"
+        ],
+        [
+          "<code>get_center()</code> / <code>get_x()</code> / <code>get_y()</code>",
+          "查询中心坐标"
+        ],
+        [
+          "<code>get_top()</code> / <code>get_bottom()</code> / <code>get_left()</code> / <code>get_right()</code>",
+          "查询包围盒四边中点"
+        ],
+        [
+          "<code>width</code> / <code>height</code>",
+          "只读属性：当前包围盒宽高（只读，不能赋值）"
+        ]
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>下面这个示例串联了定位、变换与状态保存：</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch02/mobject_methods",
+      "scene": "MobjectMethods",
+      "caption": "<p><code>save_state()</code> 在旋转缩放前打快照，<code>animate.restore()</code> 再把它平滑地变回来；<code>next_to</code> 让正方形贴到圆左侧。</p>",
+      "code": "from manim import *\n\n\nclass MobjectMethods(Scene):\n    def construct(self):\n        square = Square().set_fill(BLUE, opacity=0.6)\n        circle = Circle().set_fill(RED, opacity=0.6).to_edge(RIGHT)\n        self.add(circle)\n        self.play(FadeIn(square))\n        self.play(square.animate.shift(2 * LEFT))\n        square.save_state()\n        self.play(square.animate.rotate(PI / 4).scale(0.5))\n        self.play(square.animate.restore())\n        self.play(square.animate.next_to(circle, LEFT, buff=0.1))\n",
+      "video": null
+    },
+    {
+      "type": "html",
+      "html": "<p>几乎所有变换/定位方法都返回 <code>self</code>，因此可以链式书写：<code>Square().set_fill(BLUE).shift(LEFT).rotate(PI / 4)</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "与其他章节的关系",
+      "text": "与其他章节的关系"
+    },
+    {
+      "type": "html",
+      "html": "<ul>\n<li>下一节的 <code>VMobject</code> 在 <code>Mobject</code> 之上增加描边、填充等矢量样式。</li>\n<li>之后的 <code>Group</code>（Mobject 子类）与 <code>VGroup</code>（VMobject 子类）用于把多个对象当一个整体操作。</li>\n</ul>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>Mobject</code> 本身<strong>没有任何点，渲染出来是不可见的</strong>——<code>self.play(FadeIn(Mobject()))</code> 不会报错，但画面什么都没有。需要可见图形时请用具体子类（<code>Square</code>、<code>Circle</code> 等）。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>width</code> / <code>height</code> 是只读属性：<code>square.width = 2</code> 会抛 <code>AttributeError</code>。要改变大小请用 <code>scale()</code> 或 <code>scale_to_fit_width()</code>。同理，<code>set_fill</code> / <code>set_stroke</code> / <code>set_opacity</code> 定义在 <code>VMobject</code> 上，纯 <code>Mobject</code>（如 <code>Point</code>）没有这些方法。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "deprecated",
+      "title": "废弃提醒",
+      "html": "<p><code>Mobject</code> 保留了 <code>get_*</code> / <code>set_*</code> 兼容层：未显式定义的方法（如 <code>mob.set_foo(0)</code>）会退化为普通属性读写并给出 <code>DeprecationWarning</code>。新代码请直接写 <code>mob.foo = 0</code> 或用 <code>mob.set(foo=0)</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>move_to(other)</code> 和 <code>next_to(other, RIGHT)</code> 有什么本质区别？</p>",
+      "answerHtml": "<p><code>move_to</code> 把<strong>自身中心</strong>对齐到目标的中心（或 <code>aligned_edge</code> 指定的边缘），两个物体重叠；<code>next_to</code> 则把自身整体放到目标的一侧，中间留出 <code>buff</code> 间距，二者不重叠。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想让一个三角形先旋转 90° 再变回去，如何用 <code>save_state</code> / <code>restore</code> 实现为一个平滑动画？</p>",
+      "answerHtml": "<p>先 <code>tri.save_state()</code> 快照，再 <code>self.play(tri.animate.rotate(PI / 2))</code>，最后 <code>self.play(tri.animate.restore())</code>——<code>restore</code> 也可以挂在 <code>.animate</code> 后面播放成动画。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>掌握了 <code>Mobject</code> 的树结构与定位变换后，下一节看真正能“上色”的矢量基类 <code>VMobject</code>。</p>"
+    }
+  ]
+}

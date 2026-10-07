@@ -1,0 +1,191 @@
+{
+  "part": "ch03",
+  "id": "text-compare",
+  "title": "文本方案对比",
+  "partTitle": "文本与公式",
+  "prev": {
+    "part": "ch03",
+    "id": "typst",
+    "title": "Typst 与 MathTypst (v0.21.0 新增)",
+    "path": "/ch/ch03/typst"
+  },
+  "next": {
+    "part": "ch03",
+    "id": "numbers",
+    "title": "数字与变量",
+    "path": "/ch/ch03/numbers"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>板块三介绍了五套文本方案：<code>Text</code>（Pango 纯文本）、<code>MarkupText</code>（Pango 富文本）、<code>Tex</code>/<code>MathTex</code>（LaTeX）、<code>Typst</code>/<code>MathTypst</code>（v0.21.0 新增）。本节把它们放在同一张表里正面对比，并给出选型决策树。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "总对比表",
+      "text": "总对比表"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "",
+        "Text",
+        "MarkupText",
+        "Tex / MathTex",
+        "Typst / MathTypst"
+      ],
+      "rows": [
+        [
+          "-",
+          "<hr />",
+          "<hr />",
+          "<hr />",
+          "<hr />"
+        ],
+        [
+          "渲染引擎",
+          "Pango → SVG",
+          "Pango → SVG",
+          "LaTeX → DVI/SVG",
+          "typst (Rust) → SVG"
+        ],
+        [
+          "外部依赖",
+          "ManimPango",
+          "ManimPango",
+          "TeX Live / MiKTeX",
+          "Python <code>typst</code> 包"
+        ],
+        [
+          "安装成本",
+          "零",
+          "零",
+          "数 GB",
+          "一条 pip 命令"
+        ],
+        [
+          "文本语法",
+          "纯文本",
+          "Pango 标记",
+          "LaTeX 文本/数学模式",
+          "Typst 标记/数学模式"
+        ],
+        [
+          "中文支持",
+          "直接支持",
+          "直接支持",
+          "需 ctex 模板 + XeLaTeX",
+          "直接支持"
+        ],
+        [
+          "数学公式",
+          "不支持",
+          "仅上下标",
+          "完整（amsmath）",
+          "完整（Typst math）"
+        ],
+        [
+          "逐字/逐组动画",
+          "字符级子对象",
+          "字符级子对象",
+          "<code>substrings_to_isolate</code> / <code>{{ }}</code>",
+          "<code>{{ }}</code> + <code>select</code>"
+        ],
+        [
+          "富文本（粗斜体/颜色/字号）",
+          "<code>t2c</code>/<code>t2w</code> 等映射",
+          "内联标签",
+          "<code>\\textbf</code> 等命令",
+          "Typst <code>#set</code>/<code>_ _</code>"
+        ],
+        [
+          "首次渲染耗时",
+          "快",
+          "快",
+          "慢（秒级编译）",
+          "中等（毫秒级编译）"
+        ],
+        [
+          "缓存",
+          "SVG 缓存可选",
+          "SVG 缓存可选",
+          "部分视频缓存",
+          "SVG 缓存可选"
+        ],
+        [
+          "排版质量",
+          "良",
+          "良",
+          "最优",
+          "优"
+        ],
+        [
+          "适用场景",
+          "中文标注、简单文字",
+          "富文本混排",
+          "正式数学公式",
+          "轻量公式、免 TeX 环境"
+        ]
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>几点补充说明：</p>\n<ul>\n<li><strong>性能</strong>：<code>Text</code>/<code>MarkupText</code> 只做一次 Pango 排版，最快；<code>Tex</code>/<code>MathTex</code> 每次都要调起 LaTeX 编译，几十个公式场景会明显拖慢迭代；<code>Typst</code> 编译在毫秒级，介于两者之间。</li>\n<li><strong>颜色机制</strong>：<code>Text</code> 系与 <code>Tex</code> 系都是 SVG 导入，Manim 颜色对象直接可用；<code>MarkupText</code> 的 <code>&lt;span foreground&gt;</code> 与 Typst 内联颜色则用各自语法（十六进制 / Typst 颜色函数），<code>Typst(color=...)</code> 会整体覆盖 Typst 内部 fill。</li>\n<li><strong>子对象粒度</strong>：<code>Text</code> 按字符拆分，做逐字动画最自然；<code>MathTex</code> 默认整式一个子对象，需要 <code>substrings_to_isolate</code> 或 <code>{{ }}</code> 主动拆分；<code>MathTypst</code> 的 <code>{{ }}</code> + <code>select</code> 是三者中最接近“按语义分组”的。</li>\n</ul>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "选型决策树",
+      "text": "选型决策树"
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-text\">要渲染的内容是什么？\n├─ 数学公式\n│   ├─ 已装 LaTeX，追求最高排版质量 ──→ MathTex（中文混排用 Tex + ctex 模板）\n│   ├─ 不想装 TeX / CI 环境受限 ────→ MathTypst\n│   └─ 只有简单上下标 ──────────────→ MarkupText（&lt;sup&gt;/&lt;sub&gt;）\n└─ 普通文字\n    ├─ 含中文 ──────────────────────→ Text（无需任何额外依赖）\n    ├─ 需要粗斜体、多字号混排 ────────→ MarkupText\n    ├─ 需要整段文档式排版（标题/列表/强调）→ Typst\n    └─ 需要 LaTeX 文本排版质量 ───────→ Tex\n</code></pre>\n<p>再叠加两条约束：</p>\n<ul>\n<li><strong>逐字/逐组动画需求强</strong> → 优先 <code>Text</code>（字符天然是子对象）或 <code>MathTypst</code>（<code>{{ }}</code> 语义分组）；<code>MathTex</code> 要先规划隔离子串。</li>\n<li><strong>渲染环境不可控</strong>（观众复现、CI、插件分发）→ 优先 Pango 系或 Typst，避免把数 GB 的 LaTeX 作为隐形依赖。</li>\n</ul>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见坑",
+      "text": "常见坑"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>不要在中途换引擎：同一个场景里 <code>Text</code> 和 <code>MathTex</code> 的字体、基线、笔画宽度体系完全不同，<code>Transform</code> 跨引擎变形会得到难看的中间帧。跨方案切换用 <code>FadeOut</code>/<code>FadeIn</code> 或 <code>ReplacementTransform</code>。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>混排公式 + 中文标注的最省心组合是：<code>MathTex</code> 出公式、<code>Text</code> 出中文注释，用 <code>next_to</code>/<code>arrange</code> 手工对齐。两者都是成熟路径，CI 与本地行为一致。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>目标：渲染中文标题“牛顿-莱布尼茨公式”和公式 <code>∫_a^b f(x)dx = F(b)-F(a)</code>，机器没装 LaTeX。选哪套方案？写出关键代码。</p>",
+      "answerHtml": "<p>公式用 <code>MathTypst</code>（免 TeX），标题用 <code>Text</code>：</p>\n<pre><code class=\"language-python\">title = Text(&quot;牛顿-莱布尼茨公式&quot;)\nformula = MathTypst(r&quot;integral_a^b f(x) dif x = F(b) - F(a)&quot;)\nformula.next_to(title, DOWN)\n</code></pre>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>为什么大量公式场景推荐预渲染或缓存策略？Tex/MathTex 与其他方案比瓶颈在哪？</p>",
+      "answerHtml": "<p><code>Tex</code>/<code>MathTex</code> 每个（或每组）公式都要启动一次外部 LaTeX 进程编译，秒级耗时且进程启动开销固定；Pango 与 Typst 都在进程内完成排版，毫秒级。公式多时 LaTeX 路径成为主要瓶颈，可利用 Manim 的部分视频缓存（默认开启）跳过未修改片段，或把静态公式预渲染为 SVG/图片。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>对比完引擎，回到具体对象：下一节看数字相关类 <code>DecimalNumber</code>、<code>Integer</code> 与 <code>Variable</code>——它们让数值本身成为可动画的对象。</p>"
+    }
+  ]
+}

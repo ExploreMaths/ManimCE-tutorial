@@ -1,0 +1,259 @@
+{
+  "part": "ch06",
+  "id": "camera-internals",
+  "title": "Camera 基类与扩展",
+  "partTitle": "3D 与摄像机",
+  "prev": {
+    "part": "ch06",
+    "id": "zoomed-scene",
+    "title": "局部放大",
+    "path": "/ch/ch06/zoomed-scene"
+  },
+  "next": {
+    "part": "ch06",
+    "id": "renderers",
+    "title": "渲染器",
+    "path": "/ch/ch06/renderers"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>前面所有场景类本质上都是在 <code>Scene</code> 上换不同的摄像机：<code>ThreeDScene</code> 换 <code>ThreeDCamera</code>，<code>MovingCameraScene</code> 换 <code>MovingCamera</code>，<code>ZoomedScene</code> 换 <code>MultiCamera</code>。本节解剖这个公共基类 <code>Camera</code>，以及三个较少用但值得知道的扩展。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Camera",
+      "text": "Camera"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Camera</code> 负责两件事：定义<strong>取景范围</strong>（帧坐标系）与<strong>像素网格</strong>（像素坐标系）的对应关系，以及把 mobject 渲染进像素数组。</p>\n<pre><code class=\"language-python\">Camera(\n    background_image: str | None = None,\n    frame_center: Point3D = ORIGIN,\n    image_mode: str = &quot;RGBA&quot;,\n    n_channels: int = 4,\n    pixel_array_dtype: str = &quot;uint8&quot;,\n    cairo_line_width_multiple: float = 0.01,\n    use_z_index: bool = True,\n    background: PixelArray | None = None,\n    pixel_height: int | None = None,\n    pixel_width: int | None = None,\n    frame_height: float | None = None,\n    frame_width: float | None = None,\n    frame_rate: float | None = None,\n    background_color: ParsableManimColor | None = None,\n    background_opacity: float | None = None,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Camera",
+        "object"
+      ]
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>frame_center</code>",
+          "type": "Point3D",
+          "default": "ORIGIN",
+          "desc": "帧坐标系原点对准的空间点"
+        },
+        {
+          "name": "<code>frame_height</code> / <code>frame_width</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>pixel_height</code> / <code>pixel_width</code>",
+          "type": "int \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>pixel_array_dtype</code>",
+          "type": "str",
+          "default": "uint8",
+          "desc": "像素数组数据类型"
+        },
+        {
+          "name": "<code>use_z_index</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "是否按 z_index 排序渲染"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "帧坐标系与像素坐标系",
+      "text": "帧坐标系与像素坐标系"
+    },
+    {
+      "type": "html",
+      "html": "<p>摄像机用两组尺寸把“画面单位”换算成“像素”：</p>\n<ul>\n<li>帧坐标系：以 <code>frame_center</code> 为中心，<code>frame_height</code>/<code>frame_width</code> 为可见范围（默认 16:9 时高 8、宽 8×16/9≈14.22）</li>\n<li>像素坐标系：<code>pixel_height</code>×<code>pixel_width</code> 的数组；<strong>像素 y 轴向下增长</strong>（数组行号），而帧坐标 y 轴向上增长</li>\n</ul>\n<p>换算关系：空间点 <code>p</code> 的像素横坐标 = <code>(p.x - center.x) / frame_width * pixel_width + pixel_width/2</code>，纵坐标方向相反。<code>Camera</code> 提供的换算工具：</p>\n<ul>\n<li><code>points_to_subpixel_coords(mobject, points)</code> —— 空间点 → 亚像素坐标（float）</li>\n<li><code>points_to_pixel_coords(mobject, points)</code> —— 空间点 → 整数像素坐标（<code>(N, 2)</code> 数组）</li>\n<li><code>get_coords_of_all_pixels()</code> —— 全部像素对应的帧坐标</li>\n<li><code>is_in_frame(mobject_or_point)</code> / <code>on_screen_pixels(...)</code> —— 可见性判断</li>\n<li><code>reset_pixel_shape(pixel_height, pixel_width)</code> / <code>resize_frame_shape(fixed_dimension)</code> —— 改变像素尺寸时保持比例</li>\n</ul>"
+    },
+    {
+      "type": "demo",
+      "example": "ch06/camera_pixel_coords",
+      "scene": "PixelCoords",
+      "caption": "<p>三个点旁边的标注是 <code>points_to_pixel_coords</code> 换算出的像素坐标：ORIGIN 对应画面正中心 (640, 360)，y 向上会让像素行号变小。</p>",
+      "code": "from manim import *\n\n\nclass PixelCoords(Scene):\n    def construct(self):\n        dots = VGroup(Dot(ORIGIN), Dot(RIGHT * 3 + UP * 2), Dot(LEFT * 4 + DOWN * 2.5))\n        labels = VGroup()\n        for d in dots:\n            x, y = self.camera.points_to_pixel_coords(d, [d.get_center()])[0]\n            labels.add(Text(f\"({x:.0f}, {y:.0f})\", font_size=20).next_to(d, UP))\n        self.add(dots, labels)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "convert-pixel-array",
+      "text": "convert_pixel_array"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>convert_pixel_array(pixel_array)</code> 把 0–1 浮点像素数组转成 0–255 的 <code>uint8</code> RGB 值（乘以 <code>rgb_max_val</code> 后按 <code>pixel_array_dtype</code> 取整），是渲染输出前的最后一步。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>v0.21.0 破坏性变更：<code>Camera.convert_pixel_array()</code> 的 <code>convert_from_floats</code> 参数<strong>已移除</strong>（本机核实当前签名为 <code>convert_pixel_array(pixel_array)</code>，函数体无条件做浮点→整数转换）。旧代码若写 <code>convert_pixel_array(arr, convert_from_floats=True/False)</code> 需删掉第二个参数；不再需要转换时改为直接使用原数组。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "get-image",
+      "text": "get_image"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>get_image(pixel_array=None) -&gt; PIL.Image</code> 把像素数组转成 PIL 图像，便于截图、后处理或保存自定义背景。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "MappingCamera",
+      "text": "MappingCamera"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>MappingCamera</code> 在渲染前对所有点应用一个自定义映射函数，可做出局部扭曲、放大、反演等特效。</p>\n<pre><code class=\"language-python\">MappingCamera(\n    mapping_func=&lt;恒等映射&gt;,\n    min_num_curves=50,\n    allow_object_intrusion=False,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "MappingCamera",
+        "Camera"
+      ]
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>mapping_func</code>",
+          "type": "Callable",
+          "default": "恒等",
+          "desc": "对显示点施加的映射 <code>(x, y, z) -&gt; (x', y', z')</code>"
+        },
+        {
+          "name": "<code>min_num_curves</code>",
+          "type": "int",
+          "default": "50",
+          "desc": "映射前把曲线细分的最小段数，保证弯曲效果平滑"
+        },
+        {
+          "name": "<code>allow_object_intrusion</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "是否允许物体侵入被映射区域"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">class WarpScene(Scene):\n    def __init__(self, **kwargs):\n        super().__init__(\n            camera_class=lambda **kw: MappingCamera(\n                mapping_func=lambda p: p * np.exp(-np.linalg.norm(p) ** 2 / 8),\n                **kw,\n            ),\n            **kwargs,\n        )\n</code></pre>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>自定义 <code>camera_class</code> 时若需要额外构造参数，用 <code>lambda **kw: MyCamera(..., **kw)</code> 包装，因为渲染器只会以关键字形式传入 <code>camera_config</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "SplitScreenCamera",
+      "text": "SplitScreenCamera"
+    },
+    {
+      "type": "html",
+      "html": "<p>把两台摄像机左右拼接成一块画面（左相机占左半、右相机占右半）。</p>\n<pre><code class=\"language-python\">SplitScreenCamera(left_camera, right_camera, **kwargs)\n</code></pre>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "SplitScreenCamera",
+        "OldMultiCamera",
+        "Camera"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>典型用途：同一 mobject 列表用两种不同视角/映射同时展示。注意左右两台相机需要预先自行构造。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "OldMultiCamera",
+      "text": "OldMultiCamera"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>SplitScreenCamera</code> 的父类，接受任意多台摄像机及各自的起始位置，是更通用的“多机位”基类。名字里的 “Old” 是历史遗留——它仍受支持，但新代码若只需画中画，优先用 <code>MultiCamera</code>（见上一节）。</p>\n<pre><code class=\"language-python\">OldMultiCamera(*cameras_with_start_positions, **kwargs)\n</code></pre>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "OldMultiCamera",
+        "Camera"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>像素坐标不是“中心为原点、向上为正”。像素数组的 (0, 0) 在<strong>左上角</strong>且 y 向下；做像素级计算时务必用 <code>points_to_pixel_coords</code> 换算，不要手推公式后忘记翻转 y。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>Camera</code> 的 <code>frame_width</code> 默认按 16:9 由 <code>frame_height</code> 推出；用自定义分辨率（如 <code>-r 1000,1000</code> 方形）时，如需精确控制取景范围，请显式传 <code>frame_width</code> 与 <code>frame_height</code>，不要假设宽是高的 16/9。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>本节签名与 <code>convert_pixel_array</code> 参数移除均基于 <code>manim 0.21.0</code> 本机 <code>inspect</code> 核实。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>-qm</code> 画质下 <code>pixel_width=1280, pixel_height=720</code>，默认 <code>frame_height=8</code>。点 <code>(2, 1, 0)</code> 的像素坐标大约是多少？</p>",
+      "answerHtml": "<p>横向：<code>(2 / (8*16/9)) * 1280 + 640 ≈ 820</code>；纵向因 y 轴向上而像素向下：<code>-(1/8)*720 + 360 = 270</code>。也可以用 <code>self.camera.points_to_pixel_coords(dot, [point])</code> 直接得到精确整数。对照本节示例：(3, 2, 0) 对应 (910, 180)，比例一致。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>升级到 v0.21.0 后，自定义摄像机子类里的 <code>self.convert_pixel_array(arr, convert_from_floats=True)</code> 报 TypeError，怎么修？</p>",
+      "answerHtml": "<p>删除第二个参数：改为 <code>self.convert_pixel_array(arr)</code>。v0.21.0 移除了 <code>convert_from_floats</code>，现在该函数总是执行浮点到整数的转换；原意为“跳过转换”的调用点应不再调用此函数。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>摄像机决定“怎么看”，渲染器决定“怎么画”。最后一节对比 Cairo 与 OpenGL 两个渲染器：能力差异、性能特征与选型建议。</p>"
+    }
+  ]
+}

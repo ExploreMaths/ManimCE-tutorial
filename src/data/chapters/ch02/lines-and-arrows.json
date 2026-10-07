@@ -1,0 +1,743 @@
+{
+  "part": "ch02",
+  "id": "lines-and-arrows",
+  "title": "线与箭头",
+  "partTitle": "基础图形",
+  "prev": {
+    "part": "ch02",
+    "id": "basic-shapes",
+    "title": "基本形状",
+    "path": "/ch/ch02/basic-shapes"
+  },
+  "next": {
+    "part": "ch02",
+    "id": "arcs-and-curves",
+    "title": "圆弧与曲线",
+    "path": "/ch/ch02/arcs-and-curves"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>本节覆盖线段、虚线、各类箭头与角度标记。它们的共同点是：都构建在 <code>TipableVMobject</code> 机制之上，因此线段和圆弧都能“长”出箭头。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Arrow",
+        "Line",
+        "TipableVMobject",
+        "VMobject"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Line",
+      "text": "Line"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Line</code> 是连接 <code>start</code> 与 <code>end</code> 两点的线段（默认从 <code>LEFT</code> 到 <code>RIGHT</code>），是所有线类图形的基类。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>start</code>",
+          "type": "Point3DLike \\",
+          "default": "Mobject",
+          "desc": "[-1, 0, 0]"
+        },
+        {
+          "name": "<code>end</code>",
+          "type": "Point3DLike \\",
+          "default": "Mobject",
+          "desc": "[1, 0, 0]"
+        },
+        {
+          "name": "<code>buff</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "两端向内收缩的长度"
+        },
+        {
+          "name": "<code>path_arc</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "弯曲程度（弧度）；大于 0 时线段变成弧线"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">line = Line(LEFT, RIGHT, color=BLUE)\nline = Line(circle, square)  # 两端自动吸附到两个 mobject 的中心\n</code></pre>\n<p>常见坑：<code>buff</code> 会让线段两端<strong>同时</strong>缩短；<code>path_arc</code> 是弧度而不是角度，画弯曲连线时常配合 <code>.animate</code> 或 <code>path_arc=PI/4</code> 使用。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "DashedLine",
+      "text": "DashedLine"
+    },
+    {
+      "type": "html",
+      "html": "<p>虚线段，<code>DashedLine</code> 直接继承 <code>Line</code>，所有 <code>Line</code> 参数都可用，额外控制虚线的颗粒度。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>dash_length</code>",
+          "type": "float",
+          "default": "0.05",
+          "desc": "每段虚线的长度"
+        },
+        {
+          "name": "<code>dashed_ratio</code>",
+          "type": "float",
+          "default": "0.5",
+          "desc": "虚线段与间隔的比例；0 到 1 之间"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>常见坑：<code>dash_length</code> 是相对 Manim 单位的长度；线条很长而 <code>dash_length</code> 不变时会显得“密”。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Arrow",
+      "text": "Arrow"
+    },
+    {
+      "type": "html",
+      "html": "<p>带箭头的线段，最常用的指示工具。<code>Arrow</code> 继承 <code>Line</code>，自动在线的终点添加一个箭头尖。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>stroke_width</code>",
+          "type": "float",
+          "default": "6",
+          "desc": "线身描边宽度"
+        },
+        {
+          "name": "<code>buff</code>",
+          "type": "float",
+          "default": "0.25",
+          "desc": "箭身两端收缩量，使箭头不贴着端点"
+        },
+        {
+          "name": "<code>max_tip_length_to_length_ratio</code>",
+          "type": "float",
+          "default": "0.25",
+          "desc": "箭头最大长度与线长的比例（限制箭头不过大）"
+        },
+        {
+          "name": "<code>max_stroke_width_to_length_ratio</code>",
+          "type": "float",
+          "default": "5",
+          "desc": "箭头最大宽度与线长比例"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>额外的关键字参数（来自 <code>TipableVMobject</code> 机制）：</p>\n<ul>\n<li><code>tip_shape</code> —— 箭头尖形状类，如 <code>tip_shape=StealthTip</code></li>\n<li><code>tip_style</code> —— 传给箭头尖构造器的样式字典，如 <code>tip_style={\"fill_opacity\": 0.5}</code></li>\n</ul>"
+    },
+    {
+      "type": "demo",
+      "example": "ch02/lines_arrows_demo",
+      "scene": "LinesArrowsDemo",
+      "caption": "<p><code>Line</code> / <code>DashedLine</code> / <code>Arrow</code> / <code>DoubleArrow</code> / <code>Vector</code> 同台：注意 <code>Arrow</code> 默认 <code>buff=0.25</code>，箭身与端点之间留有缝隙；<code>tip_shape=StealthTip</code> 换成隐形战机风格的细长箭头。</p>",
+      "code": "\"\"\"LinesArrowsDemo: Line / DashedLine / Arrow / DoubleArrow / Vector.\"\"\"\n\nfrom manim import *\n\n\nclass LinesArrowsDemo(Scene):\n    def construct(self):\n        line = Line(LEFT * 5 + DOWN, LEFT * 3 + UP, color=BLUE)\n        dashed = DashedLine(LEFT * 2.5 + UP * 2, RIGHT * 2.5 + UP * 2, dash_length=0.2)\n\n        arrow = Arrow(LEFT * 4, LEFT * 4 + 2 * UP + RIGHT, buff=0, color=GREEN)\n        stealth = Arrow(\n            LEFT * 1.5 + DOWN * 2,\n            RIGHT * 1.5 + DOWN * 0.5,\n            buff=0,\n            tip_shape=StealthTip,\n            color=YELLOW,\n        )\n        double = DoubleArrow(RIGHT * 2 + DOWN * 2, RIGHT * 5 + DOWN * 0.5, buff=0, color=RED)\n\n        vector = Vector(RIGHT * 1.5 + UP, color=MAROON).shift(LEFT * 0.5 + UP * 0.5)\n\n        self.play(Create(line), Create(dashed))\n        self.play(GrowArrow(arrow), GrowArrow(stealth), GrowArrow(double))\n        self.play(GrowArrow(vector))\n        self.wait(1)\n",
+      "video": null
+    },
+    {
+      "type": "html",
+      "html": "<p>常见坑：v0.21.0 中 <code>Arrow</code> 的默认箭头尖是 <code>ArrowTriangleFilledTip</code>（实心三角），不是旧资料里常见的空心三角；箭头尖不会自动随 <code>buff</code> 缩放，短箭头配大 <code>buff</code> 会显得很挤。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "DoubleArrow",
+      "text": "DoubleArrow"
+    },
+    {
+      "type": "html",
+      "html": "<p>两端都有箭头尖的线，继承 <code>Arrow</code>。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>tip_shape_start</code>",
+          "type": "type[ArrowTip]",
+          "default": "ArrowTriangleFilledTip",
+          "desc": "起点处箭头尖形状"
+        },
+        {
+          "name": "<code>tip_shape_end</code>",
+          "type": "type[ArrowTip]",
+          "default": "ArrowTriangleFilledTip",
+          "desc": "终点处箭头尖形状"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">DoubleArrow(LEFT, RIGHT, tip_shape_start=ArrowCircleFilledTip)\n</code></pre>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Vector",
+      "text": "Vector"
+    },
+    {
+      "type": "html",
+      "html": "<p>从原点出发指向给定方向的箭头，继承 <code>Arrow</code>，常用于表示向量。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>direction</code>",
+          "type": "Vector2DLike \\",
+          "default": "Vector3DLike",
+          "desc": "[1, 0, 0]"
+        },
+        {
+          "name": "<code>buff</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "两端收缩量，默认不收缩"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Vector([1, 2])          # 指向 (1, 2) 的向量\nVector(OUT)             # 指向屏幕外的 3D 向量\n</code></pre>\n<p>常见坑：<code>Vector</code> 的构造参数是<strong>方向向量</strong>而不是终点坐标，起点固定在 <code>ORIGIN</code>；想要任意起点的向量请用 <code>Arrow(start, end)</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Angle",
+      "text": "Angle"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Angle</code> 在两条直线的交点处画出夹角弧线，可附带圆点、直角符号，并能读取角度值。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>line1</code>",
+          "type": "Line",
+          "default": "—",
+          "desc": "第一条线"
+        },
+        {
+          "name": "<code>line2</code>",
+          "type": "Line",
+          "default": "—",
+          "desc": "第二条线"
+        },
+        {
+          "name": "<code>radius</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>quadrant</code>",
+          "type": "AngleQuadrant",
+          "default": "(1, 1)",
+          "desc": "弧线所在的象限，如 (-1, 1)"
+        },
+        {
+          "name": "<code>other_angle</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "True 时画反角（优角）"
+        },
+        {
+          "name": "<code>dot</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "是否在弧线中点加圆点"
+        },
+        {
+          "name": "<code>dot_radius</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>dot_distance</code>",
+          "type": "float",
+          "default": "0.55",
+          "desc": "圆点距交点的比例位置"
+        },
+        {
+          "name": "<code>dot_color</code>",
+          "type": "ParsableManimColor",
+          "default": "WHITE",
+          "desc": "圆点颜色"
+        },
+        {
+          "name": "<code>elbow</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "True 时用直角折线代替弧线"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">angle = Angle(line1, line2, radius=0.6, dot=True)\nangle.get_value()            # 弧度\nangle.get_value(degrees=True)  # 角度\n</code></pre>"
+    },
+    {
+      "type": "demo",
+      "example": "ch02/angle_marks",
+      "scene": "AngleMarks",
+      "caption": "<p><code>Angle</code> 带圆点并配合 <code>get_value(degrees=True)</code> 标注度数；<code>RightAngle</code> 画直角方块；<code>TangentLine</code> 在圆上 1/4 弧长处作切线。</p>",
+      "code": "\"\"\"AngleMarks: Angle / RightAngle / Elbow / TangentLine / TangentialArc.\"\"\"\n\nfrom manim import *\n\n\nclass AngleMarks(Scene):\n    def construct(self):\n        line1 = Line(ORIGIN, RIGHT * 2)\n        line2 = Line(ORIGIN, UP * 1.5 + RIGHT)\n        angle = Angle(line1, line2, radius=0.6, dot=True, dot_color=RED)\n        value = Angle(line1, line2, radius=0.45).get_value(degrees=True)\n        label = Text(f\"{value:.0f}°\", font_size=30).move_to(\n            Angle(line1, line2, radius=0.9).point_from_proportion(0.5)\n        )\n\n        hline = Line(LEFT * 5 + UP * 2, LEFT * 3 + UP * 2)\n        vline = Line(LEFT * 4 + UP * 2, LEFT * 4 + UP * 0.5)\n        right_angle = RightAngle(hline, vline, length=0.35)\n\n        circle = Circle(radius=1.2).shift(RIGHT * 3.5 + DOWN * 1.5)\n        tangent = TangentLine(circle, alpha=0.25, length=2, color=YELLOW)\n\n        self.play(Create(line1), Create(line2))\n        self.play(Create(angle), Write(label))\n        self.play(Create(hline), Create(vline), Create(right_angle))\n        self.play(Create(circle), Create(tangent))\n        self.wait(1)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>在 v0.21.0 中，当两条直线<strong>平行或共线</strong>（无唯一交点）时，<code>Angle</code> 不再抛出 <code>ValueError</code>，而是退化为一个空 Mobject（<code>angle_value</code> 记为 0）。旧代码若依赖“平行线报错”的分支需要调整。</p>"
+    },
+    {
+      "type": "html",
+      "html": "<p>常见坑：<code>quadrant</code> 的取值是 <code>(±1, ±1)</code> 四种组合，分别对应交点四周的四个角域；默认 <code>(1, 1)</code> 画的是两线正方向之间的角。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "RightAngle",
+      "text": "RightAngle"
+    },
+    {
+      "type": "html",
+      "html": "<p>直角的快捷写法：本质是 <code>Angle(line1, line2, radius=length, elbow=True)</code>，在交点画一个直角小方块。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>line1</code>",
+          "type": "Line",
+          "default": "—",
+          "desc": "第一条线"
+        },
+        {
+          "name": "<code>line2</code>",
+          "type": "Line",
+          "default": "—",
+          "desc": "第二条线"
+        },
+        {
+          "name": "<code>length</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Elbow",
+      "text": "Elbow"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Elbow</code> 是一个独立的直角折角图形（两段等宽短边），继承 <code>VMobject</code>。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>width</code>",
+          "type": "float",
+          "default": "0.2",
+          "desc": "折角两段的宽度（边长）"
+        },
+        {
+          "name": "<code>angle</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "整体旋转角度（弧度）"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>常见坑：<code>Elbow</code> 的角点默认在其包围盒中心附近，需要精确定位时配合 <code>move_to</code> / <code>shift</code> 调整。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "TangentLine",
+      "text": "TangentLine"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>TangentLine</code> 在任意 <code>VMobject</code> 路径的指定位置作切线段，继承 <code>Line</code>。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>vmob</code>",
+          "type": "VMobject",
+          "default": "—",
+          "desc": "目标图形（圆、曲线等）"
+        },
+        {
+          "name": "<code>alpha</code>",
+          "type": "float",
+          "default": "—",
+          "desc": "路径上的相对位置，0 到 1"
+        },
+        {
+          "name": "<code>length</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "切线段长度"
+        },
+        {
+          "name": "<code>d_alpha</code>",
+          "type": "float",
+          "default": "1e-06",
+          "desc": "求导时使用的微小增量"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>常见坑：<code>alpha</code> 是<strong>归一化弧长比例</strong>而不是角度；对闭合图形 0 和 1 都指向起点。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "TangentialArc",
+      "text": "TangentialArc"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>TangentialArc</code> 过“切点”画一段与两条线都相切的圆弧，常用于表现圆角过渡；继承 <code>ArcBetweenPoints</code>。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>line1</code>",
+          "type": "Line",
+          "default": "—",
+          "desc": "第一条线"
+        },
+        {
+          "name": "<code>line2</code>",
+          "type": "Line",
+          "default": "—",
+          "desc": "第二条线"
+        },
+        {
+          "name": "<code>radius</code>",
+          "type": "float",
+          "default": "—",
+          "desc": "圆弧半径（圆角大小）"
+        },
+        {
+          "name": "<code>corner</code>",
+          "type": "tuple[float, float]",
+          "default": "(1, 1)",
+          "desc": "取两线哪一侧的夹角"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>常见坑：<code>radius</code> 太大、超过两线交点附近可容纳的范围时，切点会落到线段之外，图形看起来“脱节”。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "tipablevmobject",
+      "text": "TipableVMobject"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>TipableVMobject</code> 是“可挂箭头尖”的 mixin 基类：<code>Line</code> 与 <code>Arc</code> 都继承它，因此直线和圆弧都能添加箭头尖（<code>CurvedArrow</code> 正是这样实现的）。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>tip_length</code>",
+          "type": "float",
+          "default": "0.35",
+          "desc": "箭头尖默认长度"
+        },
+        {
+          "name": "<code>normal_vector</code>",
+          "type": "Vector3DLike",
+          "default": "[0, 0, 1]",
+          "desc": "箭头尖朝向的法向量"
+        },
+        {
+          "name": "<code>tip_style</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>常用方法：</p>\n<pre><code class=\"language-python\">obj.add_tip()                                   # 终点加默认箭头尖\nobj.add_tip(tip_shape=ArrowCircleTip)           # 指定形状\nobj.add_tip(at_start=True)                      # 起点加箭头尖\nobj.get_tip()                                   # 取终点箭头尖（可能为 None）\n</code></pre>\n<p>常见坑：<code>add_tip()</code> 返回的是 mobject 自身（链式调用安全），但箭头尖是<strong>子 mobject</strong>，<code>remove</code> 它请用 <code>obj.remove(obj.get_tip())</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ArrowTip",
+      "text": "ArrowTip"
+    },
+    {
+      "type": "html",
+      "html": "<p>所有箭头尖的抽象基类，定义了箭头尖与线身衔接的接口（<code>base</code>、<code>tip_point</code>、<code>get_length</code> 等）。一般不直接实例化，而是通过 <code>tip_shape=</code> 传给 <code>Arrow</code>/<code>add_tip()</code>。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "ArrowTip",
+        "VMobject"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ArrowTriangleTip",
+      "text": "ArrowTriangleTip"
+    },
+    {
+      "type": "html",
+      "html": "<p>空心三角形箭头尖（默认描边、不填充），继承 <code>ArrowTip</code> 与 <code>Triangle</code>。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>fill_opacity</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "填充不透明度（0 即空心）"
+        },
+        {
+          "name": "<code>stroke_width</code>",
+          "type": "float",
+          "default": "3",
+          "desc": "描边宽度"
+        },
+        {
+          "name": "<code>length</code>",
+          "type": "float",
+          "default": "0.35",
+          "desc": "箭头尖长度"
+        },
+        {
+          "name": "<code>width</code>",
+          "type": "float",
+          "default": "0.35",
+          "desc": "箭头尖宽度"
+        },
+        {
+          "name": "<code>start_angle</code>",
+          "type": "float",
+          "default": "PI",
+          "desc": "箭头尖自身旋转角"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ArrowTriangleFilledTip",
+      "text": "ArrowTriangleFilledTip"
+    },
+    {
+      "type": "html",
+      "html": "<p>实心三角形箭头尖，只改默认样式（填充 1、描边 0），行为与 <code>ArrowTriangleTip</code> 完全一致。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>v0.21.0 中 <code>Arrow</code>、<code>Vector</code>、<code>DoubleArrow</code>、<code>CurvedArrow</code> 的默认箭头尖都是 <code>ArrowTriangleFilledTip</code>，不是它空心的兄弟类 <code>ArrowTriangleTip</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ArrowCircleTip",
+      "text": "ArrowCircleTip"
+    },
+    {
+      "type": "html",
+      "html": "<p>空心圆形箭头尖，继承 <code>ArrowTip</code> 与 <code>Circle</code>。参数与 <code>ArrowTriangleTip</code> 相同（<code>fill_opacity=0</code>、<code>stroke_width=3</code>、<code>length=0.35</code>）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ArrowCircleFilledTip",
+      "text": "ArrowCircleFilledTip"
+    },
+    {
+      "type": "html",
+      "html": "<p>实心圆形箭头尖，<code>ArrowCircleTip</code> 的实心版本（<code>fill_opacity=1</code>、<code>stroke_width=0</code>）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ArrowSquareTip",
+      "text": "ArrowSquareTip"
+    },
+    {
+      "type": "html",
+      "html": "<p>空心方形箭头尖，继承 <code>ArrowTip</code> 与 <code>Square</code>。参数与 <code>ArrowTriangleTip</code> 相同。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "ArrowSquareFilledTip",
+      "text": "ArrowSquareFilledTip"
+    },
+    {
+      "type": "html",
+      "html": "<p>实心方形箭头尖，<code>ArrowSquareTip</code> 的实心版本。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "StealthTip",
+      "text": "StealthTip"
+    },
+    {
+      "type": "html",
+      "html": "<p>隐形战机（stealth）风格的箭头尖：更细长、默认填充，适合科技感的图示。</p>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>length</code>",
+          "type": "float",
+          "default": "0.175",
+          "desc": "箭头尖长度（比三角尖默认短）"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Arrow(LEFT, RIGHT, tip_shape=StealthTip)\n</code></pre>"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "箭头尖",
+        "形状",
+        "默认填充",
+        "典型场景"
+      ],
+      "rows": [
+        [
+          "<code>ArrowTriangleTip</code>",
+          "三角",
+          "空心",
+          "描边风格图示"
+        ],
+        [
+          "<code>ArrowTriangleFilledTip</code>",
+          "三角",
+          "实心",
+          "默认箭头"
+        ],
+        [
+          "<code>ArrowCircleTip</code>",
+          "圆形",
+          "空心",
+          "特殊标记"
+        ],
+        [
+          "<code>ArrowCircleFilledTip</code>",
+          "圆形",
+          "实心",
+          "端点强调"
+        ],
+        [
+          "<code>ArrowSquareTip</code>",
+          "方形",
+          "空心",
+          "工程图风格"
+        ],
+        [
+          "<code>ArrowSquareFilledTip</code>",
+          "方形",
+          "实心",
+          "端点强调"
+        ],
+        [
+          "<code>StealthTip</code>",
+          "细长多边形",
+          "实心",
+          "简约/科技感箭头"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>箭头尖是子 mobject：对 <code>Arrow</code> 整体 <code>scale</code> 时箭头尖会跟着缩放，但对 <code>arrow.get_tip()</code> 单独 <code>scale</code> 后再 <code>add_tip</code> 会叠加缩放。需要固定尺寸箭头时设置 <code>max_tip_length_to_length_ratio</code>。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>GrowArrow</code> 动画依赖 <code>scale(scale_tips=True)</code>，只适用于 <code>Arrow</code> / <code>Line</code> 系；对 <code>CurvedArrow</code> 请改用 <code>Create</code> 或 <code>FadeIn</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>如何把一根普通 <code>Line</code> 变成双头箭头，并且两端用不同形状的箭头尖？</p>",
+      "answerHtml": "<p><code>Line</code> 继承自 <code>TipableVMobject</code>，直接调用 <code>add_tip()</code> 两次（其中一次 <code>at_start=True</code>）并分别指定 <code>tip_shape</code>：</p>\n<pre><code class=\"language-python\">line = Line(LEFT, RIGHT)\nline.add_tip(tip_shape=ArrowTriangleFilledTip)\nline.add_tip(at_start=True, tip_shape=StealthTip)\n</code></pre>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>下一节介绍圆弧与曲线家族：<code>Arc</code>、<code>CubicBezier</code> 以及由它们衍生的扇形、圆环与曲线箭头。</p>"
+    }
+  ]
+}

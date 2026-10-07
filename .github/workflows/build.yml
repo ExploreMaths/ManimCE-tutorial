@@ -1,0 +1,156 @@
+name: build
+
+# Quoted because YAML 1.1 parsers (e.g. PyYAML) treat bare `on:` as boolean.
+"on":
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Serialize runs so media-branch pushes never race each other.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Checkout media branch (render cache)
+        id: media-checkout
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: media
+          path: media
+          fetch-depth: 1
+
+      - name: Ensure media dir
+        shell: bash
+        run: |
+          mkdir -p media
+          if [ ! -f media/manifest.json ]; then
+            # First-ever run (or media branch absent): start with an empty cache.
+            echo "No media cache found; all examples will be rendered from scratch."
+            echo '{"version":"0.21.0","examples":{}}' > media/manifest.json
+          fi
+
+      - name: Install system dependencies
+        uses: awalsh128/cache-apt-pkgs@latest
+        with:
+          # texlive-latex-base/recommended + dvisvgm cover Tex/MathTex examples
+          # without the huge texlive-full. xetex + lang-chinese cover the ctex
+          # Chinese template demo. Add texlive-latex-extra here if a
+          # chapter needs extra LaTeX macros.
+          packages: ffmpeg libpango1.0-0 libpangoft2-1.0-0 libcairo2 texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-xetex texlive-lang-chinese dvisvgm
+          version: 1.0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build content JSON
+        run: python scripts/build_content.py --media-dir media
+
+      - name: Content coverage check (non-blocking)
+        run: |
+          if ! python scripts/build_content.py --media-dir media --strict; then
+            echo "::warning::content coverage check failed (missing covers or errors) — see log"
+          fi
+
+      - name: Render examples (incremental)
+        run: python scripts/render_examples.py --media-dir media
+
+      - name: Render summary
+        if: always()
+        shell: bash
+        run: |
+          python - <<'EOF'
+          import json, os
+          from pathlib import Path
+          summary_path = Path("media/render-summary.json")
+          summary = {"rendered": [], "reused": [], "failed": []}
+          if summary_path.is_file():
+              summary = json.loads(summary_path.read_text(encoding="utf-8"))
+          failed = summary.get("failed", [])
+          lines = [
+              "### Example render summary",
+              "",
+              f"- reused: {len(summary.get('reused', []))}",
+              f"- rendered: {len(summary.get('rendered', []))}",
+              f"- failed: {len(failed)}",
+              "",
+          ]
+          if failed:
+              lines += ["| example | error |", "| --- | --- |"]
+              lines += [f"| {f['key']} | {str(f['error']).splitlines()[-1]} |" for f in failed]
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as fh:
+              fh.write("\n".join(lines) + "\n")
+          for f in failed:
+              print(f"::warning::example render failed: {f['key']}")
+          EOF
+
+      - name: Commit and push media branch
+        if: always()
+        shell: bash
+        run: |
+          cd media
+          if [ ! -d .git ]; then
+            # Media branch does not exist yet on the remote: create it locally.
+            git init -b media
+            git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No media changes to commit."
+            exit 0
+          fi
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          RENDERED=$(python -c "import json;print(len(json.load(open('render-summary.json')).get('rendered',[])))" 2>/dev/null || echo 0)
+          FAILED=$(python -c "import json;print(len(json.load(open('render-summary.json')).get('failed',[])))" 2>/dev/null || echo 0)
+          git commit -m "render: ${SHORT_SHA} (${RENDERED} new, ${FAILED} failed)"
+          if ! git push origin HEAD:media; then
+            # A concurrent run may have pushed first: rebase and retry once.
+            echo "::warning::media push rejected, retrying after rebase"
+            git pull --rebase origin media
+            if ! git push origin HEAD:media; then
+              echo "::warning::media push failed (cache will be rebuilt next run)"
+              exit 0
+            fi
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Merge media into dist
+        run: python scripts/merge_media.py --media-dir media --dist dist
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: ManimCE-tutorial
+          directory: dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

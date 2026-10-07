@@ -1,0 +1,175 @@
+{
+  "part": "ch05",
+  "id": "tracing",
+  "title": "追踪与边界",
+  "partTitle": "动画进阶",
+  "prev": {
+    "part": "ch05",
+    "id": "number-animations",
+    "title": "数值动画",
+    "path": "/ch/ch05/number-animations"
+  },
+  "next": {
+    "part": "ch05",
+    "id": "motion",
+    "title": "运动变形",
+    "path": "/ch/ch05/motion"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>\"拖尾轨迹\"和\"流动边框\"是讲解演示中最常用的两类装饰效果：<code>TracedPath</code> 记录一个点的运动轨迹，<code>AnimatedBoundary</code> 给图形加上不断流动的彩色描边。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "TracedPath",
+      "text": "TracedPath"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>TracedPath(traced_point_func)</code> 是一条特殊的 <code>VMobject</code>：内部维护一个 updater，每帧取<strong>当前点</strong>追加到自身点列，从而把\"某个点的运动路径\"画出来。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "TracedPath",
+        "VMobject",
+        "Mobject",
+        "object"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">TracedPath(\n    traced_point_func: Callable,\n    stroke_width: float = 2,\n    stroke_color: ParsableManimColor | None = WHITE,\n    dissipating_time: float | None = None,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>traced_point_func</code>",
+          "type": "Callable",
+          "default": "—",
+          "desc": "返回一个点坐标的函数；通常传<strong>方法引用</strong>如 <code>dot.get_center</code>（不要加括号）"
+        },
+        {
+          "name": "<code>stroke_width</code>",
+          "type": "float",
+          "default": "2",
+          "desc": "轨迹线宽"
+        },
+        {
+          "name": "<code>stroke_color</code>",
+          "type": "color \\",
+          "default": "None",
+          "desc": "WHITE"
+        },
+        {
+          "name": "<code>dissipating_time</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "AnimatedBoundary",
+      "text": "AnimatedBoundary"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>AnimatedBoundary(vmobject)</code> 给目标图形生成一圈<strong>流动的彩色描边</strong>：多层颜色不同的描边依次显现、消失，形成\"边界在流动\"的视觉效果。它本身是一个 <code>VGroup</code>，由若干描边副本组成。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "AnimatedBoundary",
+        "VGroup",
+        "VMobject",
+        "Mobject",
+        "object"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">AnimatedBoundary(\n    vmobject: VMobject,\n    colors: Sequence[color] = [#29ABCA, #9CDCEB, #236B8E, #736357],\n    max_stroke_width: float = 3,\n    cycle_rate: float = 0.5,\n    back_and_forth: bool = True,\n    draw_rate_func: RateFunction = smooth,\n    fade_rate_func: RateFunction = smooth,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>colors</code>",
+          "type": "Sequence[color]",
+          "default": "四种蓝灰色",
+          "desc": "参与流动的描边颜色"
+        },
+        {
+          "name": "<code>max_stroke_width</code>",
+          "type": "float",
+          "default": "3",
+          "desc": "描边最大线宽"
+        },
+        {
+          "name": "<code>cycle_rate</code>",
+          "type": "float",
+          "default": "0.5",
+          "desc": "每层颜色完成一次显现/消失的速率"
+        },
+        {
+          "name": "<code>back_and_forth</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "线宽是否来回脉动"
+        }
+      ]
+    },
+    {
+      "type": "demo",
+      "example": "ch05/tracing",
+      "scene": "TracingAndBoundary",
+      "caption": "<p><code>TracedPath</code> 让黄点绕圆一周的轨迹留下 2 秒渐散的拖尾；<code>AnimatedBoundary</code> 给右侧正方形加上流动的蓝灰描边。</p>",
+      "code": "\"\"\"TracingAndBoundary: TracedPath 拖尾轨迹，AnimatedBoundary 流动边界。\"\"\"\n\nfrom manim import *\n\n\nclass TracingAndBoundary(Scene):\n    def construct(self):\n        dot = Dot(LEFT * 2)\n        self.add(dot)\n        self.add(\n            TracedPath(\n                dot.get_center,\n                stroke_color=YELLOW,\n                stroke_width=4,\n                dissipating_time=2,  # 2 秒前的轨迹逐渐消散\n            )\n        )\n        self.play(MoveAlongPath(dot, Circle(radius=2)), run_time=2.5)\n\n        square = Square().shift(RIGHT * 3.2)\n        self.add(square, AnimatedBoundary(square))\n        self.wait(1.5)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>TracedPath</code> 必须先 <code>self.add(...)</code> 进场景，否则它的 updater 不会执行，画面里只有运动、没有轨迹。另外传点函数时写成 <code>dot.get_center</code>（方法引用）而不是 <code>dot.get_center()</code>（调用结果）——后者只记录了添加那一刻的位置，轨迹变成一条死线。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>TracedPath</code> 常与 <code>MoveAlongPath</code>、Rotating 或 updater 驱动的点搭配：先创建会动的点，再让轨迹跟随它。<code>dissipating_time</code> 适合表现\"最近路径\"，设为 <code>None</code> 则适合保留完整轨迹（如几何作图）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想记录一个点的完整运动轨迹并永久保留，<code>TracedPath</code> 应该怎么配置？</p>",
+      "answerHtml": "<p><code>self.add(TracedPath(dot.get_center, dissipating_time=None))</code>（<code>dissipating_time</code> 默认就是 None，即永久保留），确保轨迹对象被 add 进场景即可。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>为什么 <code>TracedPath(dot.get_center())</code> 画不出轨迹？</p>",
+      "answerHtml": "<p><code>dot.get_center()</code> 是<strong>调用</strong>，传入的是添加那一刻的一个坐标值，不是\"每帧取点\"的函数。应传方法引用 <code>dot.get_center</code>，轨迹对象每帧自己调用它取当前位置。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>轨迹让\"走过的路\"可见，下一节让物体沿任意路径运动、或被任意形变：<code>MoveAlongPath</code> 与 <code>Homotopy</code> 家族。</p>"
+    }
+  ]
+}

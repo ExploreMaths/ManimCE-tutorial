@@ -1,0 +1,287 @@
+{
+  "part": "ch03",
+  "id": "numbers",
+  "title": "数字与变量",
+  "partTitle": "文本与公式",
+  "prev": {
+    "part": "ch03",
+    "id": "text-compare",
+    "title": "文本方案对比",
+    "path": "/ch/ch03/text-compare"
+  },
+  "next": {
+    "part": "ch03",
+    "id": "lists-and-title",
+    "title": "列表与标题",
+    "path": "/ch/ch03/lists-and-title"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p><code>DecimalNumber</code>、<code>Integer</code>、<code>Variable</code> 把“数值”封装成 Mobject：数值变化时对象自动重排字符，配合 <code>ValueTracker</code> 就能做出滚动的计数器、实时更新的坐标等效果。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "version",
+      "title": "版本说明",
+      "html": "<p>本节示例的默认数字外观由 <code>MathTex</code> 排版，依赖 LaTeX，示例由 CI 渲染。<code>ValueTracker</code> 本身只是数值容器，其机制在「动画进阶」板块的数值动画一节详细讲解，本节只用到 <code>tracker.get_value()</code> 与 <code>tracker.animate.set_value(...)</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "DecimalNumber",
+      "text": "DecimalNumber"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>DecimalNumber</code> 渲染一个浮点数，<strong>值改变时自动增删字符并保持对齐</strong>，是计数器动画的核心。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "DecimalNumber",
+        "VMobject",
+        "Mobject"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">DecimalNumber(\n    number: float = 0,\n    num_decimal_places: int = 2,\n    mob_class: type[SingleStringMathTex] = MathTex,\n    include_sign: bool = False,\n    group_with_commas: bool = True,\n    digit_buff_per_font_unit: float = 0.001,\n    show_ellipsis: bool = False,\n    unit: str | None = None,\n    unit_buff_per_font_unit: float = 0,\n    include_background_rectangle: bool = False,\n    edge_to_fix: Vector3DLike = LEFT,\n    font_size: float = 48,\n    stroke_width: float = 0,\n    fill_opacity: float = 1.0,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>number</code>",
+          "type": "float",
+          "default": "0",
+          "desc": "初始数值"
+        },
+        {
+          "name": "<code>num_decimal_places</code>",
+          "type": "int",
+          "default": "2",
+          "desc": "小数位数"
+        },
+        {
+          "name": "<code>mob_class</code>",
+          "type": "type[SingleStringMathTex]",
+          "default": "MathTex",
+          "desc": "单个数字/字符的排版类"
+        },
+        {
+          "name": "<code>include_sign</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "始终显示正负号"
+        },
+        {
+          "name": "<code>group_with_commas</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "整数部分加千分位逗号"
+        },
+        {
+          "name": "<code>show_ellipsis</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "末尾显示省略号（暗示截断）"
+        },
+        {
+          "name": "<code>unit</code>",
+          "type": "str \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>include_background_rectangle</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "给整个数字加背景矩形"
+        },
+        {
+          "name": "<code>edge_to_fix</code>",
+          "type": "Vector3DLike",
+          "default": "LEFT",
+          "desc": "数值增长时固定不动的边缘"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>核心用法：<code>set_value(x)</code> 更新数值（ instantly ），配合 <code>ValueTracker</code> + updater 或 <code>.animate.set_value</code> 实现平滑滚动：</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch03/decimal_number_demo",
+      "scene": "DecimalNumberDemo",
+      "caption": "<p><code>ValueTracker</code> 从 0 动画到 1，updater 每帧把 <code>PI * tracker</code> 写入 <code>DecimalNumber</code>——省略号来自 <code>show_ellipsis=True</code>。本示例由 CI 渲染。</p>",
+      "code": "\"\"\"DecimalNumberDemo: 用 ValueTracker 驱动小数滚动。（需要 LaTeX，由 CI 渲染）\"\"\"\n\nfrom manim import *\n\n\nclass DecimalNumberDemo(Scene):\n    def construct(self):\n        tracker = ValueTracker(0)\n        num = DecimalNumber(\n            0,\n            num_decimal_places=3,\n            show_ellipsis=True,\n        )\n        num.add_updater(lambda m: m.set_value(PI * tracker.get_value()))\n\n        self.add(num)\n        self.play(tracker.animate.set_value(1), run_time=2)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>edge_to_fix=LEFT</code> 是默认值：数字向右增长时左侧对齐，适合左对齐的计数器。做居中计分板时传入 <code>ORIGIN</code> 保持整体居中。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Integer",
+      "text": "Integer"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Integer</code> 是 <code>DecimalNumber</code> 的子类，固定 <code>num_decimal_places=0</code> 的整数版本，参数其余相同。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Integer",
+        "DecimalNumber",
+        "VMobject"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Integer(number: float = 0, num_decimal_places: int = 0, **kwargs)\n</code></pre>\n<p>典型场景：帧计数、得分、粒子数。配合 <code>ValueTracker</code> 的写法和 <code>DecimalNumber</code> 完全一致。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "Variable",
+      "text": "Variable"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>Variable</code> 把“标签 + 数值”组合显示，自带一个 <code>tracker</code>（<code>ValueTracker</code> 实例），常用于展示“变量名 = 当前值”。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "Variable",
+        "VMobject",
+        "Mobject"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">Variable(\n    var: float,\n    label: str | Tex | MathTex | Text | SingleStringMathTex,\n    var_type: type[DecimalNumber | Integer] = DecimalNumber,\n    num_decimal_places: int = 2,\n    **kwargs,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>var</code>",
+          "type": "float",
+          "default": "—",
+          "desc": "初始值"
+        },
+        {
+          "name": "<code>label</code>",
+          "type": "str \\",
+          "default": "Tex \\",
+          "desc": "MathTex \\"
+        },
+        {
+          "name": "<code>var_type</code>",
+          "type": "type",
+          "default": "DecimalNumber",
+          "desc": "数值部分用的类（<code>DecimalNumber</code> 或 <code>Integer</code>）"
+        },
+        {
+          "name": "<code>num_decimal_places</code>",
+          "type": "int",
+          "default": "2",
+          "desc": "小数位数（透传给数值类）"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>成员：<code>v.tracker</code> 是内部 <code>ValueTracker</code>；<code>v.label</code> 是变量名部分；<code>v.value</code> 显示数值。改值用 <code>v.set_value(x)</code> 或直接动 <code>v.tracker</code>：</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch03/variable_demo",
+      "scene": "VariableDemo",
+      "caption": "<p><code>x</code> 与 <code>x^2</code> 两个 <code>Variable</code> 并排，<code>x^2</code> 注册 updater 依赖 <code>x.tracker</code>——动画只驱动 <code>x</code>，另一个自动跟随。本示例由 CI 渲染。</p>",
+      "code": "\"\"\"VariableDemo: Variable 显示变量及其依赖更新。（需要 LaTeX，由 CI 渲染）\"\"\"\n\nfrom manim import *\n\n\nclass VariableDemo(Scene):\n    def construct(self):\n        x = Variable(0, \"x\", var_type=DecimalNumber, num_decimal_places=1)\n        y = Variable(0, \"x^2\", var_type=DecimalNumber, num_decimal_places=1)\n        y.next_to(x, RIGHT, buff=1.5)\n        y.add_updater(lambda m: m.set_value(x.tracker.get_value() ** 2))\n\n        self.add(x, y)\n        self.play(x.tracker.animate.set_value(3), run_time=2)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "",
+        "DecimalNumber",
+        "Integer",
+        "Variable"
+      ],
+      "rows": [
+        [
+          "-",
+          "<hr />",
+          "<hr />",
+          "<hr />"
+        ],
+        [
+          "小数",
+          "支持",
+          "不支持",
+          "由 <code>var_type</code> 决定"
+        ],
+        [
+          "自带标签",
+          "无",
+          "无",
+          "有（<code>label</code>）"
+        ],
+        [
+          "自带 tracker",
+          "无",
+          "无",
+          "有（<code>.tracker</code>）"
+        ],
+        [
+          "适用",
+          "测量值、进度",
+          "计数、得分",
+          "展示“变量 = 值”"
+        ]
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>DecimalNumber</code> 的子对象是按<strong>当前位数</strong>重建的：<code>set_value</code> 前后位数若变化，<code>num[3]</code> 这类硬编码索引会指到别的字符。要对特定位做动画，先确认位数固定，或改用 <code>unit</code>、<code>include_sign</code> 等参数稳定结构。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>做一个从 0 滚到 100 的居中整数计数器，写出关键代码。</p>",
+      "answerHtml": "<pre><code class=\"language-python\">tracker = ValueTracker(0)\ncounter = Integer(0, edge_to_fix=ORIGIN)\ncounter.add_updater(lambda m: m.set_value(tracker.get_value()))\nself.add(counter)\nself.play(tracker.animate.set_value(100), run_time=3)\n</code></pre>\n<p><code>edge_to_fix=ORIGIN</code> 让增长中的数字保持整体居中。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>Variable(0, \"x\")</code> 中 <code>label</code> 传字符串与传 <code>Text(\"x\")</code> 有何区别？</p>",
+      "answerHtml": "<p>传字符串时，标签按 <code>var_type</code> 的排版引擎（默认 <code>DecimalNumber</code> → <code>MathTex</code>，数学斜体）渲染；传 <code>Text(\"x\")</code> 则用 Pango 渲染成普通文本字体。外观不同，且前者需要 LaTeX。想与非数学风格的场景统一，显式传 <code>Text</code> 对象。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>有了文本和数字，还需要组织内容的结构——下一节看 <code>BulletedList</code> 与 <code>Title</code>。</p>"
+    }
+  ]
+}

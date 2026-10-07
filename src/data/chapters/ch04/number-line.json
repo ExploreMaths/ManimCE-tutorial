@@ -1,0 +1,237 @@
+{
+  "part": "ch04",
+  "id": "number-line",
+  "title": "NumberLine",
+  "partTitle": "坐标系与数据可视化",
+  "prev": {
+    "part": "ch03",
+    "id": "tex-templates",
+    "title": "TeX 模板定制",
+    "path": "/ch/ch03/tex-templates"
+  },
+  "next": {
+    "part": "ch04",
+    "id": "scales",
+    "title": "缩放基",
+    "path": "/ch/ch04/scales"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p>数轴是坐标系家族的地基：<code>Axes</code>、<code>NumberPlane</code> 乃至对数刻度都建立在它之上。本节先讲清楚 <code>NumberLine</code> 本身，以及它的特例 <code>UnitInterval</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "NumberLine",
+      "text": "NumberLine"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>NumberLine</code> 表示一条<strong>带刻度、可带数字与箭头</strong>的数轴，是 <code>Line</code> 的子类——它本质上就是一条线段，再加上刻度（ticks）、数字标签和可选的末端箭头。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "NumberLine",
+        "Line",
+        "TipableVMobject",
+        "VMobject"
+      ]
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>x_range</code>",
+          "type": "Sequence[float] \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>length</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>unit_size</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "单位长度：1 个坐标单位对应多少场景单位"
+        },
+        {
+          "name": "<code>include_ticks</code>",
+          "type": "bool",
+          "default": "True",
+          "desc": "是否绘制刻度线"
+        },
+        {
+          "name": "<code>tick_size</code>",
+          "type": "float",
+          "default": "0.1",
+          "desc": "刻度线长度"
+        },
+        {
+          "name": "<code>numbers_with_elongated_ticks</code>",
+          "type": "Iterable[float] \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>include_tip</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "末端是否加箭头"
+        },
+        {
+          "name": "<code>include_numbers</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "是否自动添加数字标签（标签走 LaTeX）"
+        },
+        {
+          "name": "<code>label_direction</code>",
+          "type": "Point3DLike",
+          "default": "DOWN",
+          "desc": "数字标签相对数轴的方向"
+        },
+        {
+          "name": "<code>label_constructor</code>",
+          "type": "type[ManimTextLabel]",
+          "default": "MathTex",
+          "desc": "标签构造函数；可换 <code>Text</code>/<code>MathTypst</code> 摆脱 LaTeX"
+        },
+        {
+          "name": "<code>scaling</code>",
+          "type": "_ScaleBase",
+          "default": "LinearBase()",
+          "desc": "缩放基，见下一节（LogBase 等）"
+        },
+        {
+          "name": "<code>line_to_number_buff</code>",
+          "type": "float",
+          "default": "0.25",
+          "desc": "数字与数轴的间距"
+        },
+        {
+          "name": "<code>numbers_to_exclude</code>",
+          "type": "Iterable[float] \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>numbers_to_include</code>",
+          "type": "Iterable[float] \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>最常用的三个操作：<strong>坐标互转</strong>（<code>number_to_point</code> / <code>point_to_number</code>，别名 <code>n2p</code> / <code>p2n</code>）、<strong>加数字</strong>（<code>add_numbers</code>）、<strong>加自定义标签</strong>（<code>add_labels</code>）。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch04/number_line",
+      "scene": "NumberLineDemo",
+      "caption": "<p><code>add_labels</code> 传入 <code>{坐标值: Mobject}</code> 字典；<code>number_to_point</code> 与 <code>point_to_number</code> 互为逆运算，是把几何位置和抽象坐标联系起来的桥梁。</p>",
+      "code": "\"\"\"NumberLineDemo: NumberLine 的刻度、自定义标签与坐标互转。\"\"\"\n\nfrom manim import *\n\n\nclass NumberLineDemo(Scene):\n    def construct(self):\n        line = NumberLine(\n            x_range=[-4, 4, 1],\n            length=10,\n            include_tip=True,\n        )\n        # 用 Text 作为标签，避免依赖 LaTeX\n        line.add_labels(\n            {\n                -3: Text(\"-3\", font_size=30),\n                -1: Text(\"-1\", font_size=30),\n                1: Text(\"1\", font_size=30),\n                3: Text(\"3\", font_size=30),\n            }\n        )\n        dot = Dot(line.number_to_point(2.5), color=RED)\n\n        self.play(Create(line), run_time=1.5)\n        self.play(FadeIn(dot), run_time=0.5)\n\n        # number_to_point 与 point_to_number 互逆\n        x_val = line.point_to_number(dot.get_center())\n        coord = Text(f\"x = {x_val:.1f}\", font_size=30)\n        coord.next_to(dot, UP)\n        self.play(Write(coord), run_time=1.0)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "html",
+      "html": "<p>常用方法速览：</p>\n<ul>\n<li><code>line.add_numbers(x_values=None, ...)</code> —— 自动按 <code>x_range</code> 的步长补数字（默认走 <code>MathTex</code>，需要 LaTeX）</li>\n<li><code>line.add_labels({1: Tex(\"a\"), 2: Text(\"b\")}, ...)</code> —— 自定义标签，值可以是任意带 <code>font_size</code> 属性的 Mobject</li>\n<li><code>line.get_number_mobject(x)</code> / <code>get_number_mobjects(...)</code> —— 取回数字标签 Mobject</li>\n<li><code>line @ x</code> —— <code>number_to_point</code> 的运算符写法</li>\n</ul>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>v0.21.0 中 <code>add_labels</code> 加的标签存放在 <code>line.labels</code> 属性里，但 <code>line.get_labels()</code> <strong>不会返回它们</strong>——它内部直接转调 <code>get_number_mobjects()</code>（取刻度数字）。想取出 <code>add_labels</code> 的标签请用 <code>line.labels</code>，且只有在调用过 <code>add_numbers</code> 之后 <code>get_labels()</code> 才可用（否则会抛 <code>AttributeError</code>）。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>不想依赖 LaTeX 时，把 <code>label_constructor=Text</code> 传给构造或 <code>add_numbers</code>/<code>add_labels</code>，标签就会用 Pango 渲染，例如 <code>NumberLine(x_range=[0, 10], include_numbers=True, label_constructor=Text)</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "UnitInterval",
+      "text": "UnitInterval"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>UnitInterval</code> 是一条<strong>固定覆盖 0 到 1、每单位长 10</strong> 的特化数轴：等价于 <code>NumberLine(x_range=(0, 1), unit_size=10)</code>。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "UnitInterval",
+        "NumberLine",
+        "Line"
+      ]
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>unit_size</code>",
+          "type": "float",
+          "default": "10",
+          "desc": "单位长度（1 对应 10 个场景单位，即整条轴长 10）"
+        },
+        {
+          "name": "<code>numbers_with_elongated_ticks</code>",
+          "type": "list[float] \\",
+          "default": "None",
+          "desc": "[0, 1]"
+        },
+        {
+          "name": "<code>decimal_number_config</code>",
+          "type": "dict \\",
+          "default": "None",
+          "desc": "None"
+        }
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "版本说明",
+      "html": "<p><code>UnitInterval</code> <strong>没有出现在官方文档中</strong>（未公开的便捷类），但它在 <code>manim</code> 顶层命名空间可直接导入，行为稳定。需要 0–1 区间且长度恰为 10 的数轴时用它最省事；要其他区间请直接用 <code>NumberLine</code>。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>UnitInterval</code> 和其他 <code>NumberLine</code> 一样<strong>以自身中心对齐原点</strong>：<code>number_to_point(0)</code> 位于场景 <code>x = -5</code>，而不是原点。若需要“0 在原点”的 0–1 数轴，请自行 <code>shift(RIGHT * 5)</code> 或用 <code>x_range</code> 构造。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch04/unit_interval",
+      "scene": "UnitIntervalDemo",
+      "caption": "<p>默认 0 和 1 处有长刻度；注意整条轴以中心为原点对称展开。</p>",
+      "code": "\"\"\"UnitIntervalDemo: UnitInterval 默认 0-1、unit_size=10，且整体居中。\"\"\"\n\nfrom manim import *\n\n\nclass UnitIntervalDemo(Scene):\n    def construct(self):\n        ui = UnitInterval()\n        ui.add_labels(\n            {\n                0: Text(\"0\", font_size=30),\n                0.5: Text(\"0.5\", font_size=30),\n                1: Text(\"1\", font_size=30),\n            }\n        )\n        # 注意：UnitInterval 以自身中心对齐原点，\n        # number_to_point(0) 位于场景 x = -5 处，而不是原点。\n        dot = Dot(ui.number_to_point(0.75), color=YELLOW)\n\n        self.play(Create(ui), run_time=1.5)\n        self.play(FadeIn(dot), run_time=0.5)\n\n        arrow = Arrow(\n            ui.number_to_point(0.25),\n            ui.number_to_point(0.75),\n            buff=0,\n            color=BLUE,\n        )\n        self.play(GrowArrow(arrow), run_time=1.0)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>NumberLine(x_range=[-2, 8, 0.5], length=10)</code> 上，<code>number_to_point(3)</code> 大约在场景什么位置？</p>",
+      "answerHtml": "<p>数轴总长 10，覆盖 10 个单位，因此 <code>unit_size = 1</code>。值 3 位于 <code>(-2 → 8)</code> 区间的 5/10 处，即数轴中点；而数轴整体居中于原点，所以该点约为原点（x = 0）。一般结论：<code>point = unit_size * (number - x_min - (x_max - x_min)/2)</code>。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想让数轴上 0 到 10 的范围内只显示 2、4、6 三个数字，怎么做？</p>",
+      "answerHtml": "<p>构造时传 <code>include_numbers=True</code> 并配合 <code>numbers_to_include=[2, 4, 6]</code>（也可用 <code>numbers_to_exclude</code> 反向排除）。</p>"
+    }
+  ]
+}

@@ -1,0 +1,250 @@
+{
+  "part": "ch03",
+  "id": "markup-text",
+  "title": "MarkupText",
+  "partTitle": "文本与公式",
+  "prev": {
+    "part": "ch03",
+    "id": "text-and-paragraph",
+    "title": "Text 与段落",
+    "path": "/ch/ch03/text-and-paragraph"
+  },
+  "next": {
+    "part": "ch03",
+    "id": "tex-and-mathtex",
+    "title": "Tex 与 MathTex",
+    "path": "/ch/ch03/tex-and-mathtex"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p><code>MarkupText</code> 与 <code>Text</code> 共用 Pango 渲染管线，但输入是 <strong>Pango 标记语言</strong>（类似 HTML 的标签文本）：你可以在字符串里直接写 <code>&lt;span&gt;</code>、<code>&lt;b&gt;</code>、<code>&lt;i&gt;</code>、<code>&lt;sub&gt;</code> 等标签，实现富文本排版，而不必事后按索引逐个改色。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "MarkupText",
+      "text": "MarkupText"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>MarkupText</code> 用于渲染带 Pango 标记的富文本；标记标签在排版时生效，最终仍转成 SVG 矢量图形。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "MarkupText",
+        "SVGMobject",
+        "VMobject",
+        "Mobject"
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<pre><code class=\"language-python\">MarkupText(\n    text: str,\n    fill_opacity: float = 1,\n    stroke_width: float = 0,\n    color: ParsableManimColor | None = None,\n    font_size: float = 48,\n    line_spacing: float = -1,\n    font: str = &quot;&quot;,\n    slant: str = &quot;NORMAL&quot;,\n    weight: str = &quot;NORMAL&quot;,\n    justify: bool = False,\n    gradient: Iterable[ParsableManimColor] | None = None,\n    tab_width: int = 4,\n    height: int | None = None,\n    width: int | None = None,\n    should_center: bool = True,\n    disable_ligatures: bool = False,\n    warn_missing_font: bool = True,\n)\n</code></pre>"
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>text</code>",
+          "type": "str",
+          "default": "—",
+          "desc": "含 Pango 标记的文本"
+        },
+        {
+          "name": "<code>justify</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "是否两端对齐（仅多行有效）"
+        },
+        {
+          "name": "<code>font_size</code>",
+          "type": "float",
+          "default": "48",
+          "desc": "基础字号，可被标签内 <code>size</code> 覆盖"
+        },
+        {
+          "name": "<code>font</code> / <code>slant</code> / <code>weight</code>",
+          "type": "str",
+          "default": "\"NORMAL\"",
+          "desc": "同 <code>Text</code>，标签内的对应属性优先"
+        },
+        {
+          "name": "<code>gradient</code>",
+          "type": "Iterable[color] \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>disable_ligatures</code>",
+          "type": "bool",
+          "default": "False",
+          "desc": "禁用连字"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>注意：<code>MarkupText</code> <strong>没有</strong> <code>t2c</code>/<code>t2f</code>/<code>t2g</code>/<code>t2s</code>/<code>t2w</code> 参数——颜色、字体等效果都通过标记标签实现。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "常用标签",
+      "text": "常用标签"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "标签",
+        "作用",
+        "示例"
+      ],
+      "rows": [
+        [
+          "<code>&lt;b&gt;</code> / <code>&lt;i&gt;</code> / <code>&lt;u&gt;</code>",
+          "粗体 / 斜体 / 下划线",
+          "<code>&lt;b&gt;加粗&lt;/b&gt;</code>"
+        ],
+        [
+          "<code>&lt;sub&gt;</code> / <code>&lt;sup&gt;</code>",
+          "下标 / 上标",
+          "<code>x&lt;sup&gt;2&lt;/sup&gt;</code>"
+        ],
+        [
+          "<code>&lt;span foreground&gt;</code>",
+          "文字颜色（十六进制）",
+          "<code>&lt;span foreground=\"#FFFF00\"&gt;黄&lt;/span&gt;</code>"
+        ],
+        [
+          "<code>&lt;span background&gt;</code>",
+          "背景色",
+          "<code>&lt;span background=\"blue\"&gt;反白&lt;/span&gt;</code>"
+        ],
+        [
+          "<code>&lt;span size&gt;</code>",
+          "字号（<code>x-small</code>~<code>xx-large</code> 或 pt）",
+          "<code>&lt;span size=\"x-large\"&gt;大&lt;/span&gt;</code>"
+        ],
+        [
+          "<code>&lt;span font_family&gt;</code>",
+          "字体",
+          "<code>&lt;span font_family=\"serif\"&gt;衬线&lt;/span&gt;</code>"
+        ],
+        [
+          "<code>&lt;span rise&gt;</code>",
+          "基线升降（替代 sub/sup）",
+          "<code>&lt;span rise=\"5000\"&gt;上&lt;/span&gt;</code>"
+        ],
+        [
+          "<code>&lt;span strikethrough&gt;</code>",
+          "删除线",
+          "<code>&lt;span strikethrough=\"true\"&gt;删&lt;/span&gt;</code>"
+        ]
+      ]
+    },
+    {
+      "type": "demo",
+      "example": "ch03/markup_text_demo",
+      "scene": "MarkupTextDemo",
+      "caption": "<p><code>&lt;span&gt;</code> 的 <code>foreground</code>/<code>size</code> 控制标题颜色与字号；<code>&lt;sup&gt;</code>/<code>&lt;sub&gt;</code> 直接排出上下标；<code>&lt;b&gt;</code>/<code>&lt;i&gt;</code> 是粗斜体的简写。</p>",
+      "code": "\"\"\"MarkupTextDemo: Pango 标记语言的常用标签。\"\"\"\n\nfrom manim import *\n\n\nclass MarkupTextDemo(Scene):\n    def construct(self):\n        title = MarkupText('<span foreground=\"#FFFF00\" size=\"x-large\">Pango 标记语言</span>')\n        body = MarkupText(\n            '上下标：x<sup>2</sup> + y<sub>i</sub>，<b>粗体</b> 与 <i>斜体</i>',\n            font_size=32,\n        )\n        body.next_to(title, DOWN, buff=0.6)\n\n        self.play(FadeIn(title))\n        self.play(FadeIn(body, shift=UP))\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "id": "与-text-的对比",
+      "text": "与 Text 的对比"
+    },
+    {
+      "type": "compare",
+      "headers": [
+        "",
+        "Text",
+        "MarkupText"
+      ],
+      "rows": [
+        [
+          "-",
+          "<hr />",
+          "<hr />"
+        ],
+        [
+          "语法",
+          "纯文本",
+          "Pango 标记"
+        ],
+        [
+          "局部着色",
+          "<code>t2c</code> 子串映射",
+          "标签内联"
+        ],
+        [
+          "上标/下标",
+          "不支持",
+          "<code>&lt;sup&gt;</code> / <code>&lt;sub&gt;</code>"
+        ],
+        [
+          "嵌套不同字体",
+          "<code>t2f</code>",
+          "<code>&lt;span font_family&gt;</code>"
+        ],
+        [
+          "颜色值格式",
+          "Manim 颜色对象",
+          "十六进制字符串"
+        ],
+        [
+          "性能",
+          "略快（无标记解析）",
+          "略慢"
+        ],
+        [
+          "适用场景",
+          "程序化批量改色",
+          "富文本、混排排版"
+        ]
+      ]
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p>Pango 标记是 XML：文本里的 <code>&amp;</code>、<code>&lt;</code>、<code>&gt;</code> 必须转义为 <code>&amp;amp;</code>、<code>&amp;lt;</code>、<code>&amp;gt;</code>，否则排版直接报错。颜色属性<strong>只认十六进制字符串</strong>（如 <code>\"#58C4DD\"</code>），不要传 <code>RED</code> 之类的 Manim 颜色常量。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>标签里引号用单引号更方便在 Python 字符串中书写：用双引号包裹 Python 字符串、单引号包裹属性值。<code>MarkupText</code> 的子对象结构与 <code>Text</code> 一致，连字、<code>disable_ligatures</code> 的行为也完全相同。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>写出渲染 <code>速度 v = 2 m/s，平方 v²</code>（其中 2 为下标、² 用上标）的 MarkupText 调用。</p>",
+      "answerHtml": "<pre><code class=\"language-python\">MarkupText('速度 v&lt;sub&gt;2&lt;/sub&gt; = 2 m/s，平方 v&lt;sup&gt;2&lt;/sup&gt;')\n</code></pre>\n<p>注意属性值不需要引号问题——标签整体在 Python 字符串内，标签属性用双引号。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想在 MarkupText 里显示 <code>a &lt; b</code>，直接写会怎样？正确写法？</p>",
+      "answerHtml": "<p><code>&lt;</code> 会被当成标签起始符导致 Pango 解析失败。正确写法是转义：<code>MarkupText(\"a &amp;lt; b\")</code>，<code>&amp;</code> 与 <code>&gt;</code> 同理写成 <code>&amp;amp;</code>、<code>&amp;gt;</code>。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>纯文本与富文本解决了“写字”，数学公式则交给基于 LaTeX 的 <code>Tex</code> 与 <code>MathTex</code>。</p>"
+    }
+  ]
+}

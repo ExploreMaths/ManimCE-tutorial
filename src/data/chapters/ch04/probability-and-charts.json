@@ -1,0 +1,237 @@
+{
+  "part": "ch04",
+  "id": "probability-and-charts",
+  "title": "概率与图表",
+  "partTitle": "坐标系与数据可视化",
+  "prev": {
+    "part": "ch04",
+    "id": "function-graphs",
+    "title": "函数绘图",
+    "path": "/ch/ch04/function-graphs"
+  },
+  "next": {
+    "part": "ch04",
+    "id": "matrices",
+    "title": "矩阵",
+    "path": "/ch/ch04/matrices"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p><code>manim.mobject.graphing.probability</code> 模块提供两块可视化工具：<code>SampleSpace</code> 把矩形按概率划分成若干块（面积 = 概率），<code>BarChart</code> 在 <code>Axes</code> 基础上画出柱状图。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "SampleSpace",
+      "text": "SampleSpace"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>SampleSpace</code> 是一个<strong>可按比例横向/纵向划分的矩形</strong>，常用来表示概率论中的样本空间：每个子矩形对应一个事件，视觉面积正比于概率。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "SampleSpace",
+        "Rectangle",
+        "Polygon",
+        "Polygram",
+        "VMobject"
+      ]
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>height</code>",
+          "type": "float",
+          "default": "3",
+          "desc": "矩形高度"
+        },
+        {
+          "name": "<code>width</code>",
+          "type": "float",
+          "default": "3",
+          "desc": "矩形宽度"
+        },
+        {
+          "name": "<code>fill_color</code>",
+          "type": "ParsableManimColor",
+          "default": "'#444444'",
+          "desc": "填充色"
+        },
+        {
+          "name": "<code>fill_opacity</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "填充不透明度"
+        },
+        {
+          "name": "<code>stroke_width</code>",
+          "type": "float",
+          "default": "0.5",
+          "desc": "边框线宽"
+        },
+        {
+          "name": "<code>stroke_color</code>",
+          "type": "ParsableManimColor",
+          "default": "'#BBBBBB'",
+          "desc": "边框颜色"
+        },
+        {
+          "name": "<code>default_label_scale_val</code>",
+          "type": "float",
+          "default": "1",
+          "desc": "内置标签的缩放系数"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "html": "<p>划分 API 是一对镜像方法：</p>\n<ul>\n<li><code>space.divide_vertically(p_list, colors=[MAROON_B, YELLOW], vect=RIGHT)</code> —— 沿<strong>宽度</strong>切成竖条</li>\n<li><code>space.divide_horizontally(p_list, colors=[GREEN, BLUE], vect=DOWN)</code> —— 沿<strong>高度</strong>切成横条</li>\n</ul>\n<p><code>p_list</code> 是<strong>单个位置参数</strong>（比例列表，也可只传一个浮点数），各块颜色从 <code>colors</code> 渐变生成；比例总和小于 1 时 <code>complete_p_list</code> 自动补一块“余量”，等于 1 则不补。划分结果存入动态属性 <code>space.vertical_parts</code> / <code>space.horizontal_parts</code> 并自动加入场景树。</p>"
+    },
+    {
+      "type": "demo",
+      "example": "ch04/sample_space",
+      "scene": "SampleSpaceDemo",
+      "caption": "<p><code>divide_vertically([0.5, 0.3, 0.2])</code> 把矩形切成三条；划分结果存在 <code>vertical_parts</code> 里，可据此用 <code>Brace</code> + <code>Text</code> 手工标注各块比例。</p>",
+      "code": "\"\"\"SampleSpaceDemo: SampleSpace 的划分与花括号标签。\n\n注意：v0.21.0 中 SampleSpace.get_subdivision_braces_and_labels 会把\nmin_num_quads 传给 Brace 而 Brace 不接受该参数，调用必崩；\n这里用手工 Brace + Text 的组合代替。\n\"\"\"\n\nfrom manim import *\n\n\nclass SampleSpaceDemo(Scene):\n    def construct(self):\n        space = SampleSpace(height=3, width=6)\n        # 注意：第一个位置参数是“比例列表”，不是可变参数；\n        # 省略余量会自动补齐（1 - sum(parts)）\n        # divide_vertically 按宽度切成竖条，divide_horizontally 按高度切成横条\n        space.divide_vertically([0.5, 0.3, 0.2])\n\n        self.play(FadeIn(space), run_time=1.0)\n\n        # 动态属性：divide 之后才有 vertical_parts / horizontal_parts\n        parts = space.vertical_parts\n        braces = VGroup(*[Brace(p, UP, buff=0.15) for p in parts])\n        labels = VGroup(\n            *[\n                Text(s, font_size=24).next_to(b, UP, buff=0.1)\n                for b, s in zip(braces, [\"0.5\", \"0.3\", \"0.2\"])\n            ]\n        )\n        self.play(FadeIn(braces), FadeIn(labels), run_time=1.0)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>p_list</code> 不是可变参数：<code>space.divide_vertically(0.5, 0.3, 0.2)</code> 会把第二个数 <code>0.3</code> 当成 <code>colors</code> 传入并触发 <code>TypeError</code>——正确写法是传一个列表。另外比例总和<strong>大于</strong> 1 时余量为负，会产生朝反方向拉伸的怪块，请自行保证总和 ≤ 1。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "版本说明",
+      "html": "<p>v0.21.0 中 <code>SampleSpace.get_subdivision_braces_and_labels(...)</code> <strong>存在 bug</strong>：它把 <code>min_num_quads</code> 传给 <code>Brace</code>，而 <code>Brace</code> 不接受该参数，调用必然抛出 <code>TypeError: Mobject.__init__() got an unexpected keyword argument 'min_num_quads'</code>。本版本请用 <code>Brace(part, direction)</code> + <code>Text</code> 手工组合代替（如上方示例）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "BarChart",
+      "text": "BarChart"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>BarChart</code> 是<strong>柱状图</strong>：内部就是一台 <code>Axes</code>（x 轴为类别序号、y 轴为数值，无箭头），柱条是立在 x 轴上的矩形，<code>values</code> 决定柱高。</p>"
+    },
+    {
+      "type": "inheritance",
+      "chain": [
+        "BarChart",
+        "Axes",
+        "VGroup"
+      ]
+    },
+    {
+      "type": "params",
+      "rows": [
+        {
+          "name": "<code>values</code>",
+          "type": "MutableSequence[float]",
+          "default": "—",
+          "desc": "各柱高度（必需）"
+        },
+        {
+          "name": "<code>bar_names</code>",
+          "type": "Sequence[str] \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>y_range</code>",
+          "type": "Sequence[float] \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>x_length</code> / <code>y_length</code>",
+          "type": "float \\",
+          "default": "None",
+          "desc": "None"
+        },
+        {
+          "name": "<code>bar_colors</code>",
+          "type": "Iterable[str]",
+          "default": "五色列表",
+          "desc": "柱条配色，按序循环取用"
+        },
+        {
+          "name": "<code>bar_width</code>",
+          "type": "float",
+          "default": "0.6",
+          "desc": "柱条宽度（x 轴坐标单位）"
+        },
+        {
+          "name": "<code>bar_fill_opacity</code>",
+          "type": "float",
+          "default": "0.7",
+          "desc": "填充不透明度"
+        },
+        {
+          "name": "<code>bar_stroke_width</code>",
+          "type": "float",
+          "default": "3",
+          "desc": "描边宽度"
+        }
+      ]
+    },
+    {
+      "type": "demo",
+      "example": "ch04/bar_chart",
+      "scene": "BarChartDemo",
+      "caption": "<p><code>change_bar_values(...)</code> 按新数据瞬时重设柱高；<code>get_bar_labels(...)</code> 按<strong>当前</strong>柱高生成柱顶数值标签。</p>",
+      "code": "\"\"\"BarChartDemo: BarChart 柱状图、数值标签与动态改值。\"\"\"\n\nfrom manim import *\n\n\nclass BarChartDemo(Scene):\n    def construct(self):\n        chart = BarChart(\n            values=[3, 5, 2, 4, 6],\n            bar_names=[\"A\", \"B\", \"C\", \"D\", \"E\"],\n            y_range=[0, 7, 1],\n            y_length=5,\n        )\n        self.play(Create(chart), run_time=1.5)\n\n        # change_bar_values 只瞬时更新柱高，不播放动画\n        chart.change_bar_values([5, 2, 6, 3, 4])\n\n        # get_bar_labels 按当前柱高生成标签（改值后调用才是新值）\n        labels = chart.get_bar_labels(font_size=24)\n        self.play(FadeIn(labels), run_time=1.0)\n        self.wait(0.5)\n",
+      "video": null
+    },
+    {
+      "type": "html",
+      "html": "<p>本示例的类别名与数值标签默认由 <code>Tex</code> 渲染，依赖 LaTeX，由 CI 渲染。</p>\n<p>常用操作：</p>\n<ul>\n<li><code>chart.bars</code> —— 柱条 <code>VGroup</code>，可按索引单独着色、位移</li>\n<li><code>chart.change_bar_values(values, update_colors=True)</code> —— <strong>瞬时</strong>更新柱高（见下方提示），数量不必与原始柱数一致，按序取 <code>zip</code> 对齐</li>\n<li><code>chart.get_bar_labels(color=None, font_size=24, buff=0.25, label_constructor=Tex)</code> —— 生成数值标签 <code>VGroup</code>，调用后也可用 <code>chart.bar_labels</code> 取回；标签不会自动上屏，需 <code>add</code> 或 <code>play(FadeIn(...))</code></li>\n<li><code>chart.x_axis</code> / <code>chart.y_axis</code> —— 就是 <code>Axes</code> 的两条轴，可 <code>add_numbers()</code> 等</li>\n</ul>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>change_bar_values()</code> <strong>不播放动画</strong>：它直接拉伸/移动柱条，画面瞬间跳变。想要平滑过渡，请自己对 <code>chart.bars</code> 施加 <code>Transform</code> / <code>.animate</code>，或配合 <code>self.play(...)</code> 手工编排。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>get_bar_labels()</code> 要在 <code>change_bar_values(...)</code> <strong>之后</strong>调用才拿得到新值；顺序反了标签会停留在旧数值上。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p>不想依赖 LaTeX 时，给 x 轴换标签构造器即可：构造时传 <code>x_axis_config={\"label_constructor\": Text}</code>（类别名与轴数字会改用 Pango 渲染）；<code>get_bar_labels(label_constructor=Text)</code> 同理。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>space.divide_vertically([0.2, 0.3])</code> 之后样本空间里有几块？比例各是多少？</p>",
+      "answerHtml": "<p>三块。比例总和为 0.5，小于 1 的部分由 <code>complete_p_list</code> 自动补齐为余量块：<code>[0.2, 0.3, 0.5]</code>。若总和恰好等于 1 则不会补块。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>想让人物讲解时柱状图“长高”的过程平滑可见，直接把 <code>chart.change_bar_values([...])</code> 写进 <code>construct()</code> 为什么不行？应该怎么写？</p>",
+      "answerHtml": "<p><code>change_bar_values()</code> 是瞬时更新，没有动画过程。平滑效果需要自己播动画，例如先用旧数据建图，再对柱条逐个 <code>Transform</code>：<code>self.play(*[Transform(old, new) for old, new in zip(chart.bars, chart.bars.copy())])</code> 的等价思路——更常见的做法是保存旧柱的副本，计算新高度后 <code>self.play(*[bar.animate.stretch_to_fit_height(h) for ...])</code> 逐根拉伸。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>在没装 LaTeX 的机器上运行带 <code>bar_names</code> 的 <code>BarChart</code>，会在哪一步报错？如何规避？</p>",
+      "answerHtml": "<p>构造 <code>BarChart</code> 时就会报错：类别名走 <code>Tex</code>、y 轴数字也走 <code>Tex</code>，任何一处都会触发 LaTeX 编译。规避方法是传 <code>x_axis_config={\"label_constructor\": Text}</code> 把轴标签换成 Pango 渲染（<code>y_axis_config</code> 同理），<code>get_bar_labels</code> 传 <code>label_constructor=Text</code>。</p>"
+    }
+  ]
+}

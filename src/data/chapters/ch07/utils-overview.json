@@ -1,0 +1,118 @@
+{
+  "part": "ch07",
+  "id": "utils-overview",
+  "title": "实用工具速览",
+  "partTitle": "高级主题",
+  "prev": {
+    "part": "ch07",
+    "id": "scripting",
+    "title": "脚本化调用",
+    "path": "/ch/ch07/scripting"
+  },
+  "next": {
+    "part": "ch07",
+    "id": "misc",
+    "title": "杂项",
+    "path": "/ch/ch07/misc"
+  },
+  "blocks": [
+    {
+      "type": "html",
+      "html": "<p><code>manim.utils</code> 是 Manim 的“工具箱”命名空间：五族函数（颜色、空间运算、迭代工具、路径、贝塞尔）支撑了内置 mobject 与动画的全部底层计算。写自定义对象和自定义动画时（见本板块前两节），你会频繁用到它们。以下导出名清单均以本机 v0.21.0 的实际导出为准。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "manimutilscolor",
+      "text": "manim.utils.color"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>ManimColor</code> 与全部颜色常量的家，ch02“颜色”一节已详细介绍核心类，这里补工具函数。</p>\n<p>导出清单：</p>\n<ul>\n<li>核心：<code>ManimColor</code>、<code>ParsableManimColor</code>、<code>ManimColorDType</code>、<code>RGBA</code>、<code>HSV</code>、<code>RandomColorGenerator</code></li>\n<li>常量：<code>WHITE</code>、<code>BLACK</code>、<code>GRAY/GREY</code> 系列、<code>RED/GREEN/BLUE/YELLOW/ORANGE/PURPLE/TEAL/MAROON/GOLD/PINK</code> 及各自 <code>_A</code>~<code>_E</code> 明度变体、<code>PURE_*</code>、<code>LOGO_*</code>、<code>DARK_*</code>、<code>LIGHT_*</code></li>\n<li>色板模块：<code>X11</code>、<code>XKCD</code>、<code>SVGNAMES</code>、<code>DVIPSNAMES</code>、<code>AS2700</code>、<code>BS381</code>（如 <code>X11.LIGHTSKYBLUE</code>）</li>\n<li>工具函数：<code>interpolate_color</code>、<code>average_color</code>、<code>color_gradient</code>、<code>invert_color</code>、<code>random_color</code>、<code>random_bright_color</code>、<code>get_shaded_rgb</code>、<code>color_to_rgb</code>、<code>color_to_rgba</code>、<code>color_to_int_rgb</code>、<code>color_to_int_rgba</code>、<code>rgb_to_color</code>、<code>rgba_to_color</code>、<code>rgb_to_hex</code>、<code>hex_to_rgb</code></li>\n</ul>\n<pre><code class=\"language-python\">from manim import *\n\n# 三种颜色等分渐变，取中间值\ncolors = color_gradient([BLUE, YELLOW, RED], 5)\ninterpolate_color(BLUE, RED, 0.3)   # 按 30% 插值\n\n# 十六进制与 ManimColor 互转\nrgb_to_hex(BLUE.to_rgb())           # '#58C4DD'\n</code></pre>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "manimutilsspace-ops",
+      "text": "manim.utils.space_ops"
+    },
+    {
+      "type": "html",
+      "html": "<p>三维向量、角度与旋转的运算库，自定义几何计算的第一选择。</p>\n<p>导出清单（27 个）：</p>\n<p><code>quaternion_mult</code>、<code>quaternion_from_angle_axis</code>、<code>angle_axis_from_quaternion</code>、<code>quaternion_conjugate</code>、<code>rotate_vector</code>、<code>thick_diagonal</code>、<code>rotation_matrix</code>、<code>rotation_about_z</code>、<code>z_to_vector</code>、<code>angle_of_vector</code>、<code>angle_between_vectors</code>、<code>normalize</code>、<code>get_unit_normal</code>、<code>compass_directions</code>、<code>regular_vertices</code>、<code>complex_to_R3</code>、<code>R3_to_complex</code>、<code>complex_func_to_R3_func</code>、<code>center_of_mass</code>、<code>midpoint</code>、<code>find_intersection</code>、<code>line_intersection</code>、<code>get_winding_number</code>、<code>shoelace</code>、<code>shoelace_direction</code>、<code>cross2d</code>、<code>earclip_triangulation</code>、<code>cartesian_to_spherical</code>、<code>spherical_to_cartesian</code>、<code>perpendicular_bisector</code></p>\n<pre><code class=\"language-python\">from manim import *\n\nv = normalize(np.array([3.0, 4.0, 0.0]))        # [0.6, 0.8, 0]\na = angle_of_vector(RIGHT)                       # 0\nrot = rotation_matrix(PI / 2, OUT)               # 绕 z 轴 90° 的 3x3 矩阵\nw = rotate_vector(RIGHT, PI / 2)                 # 直接旋转向量\npts = regular_vertices(6, radius=2)              # 正六边形顶点\n</code></pre>\n<p>注意这些函数吃 NumPy 数组（<code>NDArray</code>），不吃 mobject——配合 <code>mob.get_center()</code>、<code>mob.get_vertices()</code> 使用。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "manimutilsiterables",
+      "text": "manim.utils.iterables"
+    },
+    {
+      "type": "html",
+      "html": "<p>列表与序列的小工具，写 <code>generate_points</code> 或数据处理时很顺手。</p>\n<p>导出清单（13 个）：<code>adjacent_n_tuples</code>、<code>adjacent_pairs</code>、<code>all_elements_are_instances</code>、<code>concatenate_lists</code>、<code>list_difference_update</code>、<code>list_update</code>、<code>listify</code>、<code>make_even</code>、<code>make_even_by_cycling</code>、<code>remove_list_redundancies</code>、<code>remove_nones</code>、<code>stretch_array_to_length</code>、<code>tuplify</code></p>\n<pre><code class=\"language-python\">from manim import *\n\nadjacent_pairs([1, 2, 3, 4])\n# [(1, 2), (2, 3), (3, 4)] —— 画折线、逐段动画时常用\n\nmake_even_by_cycling([1, 2, 3], 8)\n# [1, 2, 3, 1, 2, 3, 1, 2] —— 把短列表循环补足到目标长度\n</code></pre>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "manimutilspaths",
+      "text": "manim.utils.paths"
+    },
+    {
+      "type": "html",
+      "html": "<p><code>MoveAlongPath</code>、<code>.animate.path_arc</code> 等的路径函数来源，ch05“运动变形”一节已用到。</p>\n<p>导出清单（4 个）：<code>straight_path</code>、<code>path_along_arc</code>、<code>clockwise_path</code>、<code>counterclockwise_path</code></p>\n<pre><code class=\"language-python\">from manim import *\n\n# MoveAlongPath 默认走直线；path_along_arc 让点沿圆弧走\nself.play(MoveAlongPath(dot, path), run_time=2)\n\n# 给 .animate 指定弧线半径\nself.play(dot.animate.path_arc(PI / 2).move_to(2 * UP))\n</code></pre>\n<p><code>path_along_arc(arc_height)</code> 返回一个路径函数，也可以手动传给 <code>MoveAlongPath(mob, vmobject, path_func=...)</code> 风格的底层 API 或自定义动画。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "manimutilsbezier",
+      "text": "manim.utils.bezier"
+    },
+    {
+      "type": "html",
+      "html": "<p>贝塞尔曲线计算内核：<code>VMobject.points</code> 的锚点/控制点语义就是这里定义的。</p>\n<p>导出清单（14 个）：<code>bezier</code>、<code>partial_bezier_points</code>、<code>split_bezier</code>、<code>subdivide_bezier</code>、<code>bezier_remap</code>、<code>interpolate</code>、<code>integer_interpolate</code>、<code>mid</code>、<code>inverse_interpolate</code>、<code>match_interpolate</code>、<code>get_smooth_cubic_bezier_handle_points</code>、<code>is_closed</code>、<code>proportions_along_bezier_curve_for_point</code>、<code>point_lies_on_bezier</code></p>\n<pre><code class=\"language-python\">from manim import *\n\n# bezier(points, t)：对任意阶贝塞尔曲线在参数 t 处求值\ncurve_pts = np.array([[0, 0, 0], [1, 2, 0], [3, 2, 0], [4, 0, 0]])\np = bezier(curve_pts, 0.5)      # t=0.5 处的点\n\n# subdivide_bezier：把一条三次曲线一分为二，用于自适应加密\nleft, right = subdivide_bezier(curve_pts, 3)\n</code></pre>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "常见错误与建议",
+      "text": "常见错误与建议"
+    },
+    {
+      "type": "notice",
+      "level": "warning",
+      "title": "常见错误",
+      "html": "<p><code>space_ops</code> 的函数不吃 <code>Mobject</code>。传 <code>Square()</code> 而不是 <code>square.get_center()</code> 会得到难以理解的广播错误。这是工具层与对象层的边界：对象层（<code>Mobject</code> 方法）处理 mobject，工具层处理裸数组。</p>"
+    },
+    {
+      "type": "notice",
+      "level": "tip",
+      "title": "提示",
+      "html": "<p><code>from manim import *</code> 会把这些常用工具一并导入（<code>normalize</code>、<code>interpolate_color</code>、<code>bezier</code> 等都在顶层命名空间），不必写 <code>from manim.utils.space_ops import ...</code>。写库代码（插件）时才建议显式从 <code>manim.utils.*</code> 导入。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "自测",
+      "text": "自测"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p>自定义动画里需要让一个点绕原点匀速转 90°，用 <code>manim.utils.space_ops</code> 里的哪个函数最直接？</p>",
+      "answerHtml": "<p><code>rotate_vector(vector, angle)</code>：直接返回旋转向量，配合 <code>interpolate</code> 或在插值钩子里按 alpha 计算角度即可。若需要旋转矩阵（例如同时转多个向量），用 <code>rotation_matrix(angle, OUT)</code>。</p>"
+    },
+    {
+      "type": "exercise",
+      "questionHtml": "<p><code>adjacent_pairs</code> 和 <code>make_even_by_cycling</code> 各适合什么场景？</p>",
+      "answerHtml": "<p><code>adjacent_pairs</code> 返回相邻元素对，适合“逐段处理”的任务：给折线每段着色、对相邻顶点连线等。<code>make_even_by_cycling</code> 把列表循环复制到指定长度，适合两组数据点数不对齐时（例如两组顶点一一配对前先把短的一组补齐）。</p>"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "id": "下一步",
+      "text": "下一步"
+    },
+    {
+      "type": "html",
+      "html": "<p>工具箱盘点完毕。最后一节收拢散落各处的杂项：<code>add_sound</code>、<code>interactive_embed</code> 两个场景方法，以及一组调试小工具。</p>"
+    }
+  ]
+}

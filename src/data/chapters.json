@@ -1,0 +1,419 @@
+{
+  "parts": [
+    {
+      "id": "ch01",
+      "title": "入门",
+      "sections": [
+        {
+          "part": "ch01",
+          "id": "installation",
+          "title": "安装与运行环境",
+          "path": "/ch/ch01/installation"
+        },
+        {
+          "part": "ch01",
+          "id": "first-scene",
+          "title": "你的第一个场景",
+          "path": "/ch/ch01/first-scene"
+        },
+        {
+          "part": "ch01",
+          "id": "render-pipeline",
+          "title": "渲染流程与输出结构",
+          "path": "/ch/ch01/render-pipeline"
+        },
+        {
+          "part": "ch01",
+          "id": "cli-and-sections",
+          "title": "CLI 基础与章节分段",
+          "path": "/ch/ch01/cli-and-sections"
+        }
+      ]
+    },
+    {
+      "id": "ch02",
+      "title": "基础图形",
+      "sections": [
+        {
+          "part": "ch02",
+          "id": "mobject-core",
+          "title": "Mobject 核心",
+          "path": "/ch/ch02/mobject-core"
+        },
+        {
+          "part": "ch02",
+          "id": "vmobject",
+          "title": "VMobject",
+          "path": "/ch/ch02/vmobject"
+        },
+        {
+          "part": "ch02",
+          "id": "groups",
+          "title": "组合容器",
+          "path": "/ch/ch02/groups"
+        },
+        {
+          "part": "ch02",
+          "id": "basic-shapes",
+          "title": "基本形状",
+          "path": "/ch/ch02/basic-shapes"
+        },
+        {
+          "part": "ch02",
+          "id": "lines-and-arrows",
+          "title": "线与箭头",
+          "path": "/ch/ch02/lines-and-arrows"
+        },
+        {
+          "part": "ch02",
+          "id": "arcs-and-curves",
+          "title": "圆弧与曲线",
+          "path": "/ch/ch02/arcs-and-curves"
+        },
+        {
+          "part": "ch02",
+          "id": "dots-and-clouds",
+          "title": "点与点云",
+          "path": "/ch/ch02/dots-and-clouds"
+        },
+        {
+          "part": "ch02",
+          "id": "boolean-ops",
+          "title": "布尔运算",
+          "path": "/ch/ch02/boolean-ops"
+        },
+        {
+          "part": "ch02",
+          "id": "annotations",
+          "title": "标注与装饰",
+          "path": "/ch/ch02/annotations"
+        },
+        {
+          "part": "ch02",
+          "id": "images-and-svg",
+          "title": "位图与 SVG",
+          "path": "/ch/ch02/images-and-svg"
+        },
+        {
+          "part": "ch02",
+          "id": "colors",
+          "title": "颜色系统",
+          "path": "/ch/ch02/colors"
+        }
+      ]
+    },
+    {
+      "id": "ch03",
+      "title": "文本与公式",
+      "sections": [
+        {
+          "part": "ch03",
+          "id": "text-and-paragraph",
+          "title": "Text 与段落",
+          "path": "/ch/ch03/text-and-paragraph"
+        },
+        {
+          "part": "ch03",
+          "id": "markup-text",
+          "title": "MarkupText",
+          "path": "/ch/ch03/markup-text"
+        },
+        {
+          "part": "ch03",
+          "id": "tex-and-mathtex",
+          "title": "Tex 与 MathTex",
+          "path": "/ch/ch03/tex-and-mathtex"
+        },
+        {
+          "part": "ch03",
+          "id": "typst",
+          "title": "Typst 与 MathTypst (v0.21.0 新增)",
+          "path": "/ch/ch03/typst"
+        },
+        {
+          "part": "ch03",
+          "id": "text-compare",
+          "title": "文本方案对比",
+          "path": "/ch/ch03/text-compare"
+        },
+        {
+          "part": "ch03",
+          "id": "numbers",
+          "title": "数字与变量",
+          "path": "/ch/ch03/numbers"
+        },
+        {
+          "part": "ch03",
+          "id": "lists-and-title",
+          "title": "列表与标题",
+          "path": "/ch/ch03/lists-and-title"
+        },
+        {
+          "part": "ch03",
+          "id": "code-highlight",
+          "title": "Code 代码高亮",
+          "path": "/ch/ch03/code-highlight"
+        },
+        {
+          "part": "ch03",
+          "id": "tex-templates",
+          "title": "TeX 模板定制",
+          "path": "/ch/ch03/tex-templates"
+        }
+      ]
+    },
+    {
+      "id": "ch04",
+      "title": "坐标系与数据可视化",
+      "sections": [
+        {
+          "part": "ch04",
+          "id": "number-line",
+          "title": "NumberLine",
+          "path": "/ch/ch04/number-line"
+        },
+        {
+          "part": "ch04",
+          "id": "scales",
+          "title": "缩放基",
+          "path": "/ch/ch04/scales"
+        },
+        {
+          "part": "ch04",
+          "id": "axes-family",
+          "title": "坐标系家族",
+          "path": "/ch/ch04/axes-family"
+        },
+        {
+          "part": "ch04",
+          "id": "function-graphs",
+          "title": "函数绘图",
+          "path": "/ch/ch04/function-graphs"
+        },
+        {
+          "part": "ch04",
+          "id": "probability-and-charts",
+          "title": "概率与图表",
+          "path": "/ch/ch04/probability-and-charts"
+        },
+        {
+          "part": "ch04",
+          "id": "matrices",
+          "title": "矩阵",
+          "path": "/ch/ch04/matrices"
+        },
+        {
+          "part": "ch04",
+          "id": "tables",
+          "title": "表格",
+          "path": "/ch/ch04/tables"
+        },
+        {
+          "part": "ch04",
+          "id": "vector-space-scenes",
+          "title": "向量空间场景",
+          "path": "/ch/ch04/vector-space-scenes"
+        }
+      ]
+    },
+    {
+      "id": "ch05",
+      "title": "动画进阶",
+      "sections": [
+        {
+          "part": "ch05",
+          "id": "animation-mechanism",
+          "title": "Animation 机制",
+          "path": "/ch/ch05/animation-mechanism"
+        },
+        {
+          "part": "ch05",
+          "id": "creation",
+          "title": "创建家族",
+          "path": "/ch/ch05/creation"
+        },
+        {
+          "part": "ch05",
+          "id": "grow-and-fade",
+          "title": "生长与淡入淡出",
+          "path": "/ch/ch05/grow-and-fade"
+        },
+        {
+          "part": "ch05",
+          "id": "transforms",
+          "title": "Transform 家族",
+          "path": "/ch/ch05/transforms"
+        },
+        {
+          "part": "ch05",
+          "id": "matching-transforms",
+          "title": "匹配变换",
+          "path": "/ch/ch05/matching-transforms"
+        },
+        {
+          "part": "ch05",
+          "id": "composition",
+          "title": "组合与编排",
+          "path": "/ch/ch05/composition"
+        },
+        {
+          "part": "ch05",
+          "id": "updaters",
+          "title": "Updater 系统",
+          "path": "/ch/ch05/updaters"
+        },
+        {
+          "part": "ch05",
+          "id": "number-animations",
+          "title": "数值动画",
+          "path": "/ch/ch05/number-animations"
+        },
+        {
+          "part": "ch05",
+          "id": "tracing",
+          "title": "追踪与边界",
+          "path": "/ch/ch05/tracing"
+        },
+        {
+          "part": "ch05",
+          "id": "motion",
+          "title": "运动变形",
+          "path": "/ch/ch05/motion"
+        },
+        {
+          "part": "ch05",
+          "id": "rotation",
+          "title": "旋转",
+          "path": "/ch/ch05/rotation"
+        },
+        {
+          "part": "ch05",
+          "id": "indication",
+          "title": "强调与指示",
+          "path": "/ch/ch05/indication"
+        },
+        {
+          "part": "ch05",
+          "id": "speed",
+          "title": "变速",
+          "path": "/ch/ch05/speed"
+        },
+        {
+          "part": "ch05",
+          "id": "rate-functions",
+          "title": "Rate Functions 全解",
+          "path": "/ch/ch05/rate-functions"
+        }
+      ]
+    },
+    {
+      "id": "ch06",
+      "title": "3D 与摄像机",
+      "sections": [
+        {
+          "part": "ch06",
+          "id": "three-d-scene",
+          "title": "ThreeDScene",
+          "path": "/ch/ch06/three-d-scene"
+        },
+        {
+          "part": "ch06",
+          "id": "three-d-mobjects",
+          "title": "3D 几何",
+          "path": "/ch/ch06/three-d-mobjects"
+        },
+        {
+          "part": "ch06",
+          "id": "polyhedra",
+          "title": "多面体",
+          "path": "/ch/ch06/polyhedra"
+        },
+        {
+          "part": "ch06",
+          "id": "moving-camera",
+          "title": "移动摄像机",
+          "path": "/ch/ch06/moving-camera"
+        },
+        {
+          "part": "ch06",
+          "id": "zoomed-scene",
+          "title": "局部放大",
+          "path": "/ch/ch06/zoomed-scene"
+        },
+        {
+          "part": "ch06",
+          "id": "camera-internals",
+          "title": "Camera 基类与扩展",
+          "path": "/ch/ch06/camera-internals"
+        },
+        {
+          "part": "ch06",
+          "id": "renderers",
+          "title": "渲染器",
+          "path": "/ch/ch06/renderers"
+        }
+      ]
+    },
+    {
+      "id": "ch07",
+      "title": "高级主题",
+      "sections": [
+        {
+          "part": "ch07",
+          "id": "custom-mobjects",
+          "title": "自定义 Mobject",
+          "path": "/ch/ch07/custom-mobjects"
+        },
+        {
+          "part": "ch07",
+          "id": "custom-animations",
+          "title": "自定义 Animation",
+          "path": "/ch/ch07/custom-animations"
+        },
+        {
+          "part": "ch07",
+          "id": "plugins",
+          "title": "插件机制",
+          "path": "/ch/ch07/plugins"
+        },
+        {
+          "part": "ch07",
+          "id": "config-deep-dive",
+          "title": "配置系统深度",
+          "path": "/ch/ch07/config-deep-dive"
+        },
+        {
+          "part": "ch07",
+          "id": "performance",
+          "title": "性能与缓存",
+          "path": "/ch/ch07/performance"
+        },
+        {
+          "part": "ch07",
+          "id": "cli-deep-dive",
+          "title": "CLI 深度",
+          "path": "/ch/ch07/cli-deep-dive"
+        },
+        {
+          "part": "ch07",
+          "id": "scripting",
+          "title": "脚本化调用",
+          "path": "/ch/ch07/scripting"
+        },
+        {
+          "part": "ch07",
+          "id": "utils-overview",
+          "title": "实用工具速览",
+          "path": "/ch/ch07/utils-overview"
+        },
+        {
+          "part": "ch07",
+          "id": "misc",
+          "title": "杂项",
+          "path": "/ch/ch07/misc"
+        }
+      ]
+    }
+  ],
+  "totalSections": 62
+}
