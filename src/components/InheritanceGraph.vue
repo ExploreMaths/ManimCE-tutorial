@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import type { GraphNode } from '../types'
 
 const props = defineProps<{ nodes: GraphNode[] }>()
 const router = useRouter()
 
-const NODE_W = 150
-const NODE_H = 34
-const COL_W = 190
-const ROW_H = 46
-const PAD = 8
+const container = ref<HTMLElement | null>(null)
+const collapsed = ref<Set<string>>(new Set())
+const filter = ref('')
+const ready = ref(false)
+
+let vizPromise: Promise<import('@viz-js/viz').Viz> | null = null
+function viz() {
+  if (!vizPromise) vizPromise = import('@viz-js/viz').then((m) => m.instance())
+  return vizPromise
+}
+
+/* ---------- tree helpers (same semantics as before) ---------- */
 
 const byName = computed(() => {
   const map = new Map<string, GraphNode>()
@@ -21,7 +28,7 @@ const byName = computed(() => {
 const childrenOf = computed(() => {
   const map = new Map<string, GraphNode[]>()
   for (const n of props.nodes) {
-    if (n.parent) {
+    if (n.parent && byName.value.has(n.parent)) {
       const list = map.get(n.parent) ?? []
       list.push(n)
       map.set(n.parent, list)
@@ -34,28 +41,12 @@ const roots = computed(() =>
   props.nodes.filter((n) => !n.parent || !byName.value.has(n.parent)),
 )
 
-const depthOf = computed(() => {
-  const map = new Map<string, number>()
-  function depth(name: string, visiting: Set<string>): number {
-    const cached = map.get(name)
-    if (cached !== undefined) return cached
-    if (visiting.has(name)) return 0
-    visiting.add(name)
-    const node = byName.value.get(name)
-    let d = 0
-    if (node?.parent && byName.value.has(node.parent)) {
-      d = depth(node.parent, visiting) + 1
-    }
-    visiting.delete(name)
-    map.set(name, d)
-    return d
-  }
-  for (const n of props.nodes) depth(n.name, new Set())
-  return map
-})
+function hasChildren(name: string) {
+  return (childrenOf.value.get(name) ?? []).length > 0
+}
 
-const collapsed = ref<Set<string>>(new Set())
-
+/** Names visible with the current collapse set (collapsed node itself
+ *  stays visible; its whole subtree is hidden). */
 const visible = computed(() => {
   const set = new Set<string>()
   const queue: string[] = roots.value.map((r) => r.name)
@@ -64,63 +55,11 @@ const visible = computed(() => {
     if (set.has(name)) continue
     set.add(name)
     if (collapsed.value.has(name)) continue
-    for (const child of childrenOf.value.get(name) ?? []) {
-      queue.push(child.name)
-    }
+    for (const child of childrenOf.value.get(name) ?? []) queue.push(child.name)
   }
   return set
 })
 
-const layout = computed(() => {
-  const pos = new Map<string, { x: number; y: number }>()
-  const columns = new Map<number, GraphNode[]>()
-  for (const n of props.nodes) {
-    if (!visible.value.has(n.name)) continue
-    const d = depthOf.value.get(n.name) ?? 0
-    const list = columns.get(d) ?? []
-    list.push(n)
-    columns.set(d, list)
-  }
-  let maxDepth = 0
-  let maxRows = 1
-  for (const [d, list] of columns) {
-    maxDepth = Math.max(maxDepth, d)
-    maxRows = Math.max(maxRows, list.length)
-    list.forEach((n, row) => {
-      pos.set(n.name, { x: PAD + d * COL_W, y: PAD + row * ROW_H })
-    })
-  }
-  return {
-    pos,
-    width: (maxDepth + 1) * COL_W + PAD,
-    height: maxRows * ROW_H + PAD * 2,
-    maxDepth,
-  }
-})
-
-const edges = computed(() => {
-  const list: { d: string; from: string; to: string }[] = []
-  for (const n of props.nodes) {
-    if (!n.parent) continue
-    if (!visible.value.has(n.name) || !visible.value.has(n.parent)) continue
-    const a = layout.value.pos.get(n.parent)
-    const b = layout.value.pos.get(n.name)
-    if (!a || !b) continue
-    const x1 = a.x + NODE_W
-    const y1 = a.y + NODE_H / 2
-    const x2 = b.x
-    const y2 = b.y + NODE_H / 2
-    const dx = Math.max(30, (x2 - x1) / 2)
-    list.push({
-      from: n.parent,
-      to: n.name,
-      d: `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`,
-    })
-  }
-  return list
-})
-
-const filter = ref('')
 const dimmed = computed(() => {
   const q = filter.value.trim().toLowerCase()
   if (!q) return new Set<string>()
@@ -129,8 +68,101 @@ const dimmed = computed(() => {
   )
 })
 
-function hasChildren(name: string) {
-  return (childrenOf.value.get(name) ?? []).length > 0
+/* ---------- dot source ---------- */
+
+function displayName(name: string) {
+  return name.length > 22 ? name.slice(0, 21) + '…' : name
+}
+
+const dot = computed(() => {
+  const L: string[] = [
+    'digraph G {',
+    '  graph [rankdir=LR, bgcolor="transparent", nodesep="0.3", ranksep="0.6", splines=spline];',
+    '  node  [shape=box, style="rounded,filled", fontname="Helvetica,sans-serif", fontsize=11, height=0.34, color="#8b93a1", fillcolor="#f2f4f7", fontcolor="#1f2733"];',
+    '  edge  [color="#a6adba", arrowsize=0.6, penwidth=1.1];',
+  ]
+  const q = filter.value.trim().toLowerCase()
+  for (const name of visible.value) {
+    const hit = !q || name.toLowerCase().includes(q)
+    const pen = hit ? '#5b64d6' : '#8b93a1'
+    const fill = hit ? '#eef0fd' : '#f2f4f7'
+    L.push(`  "${name}" [label="${displayName(name)}", color="${pen}", fillcolor="${fill}"];`)
+  }
+  for (const n of props.nodes) {
+    if (!n.parent) continue
+    if (!visible.value.has(n.name) || !visible.value.has(n.parent)) continue
+    L.push(`  "${n.name}" -> "${n.parent}";`)
+  }
+  L.push('}')
+  return L.join('\n')
+})
+
+/* ---------- render + decorate ---------- */
+
+const NS = 'http://www.w3.org/2000/svg'
+
+function decorate(svg: SVGSVGElement) {
+  svg.classList.add('graphviz-svg')
+  for (const g of Array.from(svg.querySelectorAll('g.node'))) {
+    const title = g.querySelector('title')
+    const name = title?.textContent ?? ''
+    if (!name) continue
+    const node = byName.value.get(name)
+    g.style.cursor = node?.link || hasChildren(name) ? 'pointer' : 'default'
+    g.addEventListener('click', (e) => {
+      e.stopPropagation()
+      if (node?.link) router.push(node.link)
+      else if (hasChildren(name)) toggle(name)
+    })
+    // dim filtered-out nodes
+    if (dimmed.value.has(name)) {
+      g.style.opacity = '0.25'
+      const edgeSel = `g.edge:has(> title):has(title)`
+      void edgeSel
+    }
+    if (!hasChildren(name)) continue
+    // fold toggle badge at the node's top-right corner
+    const shape = g.querySelector(':scope > path')
+    let bx = 0
+    let by = 0
+    if (shape) {
+      const bb = shape.getBBox()
+      bx = bb.x + bb.width
+      by = bb.y
+    }
+    const badge = document.createElementNS(NS, 'g')
+    badge.setAttribute('class', 'fold-badge')
+    badge.style.cursor = 'pointer'
+    const c = document.createElementNS(NS, 'circle')
+    c.setAttribute('cx', String(bx))
+    c.setAttribute('cy', String(by))
+    c.setAttribute('r', '7')
+    c.setAttribute('fill', '#5b64d6')
+    c.setAttribute('stroke', '#ffffff')
+    c.setAttribute('stroke-width', '1.5')
+    const t = document.createElementNS(NS, 'text')
+    t.setAttribute('x', String(bx))
+    t.setAttribute('y', String(by + 3.5))
+    t.setAttribute('text-anchor', 'middle')
+    t.setAttribute('font-size', '10')
+    t.setAttribute('font-weight', '700')
+    t.setAttribute('fill', '#ffffff')
+    t.setAttribute('pointer-events', 'none')
+    t.textContent = collapsed.value.has(name) ? '+' : '−'
+    badge.appendChild(c)
+    badge.appendChild(t)
+    badge.addEventListener('click', (e) => {
+      e.stopPropagation()
+      toggle(name)
+    })
+    g.appendChild(badge)
+  }
+  // dim edges whose endpoints are dimmed
+  for (const e of Array.from(svg.querySelectorAll('g.edge'))) {
+    const t = e.querySelector('title')?.textContent ?? '' // "child -> parent"
+    const [child, parent] = t.split('->').map((s) => s.trim())
+    if (dimmed.value.has(child) || dimmed.value.has(parent)) e.style.opacity = '0.25'
+  }
 }
 
 function toggle(name: string) {
@@ -150,29 +182,22 @@ function collapseAll() {
   )
 }
 
-function displayName(name: string) {
-  return name.length > 22 ? name.slice(0, 21) + '…' : name
+async function render() {
+  if (!container.value) return
+  const v = await viz()
+  const svg = v.renderSVGElement(dot.value)
+  container.value.replaceChildren(svg) // mount first: getBBox needs a rendered tree
+  decorate(svg)
+  ready.value = true
 }
 
-function onNodeClick(node: GraphNode) {
-  if (node.link) router.push(node.link)
-  else toggle(node.name)
-}
-
-function nodeFill(name: string) {
-  return dimmed.value.has(name) ? 0.25 : 1
-}
-
-const displayNodes = computed(() => {
-  const list: { node: GraphNode; x: number; y: number; isRoot: boolean }[] = []
-  for (const n of props.nodes) {
-    if (!visible.value.has(n.name)) continue
-    const p = layout.value.pos.get(n.name)
-    if (!p) continue
-    list.push({ node: n, x: p.x, y: p.y, isRoot: (depthOf.value.get(n.name) ?? 0) === 0 })
-  }
-  return list
+let timer: ReturnType<typeof setTimeout> | null = null
+watch([collapsed, filter], () => {
+  if (timer) clearTimeout(timer)
+  timer = setTimeout(render, 60) // coalesce rapid toggles
 })
+
+onMounted(render)
 </script>
 
 <template>
@@ -188,102 +213,61 @@ const displayNodes = computed(() => {
       <button type="button" @click="expandAll">展开全部</button>
       <button type="button" @click="collapseAll">折叠全部</button>
     </div>
-    <div class="graph-scroll">
-      <svg
-        :width="layout.width"
-        :height="layout.height"
-        :viewBox="`0 0 ${layout.width} ${layout.height}`"
-        role="img"
-        aria-label="继承关系图"
-      >
-        <path
-          v-for="e in edges"
-          :key="e.from + '->' + e.to"
-          :d="e.d"
-          fill="none"
-          :stroke="'var(--border, #ccc)'"
-          stroke-width="1.5"
-          :opacity="dimmed.has(e.from) || dimmed.has(e.to) ? 0.15 : 1"
-        />
-        <g v-for="item in displayNodes" :key="item.node.name">
-          <rect
-            :x="item.x"
-            :y="item.y"
-            :width="NODE_W"
-            :height="NODE_H"
-            rx="6"
-            :fill="'var(--surface, #fff)'"
-            :stroke="item.isRoot ? 'var(--accent, #2563eb)' : 'var(--border, #ccc)'"
-            :stroke-width="item.isRoot ? 2 : 1"
-            :opacity="nodeFill(item.node.name)"
-            style="cursor: pointer"
-            @click="toggle(item.node.name)"
-          />
-          <text
-            :x="item.x + 8"
-            :y="item.y + NODE_H / 2 + 4"
-            font-size="11"
-            :fill="'var(--text, #222)'"
-            :opacity="nodeFill(item.node.name)"
-            style="cursor: pointer"
-            @click.stop="onNodeClick(item.node)"
-          >
-            {{ displayName(item.node.name) }}
-          </text>
-          <g
-            v-if="hasChildren(item.node.name)"
-            :transform="`translate(${item.x + NODE_W - 4}, ${item.y})`"
-            style="cursor: pointer"
-            @click.stop="toggle(item.node.name)"
-          >
-            <circle r="7" :fill="'var(--accent, #2563eb)'" />
-            <text y="3.5" text-anchor="middle" font-size="11" fill="#fff">
-              {{ collapsed.has(item.node.name) ? '+' : '−' }}
-            </text>
-          </g>
-        </g>
-      </svg>
-    </div>
+    <div ref="container" class="graph-container" :class="{ ready }"></div>
+    <p v-if="!ready" class="state-box">继承关系图加载中……</p>
   </div>
 </template>
 
 <style scoped>
 .graph-wrap {
-  border: 1px solid var(--border, #ddd);
-  border-radius: 6px;
-  background: var(--surface, #fff);
-  padding: 0.5rem;
+  margin-top: 0.5rem;
 }
 .graph-toolbar {
   display: flex;
   gap: 0.5rem;
-  align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
 }
 .graph-filter {
   flex: 1;
-  max-width: 260px;
-  padding: 0.25rem 0.6rem;
-  font-size: 0.82rem;
-  border: 1px solid var(--border, #ddd);
-  border-radius: 6px;
-  background: var(--bg, #fff);
-  color: var(--text, #222);
+  min-width: 10rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--bg);
+  color: var(--text);
 }
-.graph-toolbar button {
-  font-size: 0.8rem;
-  padding: 0.25rem 0.7rem;
-  border: 1px solid var(--border, #ddd);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--text, #222);
-  cursor: pointer;
-}
-.graph-toolbar button:hover {
-  color: var(--accent, #2563eb);
-  border-color: var(--accent, #2563eb);
-}
-.graph-scroll {
+.graph-container {
   overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  padding: 0.5rem;
+}
+.graph-container :deep(.graphviz-svg) {
+  /* natural size, no squashing; the container scrolls horizontally */
+  width: auto;
+  height: auto;
+  max-width: none;
+  display: block;
+}
+/* theme adaptation over graphviz inline attributes
+   (rounded nodes are <path>, edge arrowheads are <polygon>) */
+.graph-container :deep(g.node path) {
+  stroke-width: 1.2;
+}
+[data-theme='dark'] .graph-container :deep(g.node path) {
+  fill: #1b2027 !important;
+  stroke: #39414d !important;
+}
+[data-theme='dark'] .graph-container :deep(g.node text) {
+  fill: #dfe4ea !important;
+}
+[data-theme='dark'] .graph-container :deep(g.edge path) {
+  stroke: #4a5260 !important;
+}
+[data-theme='dark'] .graph-container :deep(g.edge polygon) {
+  fill: #4a5260 !important;
+  stroke: #4a5260 !important;
 }
 </style>
