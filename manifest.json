@@ -1,0 +1,593 @@
+{
+  "version": "0.21.0",
+  "examples": {
+    "ch01/sections_demo": {
+      "sha256": "b459dbaafc0856fc26aef25e0ae90e54bd73cca2b733465d9c06f2b4c43b9507",
+      "status": "failed",
+      "scene": "SectionsDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch01/square_to_circle": {
+      "sha256": "c614cd066fcb916ff7aa890aae20ca08489a3251639429a513b2644cd3b27e00",
+      "status": "failed",
+      "scene": "SquareToCircle",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/angle_marks": {
+      "sha256": "f462d815ad9c2906d3fee4a3bc138fbbf516216f89e822d24c9056c33808897d",
+      "status": "failed",
+      "scene": "AngleMarks",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch01/scene_basics": {
+      "sha256": "29665dc600daae5dec98b5dff76bb8401fc455be114cd9e03cb31b6ab4d44cc7",
+      "status": "failed",
+      "scene": "SceneBasics",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/arcs_showcase": {
+      "sha256": "bc6b9ea1dfb0ae7772163e151ef385dae3222a5ba73aef8a220326440d0b9b4f",
+      "status": "failed",
+      "scene": "ArcsShowcase",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/annotations_demo": {
+      "sha256": "9daa4bdde0ca7a5a9ce0ea8631f834f6edc5ca7f7e22da19a437b82e4ddfb453",
+      "status": "failed",
+      "scene": "AnnotationsDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/boolean_ops_demo": {
+      "sha256": "b68d840dba1680f96aa23e82a2e7bc870f64a9fb14500a2462f8abb5cc125f8d",
+      "status": "failed",
+      "scene": "BooleanOpsDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/braces_demo": {
+      "sha256": "e55e1e0810166b9dd0ed95ecab151b50a02b8d583232fcc19cf146ee19f85ef6",
+      "status": "failed",
+      "scene": "BracesDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/circle_ellipse": {
+      "sha256": "778a4242bed895bc4c60852c13599d8eaf5f652c405b5a95f4bb806e739c5765",
+      "status": "failed",
+      "scene": "CircleEllipseDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/colors_demo": {
+      "sha256": "c0e37be797904811a21463f5eecc463b44ce9e0cde4e1bd8fd30c6c3f193e9d8",
+      "status": "failed",
+      "scene": "ColorsDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/circle_intro": {
+      "sha256": "8f83096c75da34a2087cfca2c1d77bc29b05feb0b3f79b822dd913e4a7ac09b0",
+      "status": "failed",
+      "scene": "CircleIntro",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/dashed_demo": {
+      "sha256": "a1bd1023b2e87b76262b11b391b4c0c8efb33f6849c0564aeee3d17fdc23d9b0",
+      "status": "failed",
+      "scene": "DashedDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/groups_demo": {
+      "sha256": "f253af3fd831d955f8c220c15b10cf8494cec06c3166f8862a5854ad8be793b1",
+      "status": "failed",
+      "scene": "GroupsDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/dots_demo": {
+      "sha256": "305771665ef40ef8b9ae7dcfa1340b02fe272f72751eb76db8cfd077d0344089",
+      "status": "failed",
+      "scene": "DotsDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/image_array_demo": {
+      "sha256": "e35eeb722b12f09e0e0a5316dd02c64031a7f327c9e1db2f9ae9c3ca969504ee",
+      "status": "failed",
+      "scene": "ImageArrayDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/hull_cutout": {
+      "sha256": "f5e2d02ed6c83473c81ea933300814cbd49e7eda72afc9c37e81b696cb2af66c",
+      "status": "failed",
+      "scene": "HullCutoutDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/lines_arrows_demo": {
+      "sha256": "ccd75737cef664e68c9a1d3e4b9f0a882cd57f5b377c92f1ebc62c464c40fb55",
+      "status": "failed",
+      "scene": "LinesArrowsDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/mobject_methods": {
+      "sha256": "5016ea0f17f4abc27ec14cfa935168c41822e2884bed3896a5f8a8b3907d64ce",
+      "status": "failed",
+      "scene": "MobjectMethods",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/point_cloud_demo": {
+      "sha256": "4f429e656f7f8579595e0affe6a62ce4424578d2ca7d9073e88b61eeeba8f31e",
+      "status": "failed",
+      "scene": "PointCloudDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/polygon_family": {
+      "sha256": "f2aafa415e4335e637cf41b4d5f32473251d28c5adf5d496dffd8fd4a723d17b",
+      "status": "failed",
+      "scene": "PolygonDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/polygram_star": {
+      "sha256": "67147a0b5f564788e9a7ee345309ff2659e17a15d4b21e1e37db13d57906f756",
+      "status": "failed",
+      "scene": "PolygramDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/rect_family": {
+      "sha256": "d7e1c6a144b5072cb5b0d5eb7a2bf99b3a951d55b5f1d07d5e8ae10c07000174",
+      "status": "failed",
+      "scene": "RectFamilyDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/vdict_demo": {
+      "sha256": "6be032b0c8009f90455481e0dae00ea545931716885e37bdb4c85ad80f81bf4e",
+      "status": "failed",
+      "scene": "VDictDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/svg_mobject_demo": {
+      "sha256": "104b1c6981af3968e9beeb53c41c46d10d875ce22905e79de9b4fecc4f2f3212",
+      "status": "failed",
+      "scene": "SvgMobjectDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/vectorized_point_demo": {
+      "sha256": "b8322969bf760d0d84f2fcf572c8f60932592086de3027d7431b2999b5341f0a",
+      "status": "failed",
+      "scene": "VectorizedPointDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch02/vmobject_styles": {
+      "sha256": "9b08fc6e8a5d49bfafc4e2ba195f79d9414a2be14ad386868b9eba37098c88ae",
+      "status": "failed",
+      "scene": "VMobjectStyles",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/bulleted_list_demo": {
+      "sha256": "ffba68917196525bee8cdfc9a611acae059f6caca070987fac678330f0863972",
+      "status": "failed",
+      "scene": "BulletedListDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/code_demo": {
+      "sha256": "a7b0d226648572386a6b900ac3eddb84f7edbd677c128e6f28317710ef9f93f4",
+      "status": "failed",
+      "scene": "CodeDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/code_formatter_style": {
+      "sha256": "28e39b875fc70205359b914f861ae4a91a4d45055acbca20eb2b1398df17f8c2",
+      "status": "failed",
+      "scene": "CodeFormatterStyle",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/decimal_number_demo": {
+      "sha256": "c907705f3c5a75cf15fbe113ff4badefac5c855521b4d2bfac3bdbefd3ee1bcf",
+      "status": "failed",
+      "scene": "DecimalNumberDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/markup_text_demo": {
+      "sha256": "6e56422b57f070a1f74920f591405473d56f0fa1823037d8112dcb5bcd5b677e",
+      "status": "failed",
+      "scene": "MarkupTextDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/mathtex_groups": {
+      "sha256": "5d596fc44df877aa74ed9d18535526d191ced55ad1e6f3ef63030a839a74b8f1",
+      "status": "failed",
+      "scene": "MathTexGroups",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/mathtex_labels": {
+      "sha256": "5b80d6cc58420c62ceba998d64c1b7eae03471755ef4e23e7ce7ee2d8d851107",
+      "status": "failed",
+      "scene": "MathTexLabels",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/mathtypst_groups": {
+      "sha256": "755cb35b175eb2d51d9be41be2a1d87d4fc9c8e5aeb5b1667eb3c7598ba77be9",
+      "status": "failed",
+      "scene": "MathTypstGroups",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/paragraph_demo": {
+      "sha256": "603975b999659b94d9ea9705ec4ea70c87d8fc71b2e2ad6b1ab187544fe45fc3",
+      "status": "failed",
+      "scene": "ParagraphDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/tex_basic": {
+      "sha256": "4381ce8a7450d1397aaa5d48bcbbfe9f31ba7311971875b5268640401354de10",
+      "status": "failed",
+      "scene": "TexBasic",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/tex_template_ctex": {
+      "sha256": "cf15be3819584efec363816c36630eccc713ae005a436da477e874a1c689d137",
+      "status": "failed",
+      "scene": "TexTemplateCtex",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/text_basics": {
+      "sha256": "45ac2c11050fdb434a8a5e90c81999566b2a32bc2eed06b298ec23eeb2376753",
+      "status": "failed",
+      "scene": "TextBasics",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/title_demo": {
+      "sha256": "b3d5af732c78fd9daeb373ae5aa6ee4e99252abe373fba0220e78fab3923f12d",
+      "status": "failed",
+      "scene": "TitleDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/text_index_slice": {
+      "sha256": "0c5fcdc115e67b6e206079fcdae6e5b4478ab9bd0ca923393c1bfb6b21a50991",
+      "status": "failed",
+      "scene": "TextIndexSlice",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/typst_demo": {
+      "sha256": "cc304dc237d818a65d7df2080a252bb6b93d1d9be96643288b565b3635a2e39d",
+      "status": "failed",
+      "scene": "TypstDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch03/variable_demo": {
+      "sha256": "68b75e4f5ba5dcf45b28ce489823172aa8a57ac38d30915bb8b4b7cc40785bca",
+      "status": "failed",
+      "scene": "VariableDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/axes_basic": {
+      "sha256": "4a9692ae557336e39727eca8cd15f2118ef78c1e8bcfb8d37c0c44875479e08f",
+      "status": "failed",
+      "scene": "AxesDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/bar_chart": {
+      "sha256": "6e6f73177fe5fa60ee6a75980f0e61427cce6623b02eedf349061eff8e2286fd",
+      "status": "failed",
+      "scene": "BarChartDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/complex_plane": {
+      "sha256": "e350b91b7dd7d1665dc22df27f6c0e3513da1adbd74877bfa97a6075bb4b9425",
+      "status": "failed",
+      "scene": "ComplexPlaneDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/decimal_table": {
+      "sha256": "9c1d223be915db0de5482a02ade7a51519d7df8d00c44918e92dd58554acd117",
+      "status": "failed",
+      "scene": "DecimalTableDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/function_graph": {
+      "sha256": "ab44a976e21708a05fd5cfdd5b4155098363d459e99eef03e34fa958507d01f4",
+      "status": "failed",
+      "scene": "FunctionGraphDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/integer_matrix": {
+      "sha256": "c982eac3e28cb7cd5ebbb13d721d70ae68fbc259d5368038e395fcdd31f85959",
+      "status": "failed",
+      "scene": "IntegerMatrixDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/integer_table": {
+      "sha256": "3d4b9b39dcaddcac18791fdc858b5b0a93f9d9a748361e3669e2c715e0854f4e",
+      "status": "failed",
+      "scene": "IntegerTableDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/linear_transformation": {
+      "sha256": "91dc3a700d026f3efa58044b775fbff80db27753ef411c26d73bd22bb36de3c4",
+      "status": "failed",
+      "scene": "LinearTransformationDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/log_scale": {
+      "sha256": "fa90c3d5a7d637a45e98b88fc731612d010af4cf2efc62795307b3254270d121",
+      "status": "failed",
+      "scene": "LogScaleDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/math_table": {
+      "sha256": "a3cac9f848a8a161c1097f464b7cf09b0cff1c664163cadf33a39fb7f0078b8b",
+      "status": "failed",
+      "scene": "MathTableDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/matrix_tex_helpers": {
+      "sha256": "faa4accbe08298876f5d203f6755efdcba97909440dfded3943fa93e9ef89589",
+      "status": "failed",
+      "scene": "MatrixTexHelpersDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/matrix_det": {
+      "sha256": "3b7de0373705ef701df94e5a0969c0edfeb324b25a08aef7390323a321324f59",
+      "status": "failed",
+      "scene": "MatrixDetDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/mobject_matrix": {
+      "sha256": "6a2f2198a6687ecb8ca6c653b6756e250e75f810a32a245554ca0c6629964c85",
+      "status": "failed",
+      "scene": "MobjectMatrixDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/mobject_table": {
+      "sha256": "6117978c008200c1b8369d4d885b6e0465d0b1c640efc8bf48454a1870f42fcd",
+      "status": "failed",
+      "scene": "MobjectTableDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/number_line": {
+      "sha256": "7eb28db937ab3da5cac974ae71965759fafba2958d683ca05431f0a239f713f7",
+      "status": "failed",
+      "scene": "NumberLineDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/number_plane": {
+      "sha256": "2b3f5ccb6f62648f395b63786d41966d3b8d4795a33597b90b520098524b7ac6",
+      "status": "failed",
+      "scene": "NumberPlaneDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/parametric_implicit": {
+      "sha256": "e83ffa660ad473abc34cf2d65a891d40cb7fa6ba30ee6f804dd35b37932a90c4",
+      "status": "failed",
+      "scene": "ParametricImplicitDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/polar_plane": {
+      "sha256": "68bb54315ab33369193ea34caec323c935f5dc17ebd1df037c5405abd42a5880",
+      "status": "failed",
+      "scene": "PolarPlaneDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/sample_space": {
+      "sha256": "8a9183b97ed817d046934f8afa3eca027fb2f69f6a3e4340f8818be0ee8bbe7c",
+      "status": "failed",
+      "scene": "SampleSpaceDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/table_highlight": {
+      "sha256": "9e5c5c5b49634e2f566a22b820c41146b83243f9246882f5a88bd8c41576727a",
+      "status": "failed",
+      "scene": "TableHighlightDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/three_d_axes": {
+      "sha256": "de2bd86ff56af260f436d714bd75a778edcd1ab478e5147e1e76aa4d9d080ac3",
+      "status": "failed",
+      "scene": "ThreeDAxesDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/unit_interval": {
+      "sha256": "1ba1ab792665e3216c30327809fca13e6fbe8c34ba9d9f64648d4bd0533dbcdd",
+      "status": "failed",
+      "scene": "UnitIntervalDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch04/vector_scene": {
+      "sha256": "b8545a543e85fb8346a2bbf3e8bf7b059ac99a608d470350a0a32f8ad3c2c1c3",
+      "status": "failed",
+      "scene": "VectorSceneDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/anim_mechanism": {
+      "sha256": "8a1e6d145155302f12d33c4db4795a2ab705852c6df55c3d0be193d29793db94",
+      "status": "failed",
+      "scene": "AnimMechanism",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/change_speed": {
+      "sha256": "bffdc03d2d8f777a6da813a158626372aa27733f5ee184f4cea5f6354f2d524a",
+      "status": "failed",
+      "scene": "ChangeSpeedDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/composition": {
+      "sha256": "a6a0291620e7fa42985530e0c9732beec413be9fc2def7ea02cbf75b59a917b8",
+      "status": "failed",
+      "scene": "CompositionDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/creation_family": {
+      "sha256": "e4a28bcd051e20776e828ea469fe593e86434d847ac5d453bd924487b33688b8",
+      "status": "failed",
+      "scene": "CreationFamily",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/creation_subsets": {
+      "sha256": "377501e4fcf90b1ddf11ed42a8dcbc8ff77d9aa71029efbf949b73e9706d5487",
+      "status": "failed",
+      "scene": "CreationSubsets",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/creation_text": {
+      "sha256": "ce54f06cfe9a7f41128e9db10f961eec69a8132b0ae218d6b6a277fdd7914cb0",
+      "status": "failed",
+      "scene": "CreationText",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/creation_typing": {
+      "sha256": "6fab37b2a1f6e343b4579a9f6ba72e5be77d36b550345f0a3042b957f1ee1170",
+      "status": "failed",
+      "scene": "CreationTyping",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/fade_transform": {
+      "sha256": "d78743f1c7036fd6d655f8b1e7477989a8b4f439624776aa2dd553c34a244c2c",
+      "status": "failed",
+      "scene": "FadeTransformDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/fade_variants": {
+      "sha256": "407fb4cd76eb182d9b57801212d7bca5b9f87aa730a6149045aaf6b330143ac5",
+      "status": "failed",
+      "scene": "FadeVariants",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/grow_variants": {
+      "sha256": "2c818a9c329ef38eb457406f5e31cd0b5b5f4dfa19b8e36770984e4c0648b3d4",
+      "status": "failed",
+      "scene": "GrowVariants",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/indication_advanced": {
+      "sha256": "e0dd4e9eaf4ab2ca7178ae2aa76885981270c8a781b8748dde16fcf8713e01c2",
+      "status": "failed",
+      "scene": "IndicationAdvanced",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/matching_shapes": {
+      "sha256": "5807d63989c8996faf5278ef1ba6c92db40ed9593e0f3a3c609ed7873de159af",
+      "status": "failed",
+      "scene": "MatchingShapesDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/indication_basics": {
+      "sha256": "728dcae804975cc18a2e7efb48c6b9c3b1bad18946b9ebbb6f4f0c707e71cd6d",
+      "status": "failed",
+      "scene": "IndicationBasics",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/matching_tex": {
+      "sha256": "2e2c33c210656ba73035f6b320f3aec10ee484c617e1d7c9a2428e8494595a0b",
+      "status": "failed",
+      "scene": "MatchingTexDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/motion": {
+      "sha256": "da0043e406db50f37d77f491dc6859f960be3e99b582353d4cd2d30c6903d37a",
+      "status": "failed",
+      "scene": "MotionAndHomotopy",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/rate_functions": {
+      "sha256": "0fc282e0ede4ad8a496f7f820ace6f5ec2c90bbca965983af753e9243665edb8",
+      "status": "failed",
+      "scene": "RateFunctionsRace",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/number_animations": {
+      "sha256": "7f1b01b3df6b473ab1742043b0f95ffe5f2036136d38b290e0d0b049830d5192",
+      "status": "failed",
+      "scene": "NumberAnimations",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/rotation": {
+      "sha256": "9323e681f6cedcdad15c563023885ab4cf85622cdf35bdd900d210f08d0733d3",
+      "status": "failed",
+      "scene": "RotateVsRotating",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/tracing": {
+      "sha256": "c7e55bf74c334c19f5bc400508b96633b6f140a526f2673c6c4bce01b235e741",
+      "status": "failed",
+      "scene": "TracingAndBoundary",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/transform_basics": {
+      "sha256": "c6d0d298553469364188e019daa8e780dee2c43a7d72305160de58fbcd68a91e",
+      "status": "failed",
+      "scene": "TransformBasics",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/transform_path_func": {
+      "sha256": "ed99621dc9041b51d02c2e7a660eae976e33e3cb085ccdd7924f45d87d95fd1c",
+      "status": "failed",
+      "scene": "TransformPathFunc",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/updater_helpers": {
+      "sha256": "ca4bf538c88ec2b3bb3eff40d92acfeb8f5cc77df19be8e778ba8aee557eab3e",
+      "status": "failed",
+      "scene": "UpdaterHelpers",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch05/updater_value_tracker": {
+      "sha256": "72efe891c7c75dbfd7a90bad7a085840054cb9e8de21b458a8f689bb5362c719",
+      "status": "failed",
+      "scene": "UpdaterValueTracker",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch06/camera_pixel_coords": {
+      "sha256": "ec41cda87d04fe5fbee05ac5abb6f71b64257241815071bce95e77188255af11",
+      "status": "failed",
+      "scene": "PixelCoords",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch06/convex_hull_3d": {
+      "sha256": "95b598bb5e58d415b000a55c348a1a386c3140d8fd3f5b4f7d29c6e2a6b8b1ac",
+      "status": "failed",
+      "scene": "ConvexHullDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch06/moving_camera_walk": {
+      "sha256": "f3fde09ac88437cccdfaddea7a7e9b88f730b20ec1752a0eb8a3423a102887a2",
+      "status": "failed",
+      "scene": "CameraWalk",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch06/polyhedra_showcase": {
+      "sha256": "5e56debd939811646c40bac93a012395eb373da4e71310f7975d788123cd270f",
+      "status": "failed",
+      "scene": "PolyhedraShowcase",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch06/three_d_lines_surface": {
+      "sha256": "d721bfca65ee815f3a129aec2c0eb568d668c7be3df53c281379cf5c11dfc0c1",
+      "status": "failed",
+      "scene": "ThreeDLinesAndSurface",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch06/three_d_scene_orbit": {
+      "sha256": "7d9398ef779d66375e6ea95d11a71c2352b2af23a55dd64f43bc981b9ca6e7ba",
+      "status": "failed",
+      "scene": "ThreeDOrbit",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch06/three_d_solids": {
+      "sha256": "1eb809d57a3f5d287afb9b16f4d3cf01853d55c94eb0935212274cb0a03d0ed8",
+      "status": "failed",
+      "scene": "ThreeDSolids",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch06/zoomed_scene_demo": {
+      "sha256": "95c0867d3aef55098307d53b2b332b7ef1ace1ef1f604e8b0aea4e43cd44ac47",
+      "status": "failed",
+      "scene": "ZoomDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch07/color_jitter": {
+      "sha256": "5494b30a0562b9fd9db62d0e5adfb6f04c68dc3cbbae81efecc51044a840c98a",
+      "status": "failed",
+      "scene": "CustomAnimationDemo",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    },
+    "ch07/custom_gauge": {
+      "sha256": "02e6409a43a2cfb8f299b2e220dbcca67abe5c89001f9f2d7f5b89d40f7176f6",
+      "status": "failed",
+      "scene": "CustomGauge",
+      "error": "Usage: manim render [OPTIONS] FILE [SCENE_NAMES]...\nTry 'manim render --help' for help.\n\nError: Invalid value for '-q' / '--quality': 'qm' is not one of 'l', 'm', 'h', 'p', 'k'."
+    }
+  }
+}
