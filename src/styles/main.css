@@ -329,16 +329,34 @@ h4 {
 }
 
 .table-wrap {
-  /* overflow-x:auto made this box a scroll container, so position:sticky
-     thead cells stuck relative to THIS box (top:57px) instead of the
-     viewport and slid over the tbody rows. clip clips without creating
-     a scroll container, keeping the header glued to the page top bar.
-     Fallback: unknown value drops the declaration -> visible, fine too. */
+  /* Desktop: clip (NOT auto/scroll/hidden) — those create a scroll
+     container and hijack the sticky thead's frame. Wide-table panning
+     only matters on phones, handled in the max-width:1024px block. */
   overflow-x: clip;
   border: 1px solid var(--border);
   border-radius: 8px;
   margin: 1rem 0;
   background: var(--bg);
+}
+
+@media (max-width: 1024px) {
+  /* Phones: the wrap becomes a real scrollport (both axes) so wide
+     tables can pan; the thead then sticks to the WRAP's top (top:0)
+     instead of the page header. */
+  .table-wrap {
+    overflow: auto;
+    max-height: 72vh;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* give the three columns a comfortable width so the table is wider
+     than the phone and pans horizontally (CJK text would otherwise
+     wrap char-by-char and squash the table into the viewport) */
+  .table-wrap table.data-table {
+    min-width: 640px;
+  }
+  .table-wrap table.data-table thead th {
+    top: 0;
+  }
 }
 
 table.data-table {
