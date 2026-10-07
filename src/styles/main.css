@@ -330,7 +330,11 @@ h4 {
 
 table.data-table {
   width: 100%;
-  border-collapse: collapse;
+  /* separate + 0 spacing instead of collapse: collapsed borders break
+     position:sticky header rendering in Chromium (ghost rows, offset
+     borders). Visually identical here since only border-bottom is set. */
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 0.875rem;
 }
 
@@ -346,6 +350,7 @@ table.data-table thead th {
   position: sticky;
   top: 57px;
   background: var(--surface);
+  background-clip: padding-box;
   font-weight: 600;
   z-index: 1;
 }

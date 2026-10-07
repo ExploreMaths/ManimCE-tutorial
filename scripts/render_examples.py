@@ -8,7 +8,6 @@ Cache design (a REAL cache, not a fake):
     AND status == "ok" AND the recorded video file exists under media-dir.
   * Anything invalid/missing is queued and rendered in a subprocess:
       manim render --media_dir <tmpdir> -q<quality> --format mp4 <file> <Scene>
-
 The scene class is discovered by AST: the first top-level class whose base
 class name ends with "Scene". Files under examples/_shared/ are skipped.
 
@@ -156,7 +155,7 @@ def main() -> int:
                     help="parallel render workers (default: min(4, cpu_count))")
     ap.add_argument("--dry-run", action="store_true",
                     help="compute cache state, write manifest, do not render")
-    ap.add_argument("--quality", default="qm", help="manim quality flag, e.g. qm (default)")
+    ap.add_argument("--quality", default="m", help="manim quality flag: l/m/h/p/k (default m)")
     ap.add_argument("--only", help="restrict to one example path/key")
     args = ap.parse_args()
 

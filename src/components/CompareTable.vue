@@ -7,7 +7,7 @@ defineProps<{ headers: string[]; rows: string[][] }>()
     <table class="compare-table">
       <thead>
         <tr>
-          <th v-for="(h, i) in headers" :key="i">{{ h }}</th>
+          <th v-for="(h, i) in headers" :key="i" v-html="h"></th>
         </tr>
       </thead>
       <tbody>

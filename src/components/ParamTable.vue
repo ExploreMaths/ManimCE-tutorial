@@ -17,10 +17,10 @@ defineProps<{ rows: ParamRow[] }>()
       </thead>
       <tbody>
         <tr v-for="row in rows" :key="row.name">
-          <td class="mono">{{ row.name }}</td>
-          <td class="mono">{{ row.type }}</td>
-          <td class="mono">{{ row.default ?? '—' }}</td>
-          <td>{{ row.desc }}</td>
+          <td class="mono" v-html="row.name"></td>
+          <td class="mono" v-html="row.type"></td>
+          <td class="mono" v-html="row.default ?? '—'"></td>
+          <td v-html="row.desc"></td>
         </tr>
       </tbody>
     </table>

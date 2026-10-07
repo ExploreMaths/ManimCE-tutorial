@@ -43,10 +43,10 @@ onMounted(() => {
   fetch(`${searchBase()}inheritance.json`)
     .then((res) => {
       if (!res.ok) throw new Error(String(res.status))
-      return res.json() as Promise<GraphNode[]>
+      return res.json() as Promise<{ nodes: GraphNode[] }>
     })
     .then((data) => {
-      graphNodes.value = data
+      graphNodes.value = data.nodes
     })
     .catch(() => {
       graphError.value = true

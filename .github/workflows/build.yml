@@ -53,15 +53,6 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      - name: Build content JSON
-        run: python scripts/build_content.py --media-dir media
-
-      - name: Content coverage check (non-blocking)
-        run: |
-          if ! python scripts/build_content.py --media-dir media --strict; then
-            echo "::warning::content coverage check failed (missing covers or errors) — see log"
-          fi
-
       - name: Render examples (incremental)
         run: python scripts/render_examples.py --media-dir media
 
@@ -123,6 +114,17 @@ jobs:
               echo "::warning::media push failed (cache will be rebuilt next run)"
               exit 0
             fi
+          fi
+
+      - name: Build content JSON
+        # After rendering: video paths for newly rendered mp4s are now
+        # visible to the is_file() check in build_content.py.
+        run: python scripts/build_content.py --media-dir media
+
+      - name: Content coverage check (non-blocking)
+        run: |
+          if ! python scripts/build_content.py --media-dir media --strict; then
+            echo "::warning::content coverage failed (missing covers or errors) — see log"
           fi
 
       - name: Setup Node
