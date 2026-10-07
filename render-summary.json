@@ -1,5 +1,6 @@
 {
-  "rendered": [
+  "rendered": [],
+  "reused": [
     "ch01/scene_basics",
     "ch01/sections_demo",
     "ch01/square_to_circle",
@@ -94,7 +95,6 @@
     "ch07/color_jitter",
     "ch07/custom_gauge"
   ],
-  "reused": [],
   "failed": [
     {
       "key": "ch03/bulleted_list_demo",
