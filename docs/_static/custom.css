@@ -1,0 +1,314 @@
+/* ManimCE tutorial — custom styles on top of Furo. */
+
+/* ---------- demo blocks ---------- */
+
+.demo-block {
+  margin: 1.25rem 0;
+  border: 1px solid var(--color-background-border, #e0e0e0);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: var(--color-background-secondary, #f7f7f7);
+}
+
+.demo-caption {
+  margin-bottom: 0.75rem;
+  font-size: 0.92rem;
+}
+
+.demo-caption p {
+  margin: 0;
+}
+
+.demo-video-area {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.demo-video-area video {
+  display: block;
+  width: 100%;
+  border-radius: 0.5rem;
+  background: #000;
+}
+
+.demo-video-missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  border-radius: 0.5rem;
+  background: var(--color-background-item, #eee);
+  color: var(--color-foreground-secondary, #666);
+  font-size: 0.9rem;
+}
+
+.demo-source {
+  margin-top: 0.75rem;
+  border-top: 1px dashed var(--color-background-border, #ddd);
+  padding-top: 0.5rem;
+}
+
+.demo-source > summary {
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--color-link, #0645ad);
+  user-select: none;
+}
+
+.demo-source .literal-block-wrapper,
+.demo-source .highlight,
+.demo-source pre {
+  margin-top: 0.75rem;
+}
+
+/* ---------- params / compare tables ---------- */
+
+.table-scroll {
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+table.params-table,
+table.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+table.params-table th,
+table.params-table td,
+table.compare-table th,
+table.compare-table td {
+  border: 1px solid var(--color-background-border, #ddd);
+  padding: 0.4rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+table.params-table th,
+table.compare-table th {
+  background: var(--color-background-secondary, #f2f2f2);
+  white-space: nowrap;
+}
+
+table.params-table td:first-child {
+  white-space: nowrap;
+}
+
+/* ---------- inheritance chain ---------- */
+
+.inheritance-chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 1rem 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.5rem;
+  background: var(--color-background-secondary, #f5f5f5);
+  font-size: 0.9rem;
+}
+
+.ic-node {
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--color-background-border, #ccc);
+  border-radius: 0.4rem;
+  background: var(--color-background-primary, #fff);
+  font-family: var(--font-stack--monospace, monospace);
+  font-size: 0.85rem;
+}
+
+.ic-arrow {
+  color: var(--color-foreground-secondary, #888);
+}
+
+/* ---------- custom notices ---------- */
+
+.admonition.notice-version {
+  border-color: #14a38b;
+}
+
+.admonition.notice-version > .admonition-title {
+  background: rgba(20, 163, 139, 0.12);
+}
+
+.admonition.notice-version > .admonition-title::before {
+  content: "ℹ️";
+}
+
+.admonition.notice-deprecated {
+  border-color: #d0383e;
+}
+
+.admonition.notice-deprecated > .admonition-title {
+  background: rgba(208, 56, 62, 0.12);
+}
+
+.admonition.notice-deprecated > .admonition-title::before {
+  content: "🗑️";
+}
+
+/* ---------- home progress card ---------- */
+
+.mce-progress-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin: 1.25rem 0;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--color-background-border, #e0e0e0);
+  border-radius: 0.75rem;
+  background: var(--color-background-secondary, #f7f7f7);
+}
+
+.mce-progress-label {
+  font-weight: 600;
+  min-width: 14rem;
+}
+
+.mce-progress-track {
+  flex: 1;
+  min-width: 10rem;
+  height: 0.6rem;
+  border-radius: 999px;
+  background: var(--color-background-item, #e4e4e4);
+  overflow: hidden;
+}
+
+.mce-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-brand-primary, #5b64d6);
+  transition: width 0.4s ease;
+}
+
+/* ---------- restore toast ---------- */
+
+.mce-restore-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 0.6rem;
+  background: var(--color-background-primary, #fff);
+  border: 1px solid var(--color-background-border, #ddd);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+  font-size: 0.9rem;
+}
+
+.mce-toast-btn {
+  border: none;
+  border-radius: 0.45rem;
+  padding: 0.3rem 0.8rem;
+  background: var(--color-brand-primary, #5b64d6);
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.mce-toast-btn:hover {
+  filter: brightness(1.08);
+}
+
+/* ---------- inheritance graph ---------- */
+
+.inheritance-graph {
+  margin: 1rem 0;
+}
+
+.graph-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.graph-filter {
+  flex: 1;
+  min-width: 10rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--color-background-border, #ccc);
+  border-radius: 0.5rem;
+  background: var(--color-background-primary, #fff);
+  color: var(--color-foreground-primary, #1a1a1a);
+}
+
+.graph-btn {
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--color-background-border, #ccc);
+  border-radius: 0.5rem;
+  background: var(--color-background-secondary, #f2f2f2);
+  color: var(--color-foreground-primary, #1a1a1a);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.graph-container {
+  overflow-x: auto;
+  border: 1px solid var(--color-background-border, #ddd);
+  border-radius: 0.75rem;
+  background: var(--color-background-primary, #fff);
+  padding: 0.5rem;
+}
+
+.graph-container .graphviz-svg {
+  width: auto;
+  height: auto;
+  max-width: none;
+  display: block;
+}
+
+.state-box {
+  margin: 0.5rem;
+  color: var(--color-foreground-secondary, #777);
+  font-size: 0.9rem;
+}
+
+/* graphviz dark-theme adaptation (inline DOT attributes are light-themed) */
+[data-theme="dark"] .graph-container g.node path {
+  fill: #1b2027 !important;
+  stroke: #39414d !important;
+  stroke-width: 1.2;
+}
+
+[data-theme="dark"] .graph-container g.node text {
+  fill: #dfe4ea !important;
+}
+
+[data-theme="dark"] .graph-container g.edge path {
+  stroke: #4a5260 !important;
+}
+
+[data-theme="dark"] .graph-container g.edge polygon {
+  fill: #4a5260 !important;
+  stroke: #4a5260 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  body:not([data-theme="light"]) .graph-container g.node path {
+    fill: #1b2027 !important;
+    stroke: #39414d !important;
+  }
+  body:not([data-theme="light"]) .graph-container g.node text {
+    fill: #dfe4ea !important;
+  }
+  body:not([data-theme="light"]) .graph-container g.edge path,
+  body:not([data-theme="light"]) .graph-container g.edge polygon {
+    stroke: #4a5260 !important;
+    fill: #4a5260 !important;
+  }
+}
+
+/* avoid a horizontal scrollbar from the toast transform on small screens */
+@media (max-width: 480px) {
+  .mce-restore-toast {
+    width: calc(100% - 2rem);
+    justify-content: space-between;
+  }
+}
