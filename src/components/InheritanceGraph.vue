@@ -103,7 +103,7 @@ const NS = 'http://www.w3.org/2000/svg'
 
 function decorate(svg: SVGSVGElement) {
   svg.classList.add('graphviz-svg')
-  for (const g of Array.from(svg.querySelectorAll('g.node'))) {
+  for (const g of Array.from(svg.querySelectorAll<SVGGElement>('g.node'))) {
     const title = g.querySelector('title')
     const name = title?.textContent ?? ''
     if (!name) continue
@@ -122,7 +122,7 @@ function decorate(svg: SVGSVGElement) {
     }
     if (!hasChildren(name)) continue
     // fold toggle badge at the node's top-right corner
-    const shape = g.querySelector(':scope > path')
+    const shape = g.querySelector<SVGPathElement>(':scope > path')
     let bx = 0
     let by = 0
     if (shape) {
@@ -158,7 +158,7 @@ function decorate(svg: SVGSVGElement) {
     g.appendChild(badge)
   }
   // dim edges whose endpoints are dimmed
-  for (const e of Array.from(svg.querySelectorAll('g.edge'))) {
+  for (const e of Array.from(svg.querySelectorAll<SVGGElement>('g.edge'))) {
     const t = e.querySelector('title')?.textContent ?? '' // "child -> parent"
     const [child, parent] = t.split('->').map((s) => s.trim())
     if (dimmed.value.has(child) || dimmed.value.has(parent)) e.style.opacity = '0.25'
