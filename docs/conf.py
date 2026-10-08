@@ -19,12 +19,16 @@ extensions = [
     "sphinx_design",
     "sphinx_copybutton",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.graphviz",
     "manim_tutorial",
 ]
 
 intersphinx_mapping = {
     "manim": ("https://docs.manim.community/en/v0.21.0/", None),
 }
+
+# Render {graphviz} diagrams as inline SVG (clickable node links work).
+graphviz_output_format = "svg"
 
 source_suffix = {".md": "markdown"}
 root_doc = "index"

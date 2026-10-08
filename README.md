@@ -20,8 +20,9 @@ Manim Community Edition v0.21.0 的完整中文交互式教程站：
 │   ├── inheritance.json      #   继承图数据
 ├── docs/                     # Sphinx 站点
 │   ├── conf.py               #   Sphinx 配置（Furo 主题、MyST、扩展）
-│   ├── _ext/manim_tutorial.py  # 自定义指令：demo/params/compare/inheritance 等
-│   ├── _static/              #   custom.css / custom.js / vendor/viz.js
+│   ├── _ext/manim_tutorial.py  # 仅剩两个自定义指令：demo（构建时注入示例源码）、
+│   │                           #   manimsig（inspect 生成签名行）；其余全走原生 MyST/Sphinx
+│   ├── _static/              #   custom.css / custom.js（进度记忆等交互）
 │   ├── requirements.txt      #   站点构建依赖（与渲染依赖分离，避免缓存失效）
 │   └── chapters/ …           #   MyST 源（scripts/build_docs.py 生成，勿手改）
 ├── examples/                 # 示例场景源码（一文件一场景）
@@ -43,7 +44,8 @@ Manim Community Edition v0.21.0 的完整中文交互式教程站：
 
 - Python 3.10+（CI 使用 3.12）
 - 站点构建依赖：`pip install -r docs/requirements.txt`（Sphinx、Furo、MyST、sphinx-design）
-- 可选：安装 `manim==0.21.0`（`pip install -r requirements.txt`，渲染缓存哈希依赖该版本号）与 LaTeX——仅本地渲染示例视频时需要
+- **graphviz `dot`**：继承关系图与章节内继承链由原生 `{graphviz}` 指令在构建时渲染（Windows 装到 `C:\Program Files\Graphviz`，确认 `dot -V` 可用即可；CI 已用 apt 安装）
+- 可选：安装 `manim==0.21.0`（`pip install -r requirements.txt`，渲染缓存哈希依赖该版本号）与 LaTeX——仅本地渲染示例视频、或让 `{manimsig}` 生成真实签名行时需要
 
 **构建与预览**（Windows 用 `py -3`，macOS/Linux 用 `python3`）
 
@@ -112,7 +114,7 @@ py -3 scripts/render_examples.py --media-dir media --dry-run
 `.github/workflows/build.yml`（触发：`push` 到 `main` 或手动 `workflow_dispatch`，并发串行）：
 
 1. 检出 `main`，并检出 `media` 分支到 `media/` 作为渲染缓存（不存在则首次全量渲染）；
-2. 安装系统依赖（ffmpeg、pango、cairo、完整 TeX Live）与 `requirements.txt`；
+2. 安装系统依赖（ffmpeg、pango、cairo、完整 TeX Live、graphviz）与 `requirements.txt`；
 3. `render_examples.py` 增量渲染，渲染摘要（复用/新渲/失败清单）写入 Job Summary；
 4. 将 `media/` 提交回推 `media` 分支（推送被拒时自动 rebase 重试一次）——**视频不进入 main，缓存与历史留在 media 分支**；
 5. 安装 `docs/requirements.txt`，`build_docs.py` 生成 MyST 源（缺 covers 即失败），`sphinx-build` 构建静态站到 `docs/_build/html/`；

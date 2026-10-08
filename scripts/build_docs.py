@@ -3,21 +3,24 @@
 
 Reads the same content dialect as build_content.py (:::demo / :::params /
 :::compare / :::notice / :::exercise / :::inheritance) and rewrites it into
-MyST + the custom directives provided by docs/_ext/manim_tutorial.py:
+plain MyST / native Sphinx directives wherever possible:
 
-  :::demo    -> ```{demo} <example> <Scene>```
-  :::params  -> ```{params}```   (pipe table kept as directive content)
-  :::compare -> ```{compare}```
-  :::notice warning|tip        -> ```{warning} / {tip}```
+  :::demo    -> ```{demo} <example> <Scene>```   (custom: build-time source
+                injection + video lookup; no native equivalent)
+  :::params  -> native pipe table in a {container} table-scroll
+  :::compare -> native pipe table in a {container} table-scroll
+  :::notice warning|tip        -> ```{admonition}``` with class warning/tip
   :::notice version|deprecated -> ```{admonition}``` with a custom class
   :::exercise / :::answer      -> nested sphinx-design ```{dropdown}```
-  :::inheritance               -> ```{inheritance}```
+  :::inheritance               -> native ```{graphviz}``` left-to-right chain
 
-Level-2 headings matching the section's `covers` entries get an explicit
-MyST target ``(CoverName)=`` above them so API links have stable anchors.
+Level-2 headings matching the section's `covers` entries are followed by a
+```{manimsig} <Cover>``` block (auto signature from the installed manim,
+skipped for names manim does not export).
 
 Also generates docs/index.md, docs/api-index.md, docs/glossary.md,
-docs/inheritance-graph.md and docs/_extra/_redirects (old-route redirects).
+docs/inheritance-graph.md (full graph as native {graphviz} DOT with links)
+and docs/_extra/_redirects (old-route redirects).
 """
 
 from __future__ import annotations
@@ -113,9 +116,13 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
             if kind in ("params", "compare"):
                 body, i = collect_until_close(lines, i + 1)
                 blank()
-                out.append(f"```{{{kind}}}")
+                # Native MyST pipe table inside a styled container; cells keep
+                # their markdown (code spans, \| escapes handled by MyST).
+                out.append(":::{container} table-scroll")
+                out.append("")
                 out.extend(body)
-                out.append("```")
+                out.append("")
+                out.append(":::")
                 blank()
                 continue
             if kind == "demo":
@@ -156,9 +163,23 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                 continue
             if kind == "inheritance":
                 body, i = collect_until_close(lines, i + 1)
+                chain: list[str] = []
+                for bline in body:
+                    for piece in re.split(r"→|->", bline):
+                        piece = piece.strip()
+                        if piece:
+                            chain.append(piece)
                 blank()
-                out.append("```{inheritance}")
-                out.extend(body)
+                # Native graphviz diagram (small left-to-right chain).
+                out.append("```{graphviz}")
+                out.append("digraph G {")
+                out.append('  graph [rankdir=LR, bgcolor="transparent", nodesep="0.25", ranksep="0.35"];')
+                out.append('  node  [shape=box, style="rounded,filled", fontname="Helvetica,sans-serif", fontsize=11, height=0.3, color="#8b93a1", fillcolor="#f2f4f7", fontcolor="#1f2733"];')
+                out.append('  edge  [color="#a6adba", arrowsize=0.6, penwidth=1.1];')
+                for idx, name in enumerate(chain):
+                    if idx:
+                        out.append(f'  "{chain[idx-1]}" -> "{name}";')
+                out.append("}")
                 out.append("```")
                 blank()
                 continue
@@ -299,20 +320,33 @@ OLD_LINK_RE = re.compile(r"^/ch/([a-z0-9]+)/([a-z0-9-]+)#(.+)$")
 
 def build_inheritance_graph_page(inheritance: dict) -> str:
     nodes = inheritance.get("nodes", [])
+    dot_lines = [
+        "digraph G {",
+        '  graph [rankdir=LR, bgcolor="transparent", nodesep="0.3", ranksep="0.6", splines=spline];',
+        '  node  [shape=box, style="rounded,filled", fontname="Helvetica,sans-serif", fontsize=11, height=0.34, color="#8b93a1", fillcolor="#f2f4f7", fontcolor="#1f2733"];',
+        '  edge  [color="#a6adba", arrowsize=0.6, penwidth=1.1];',
+    ]
     for n in nodes:
-        m = OLD_LINK_RE.match(n.get("link") or "")
+        name = n["name"]
+        label = name if len(name) <= 22 else name[:21] + "…"
+        link = n.get("link") or ""
+        m = OLD_LINK_RE.match(link)
         if m:
             part, sec, anchor = m.groups()
-            n["link"] = f"/chapters/{part}/{sec}.html#{anchor.lower()}"
-    data = json.dumps(nodes, ensure_ascii=False)
+            link = f"/chapters/{part}/{sec}.html#{anchor.lower()}"
+        url = f', URL="{link}"' if link else ""
+        dot_lines.append(f'  "{name}" [label="{label}"{url}];')
+    for n in nodes:
+        if n.get("parent"):
+            dot_lines.append(f'  "{n["name"]}" -> "{n["parent"]}";')
+    dot_lines.append("}")
     L = [
         "# 继承关系图",
         "",
-        "教程涉及的核心类继承全景图。节点可点击跳转到对应章节；"
-        "带 `+` 角标的节点可以折叠/展开其子树。",
+        "教程涉及的核心类继承全景图，节点可点击跳转到对应章节。",
         "",
-        "```{inheritance-graph}",
-        f":nodes: {data}",
+        "```{graphviz}",
+        *dot_lines,
         "```",
         "",
     ]

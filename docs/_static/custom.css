@@ -61,84 +61,19 @@
   margin-top: 0.75rem;
 }
 
-/* ---------- params / compare tables ---------- */
+/* ---------- tables ---------- */
 
 .table-scroll {
   overflow-x: auto;
   margin: 1rem 0;
 }
 
-table.params-table,
-table.compare-table {
+.table-scroll table {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 0.88rem;
 }
 
-table.params-table th,
-table.params-table td,
-table.compare-table th,
-table.compare-table td {
-  border: 1px solid var(--color-background-border, #ddd);
-  padding: 0.4rem 0.7rem;
-  text-align: left;
-  vertical-align: top;
-}
-
-table.params-table th,
-table.compare-table th {
-  background: var(--color-background-secondary, #f2f2f2);
+.table-scroll td:first-child code {
   white-space: nowrap;
-}
-
-table.params-table td:first-child {
-  white-space: nowrap;
-}
-
-/* ---------- inheritance chain ---------- */
-
-.inheritance-chain {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35rem;
-  margin: 1rem 0;
-  padding: 0.6rem 0.8rem;
-  border-radius: 0.5rem;
-  background: var(--color-background-secondary, #f5f5f5);
-  font-size: 0.9rem;
-}
-
-.ic-node {
-  padding: 0.15rem 0.55rem;
-  border: 1px solid var(--color-background-border, #ccc);
-  border-radius: 0.4rem;
-  background: var(--color-background-primary, #fff);
-  font-family: var(--font-stack--monospace, monospace);
-  font-size: 0.85rem;
-}
-
-.ic-arrow {
-  color: var(--color-foreground-secondary, #888);
-}
-
-/* ---------- manimsig (auto signature line) ---------- */
-
-.manim-sig {
-  margin: -0.4rem 0 0.9rem;
-  font-size: 0.85rem;
-  color: var(--color-foreground-secondary, #666);
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-.manim-sig code {
-  font-size: 0.82rem;
-}
-
-a.manim-sig-link {
-  white-space: nowrap;
-  font-size: 0.8rem;
 }
 
 /* ---------- custom notices ---------- */
@@ -235,93 +170,22 @@ a.manim-sig-link {
   filter: brightness(1.08);
 }
 
-/* ---------- inheritance graph ---------- */
+/* ---------- graphviz (native sphinx.ext.graphviz SVG) ---------- */
 
-.inheritance-graph {
+/* The SVG is light-themed and embedded via <object>, so it cannot follow
+   the page theme: give it a fixed light card in both modes. */
+.graphviz {
   margin: 1rem 0;
-}
-
-.graph-toolbar {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.graph-filter {
-  flex: 1;
-  min-width: 10rem;
-  padding: 0.35rem 0.6rem;
-  border: 1px solid var(--color-background-border, #ccc);
-  border-radius: 0.5rem;
-  background: var(--color-background-primary, #fff);
-  color: var(--color-foreground-primary, #1a1a1a);
-}
-
-.graph-btn {
-  padding: 0.35rem 0.8rem;
-  border: 1px solid var(--color-background-border, #ccc);
-  border-radius: 0.5rem;
-  background: var(--color-background-secondary, #f2f2f2);
-  color: var(--color-foreground-primary, #1a1a1a);
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-.graph-container {
   overflow-x: auto;
   border: 1px solid var(--color-background-border, #ddd);
   border-radius: 0.75rem;
-  background: var(--color-background-primary, #fff);
+  background: #ffffff;
   padding: 0.5rem;
 }
 
-.graph-container .graphviz-svg {
-  width: auto;
-  height: auto;
-  max-width: none;
+.graphviz > object {
   display: block;
-}
-
-.state-box {
-  margin: 0.5rem;
-  color: var(--color-foreground-secondary, #777);
-  font-size: 0.9rem;
-}
-
-/* graphviz dark-theme adaptation (inline DOT attributes are light-themed) */
-[data-theme="dark"] .graph-container g.node path {
-  fill: #1b2027 !important;
-  stroke: #39414d !important;
-  stroke-width: 1.2;
-}
-
-[data-theme="dark"] .graph-container g.node text {
-  fill: #dfe4ea !important;
-}
-
-[data-theme="dark"] .graph-container g.edge path {
-  stroke: #4a5260 !important;
-}
-
-[data-theme="dark"] .graph-container g.edge polygon {
-  fill: #4a5260 !important;
-  stroke: #4a5260 !important;
-}
-
-@media (prefers-color-scheme: dark) {
-  body:not([data-theme="light"]) .graph-container g.node path {
-    fill: #1b2027 !important;
-    stroke: #39414d !important;
-  }
-  body:not([data-theme="light"]) .graph-container g.node text {
-    fill: #dfe4ea !important;
-  }
-  body:not([data-theme="light"]) .graph-container g.edge path,
-  body:not([data-theme="light"]) .graph-container g.edge polygon {
-    stroke: #4a5260 !important;
-    fill: #4a5260 !important;
-  }
+  max-width: none;
 }
 
 /* avoid a horizontal scrollbar from the toast transform on small screens */

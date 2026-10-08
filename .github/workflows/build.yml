@@ -50,6 +50,9 @@ jobs:
           # action (which also adds texlive-latex-extra + dev headers).
           install-full-deps: "true"
 
+      - name: Install graphviz (native {graphviz} diagrams)
+        run: sudo apt-get update && sudo apt-get install -y graphviz
+
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
