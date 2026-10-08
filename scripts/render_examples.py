@@ -108,14 +108,21 @@ def render_one(
         mp4s = sorted(tmp.rglob(f"{scene}.mp4"))
         if not mp4s:
             mp4s = sorted(tmp.rglob("*.mp4"))
-        if proc.returncode != 0:
-            tail = "\n".join((proc.stderr or "").splitlines()[-ERROR_TAIL_LINES:])
+        if proc.returncode != 0 or not mp4s:
+            # manim logs the *cause* (e.g. print_all_tex_errors output) to
+            # stdout, and the rich traceback to stderr — keep both, with the
+            # LaTeX "! ..." error lines pulled in when present.
+            out = (proc.stdout or "").splitlines()
+            err = (proc.stderr or "").splitlines()
+            tex_errors = [l for l in out if l.startswith("!")]
+            tail = "\n".join(err[-ERROR_TAIL_LINES:])
+            if tex_errors:
+                tail = "\n".join(tex_errors[-15:]) + "\n---\n" + tail
+            if not mp4s:
+                tail = (tail or "no mp4 produced").strip() or "no mp4 produced"
             entry = {"sha256": digest, "status": "failed", "scene": scene, "error": tail}
-            return key, entry, f"manim exited {proc.returncode}"
-        if not mp4s:
-            tail = "\n".join((proc.stderr or "").splitlines()[-ERROR_TAIL_LINES:])
-            entry = {"sha256": digest, "status": "failed", "scene": scene,
-                     "error": (tail or "no mp4 produced").strip() or "no mp4 produced"}
+            if proc.returncode != 0:
+                return key, entry, f"manim exited {proc.returncode}"
             return key, entry, "no mp4 produced"
 
         dest = media_dir / f"{key}__{scene}.mp4"

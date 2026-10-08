@@ -6,6 +6,7 @@ import CodeBlock from './CodeBlock.vue'
 const props = defineProps<{ demo: DemoBlockData }>()
 
 const videoEl = ref<HTMLVideoElement | null>(null)
+const areaEl = ref<HTMLDivElement | null>(null)
 const shouldLoad = ref(false)
 const baseUrl = import.meta.env.BASE_URL
 let observer: IntersectionObserver | null = null
@@ -24,9 +25,11 @@ function onIntersect(entries: IntersectionObserverEntry[]) {
 }
 
 onMounted(() => {
-  if (props.demo.video && videoEl.value) {
+  // Observe the container, not the video: the <video> starts display:none
+  // (v-show) and a hidden target never reports intersecting — deadlock.
+  if (props.demo.video && areaEl.value) {
     observer = new IntersectionObserver(onIntersect, { rootMargin: '600px' })
-    observer.observe(videoEl.value)
+    observer.observe(areaEl.value)
   }
 })
 
@@ -49,7 +52,7 @@ async function copyCode() {
 
 <template>
   <div class="card demo-player">
-    <div class="demo-video-area">
+    <div ref="areaEl" class="demo-video-area">
       <template v-if="demo.video">
         <video
           v-show="shouldLoad"
