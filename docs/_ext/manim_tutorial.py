@@ -7,20 +7,65 @@
 - {inheritance}: `A → B → C` chain rendered as styled breadcrumbs.
 - {inheritance-graph}: full interactive Graphviz graph (data embedded as JSON,
   rendered client-side with viz.js by _static/custom.js).
+- {manimsig} <Name>: auto-generated signature line for a public manim API
+  (inspected from the installed manim package) plus a link to the official
+  v0.21.0 docs via intersphinx. Emits nothing for names not exported by
+  manim (methods, CLI flags, IPython magics, ...).
 """
 
 from __future__ import annotations
 
 import html
+import inspect
 import json
 import re
 from pathlib import Path
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
+from sphinx import addnodes
 from sphinx.util import logging
 
 logger = logging.getLogger(__name__)
+
+_MANIM_NS: dict | None = None
+
+
+def _manim():
+    """Import manim once per build (lazy so table-only builds stay fast)."""
+    global _MANIM_NS
+    if _MANIM_NS is None:
+        try:
+            import manim
+        except Exception as err:  # noqa: BLE001 - manim optional at build time
+            logger.warning(f"manimsig: manim not importable ({err}); skipping all")
+            _MANIM_NS = {}
+        else:
+            _MANIM_NS = vars(manim)
+    return _MANIM_NS
+
+
+def _fmt_default(value: object) -> str:
+    text = repr(value)
+    return text if len(text) <= 24 else text[:21] + "…"
+
+
+def _signature_text(name: str, obj: object) -> str | None:
+    try:
+        sig = inspect.signature(obj)
+    except (TypeError, ValueError):
+        return None
+    parts: list[str] = []
+    for p in sig.parameters.values():
+        if p.kind is p.VAR_POSITIONAL:
+            parts.append("*" + p.name)
+        elif p.kind is p.VAR_KEYWORD:
+            parts.append("**" + p.name)
+        elif p.default is not p.empty:
+            parts.append(f"{p.name}={_fmt_default(p.default)}")
+        else:
+            parts.append(p.name)
+    return f"{name}({', '.join(parts)})"
 
 
 def split_row(s: str) -> list[str]:
@@ -228,6 +273,42 @@ class InheritanceGraphDirective(Directive):
         return [nodes.raw("", raw, format="html")]
 
 
+class ManimSigDirective(Directive):
+    """```{manimsig} NumberLine
+
+    Auto signature line for a public manim API + link to the official docs.
+    Silently skipped when manim is not importable or the name is not a
+    top-level manim export (methods, CLI flags, IPython magics, ...).
+    """
+    required_arguments = 1
+    optional_arguments = 0
+    has_content = False
+
+    def run(self):
+        name = self.arguments[0]
+        obj = _manim().get(name)
+        if obj is None:
+            return []
+        sig_text = _signature_text(name, obj)
+        if sig_text is None:
+            return []
+        kind = "class" if inspect.isclass(obj) else "function"
+        fullname = f"{obj.__module__}.{obj.__qualname__}"
+        para = nodes.paragraph(classes=["manim-sig"])
+        para.append(nodes.literal(sig_text, sig_text))
+        xref = addnodes.pending_xref(
+            "",
+            nodes.inline("", "官方文档 ↗"),
+            refdomain="py",
+            reftype=kind,
+            reftarget=fullname,
+        )
+        xref["classes"] = ["manim-sig-link"]
+        para.append(nodes.Text(" "))
+        para.append(xref)
+        return [para]
+
+
 def setup(app):
     app.add_config_value("manim_examples_dir", "examples", "env")
     app.add_config_value("manim_media_dir", "media", "env")
@@ -237,4 +318,5 @@ def setup(app):
     app.add_directive("compare", CompareDirective)
     app.add_directive("inheritance", InheritanceDirective)
     app.add_directive("inheritance-graph", InheritanceGraphDirective)
-    return {"version": "1.0", "parallel_read_safe": True}
+    app.add_directive("manimsig", ManimSigDirective)
+    return {"version": "1.0", "parallel_read_safe": False}

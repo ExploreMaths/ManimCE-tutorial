@@ -178,9 +178,14 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                         # pin an explicit target with the exact id.
                         blank()
                         out.append(f"({stripped})=")
-            out.append(line)
-            i += 1
-            continue
+                    out.append(line)
+                    # auto-generated signature line (skipped by the directive
+                    # for names manim does not export: methods, flags, ...).
+                    out.append("")
+                    out.append(f"```{{manimsig}} {stripped}")
+                    out.append("```")
+                    i += 1
+                    continue
         out.append(line)
         i += 1
 

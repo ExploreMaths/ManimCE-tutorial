@@ -18,8 +18,13 @@ extensions = [
     "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
+    "sphinx.ext.intersphinx",
     "manim_tutorial",
 ]
+
+intersphinx_mapping = {
+    "manim": ("https://docs.manim.community/en/v0.21.0/", None),
+}
 
 source_suffix = {".md": "markdown"}
 root_doc = "index"

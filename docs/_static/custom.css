@@ -122,6 +122,25 @@ table.params-table td:first-child {
   color: var(--color-foreground-secondary, #888);
 }
 
+/* ---------- manimsig (auto signature line) ---------- */
+
+.manim-sig {
+  margin: -0.4rem 0 0.9rem;
+  font-size: 0.85rem;
+  color: var(--color-foreground-secondary, #666);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.manim-sig code {
+  font-size: 0.82rem;
+}
+
+a.manim-sig-link {
+  white-space: nowrap;
+  font-size: 0.8rem;
+}
+
 /* ---------- custom notices ---------- */
 
 .admonition.notice-version {
