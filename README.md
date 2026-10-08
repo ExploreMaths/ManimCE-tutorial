@@ -29,13 +29,11 @@ Manim Community Edition v0.21.0 的完整中文交互式教程站：
 │   └── _shared/              #   共享辅助代码（渲染时跳过）
 ├── scripts/
 │   ├── build_docs.py         #   章节 Markdown → docs/ MyST + 首页/API 索引/术语表/重定向
-│   ├── build_content.py      #   （旧 Vue 站）Markdown → public/data/*.json
 │   ├── render_examples.py    #   增量渲染 examples/ → media/*.mp4
 │   └── merge_media.py        #   media/ → 构建输出/media/（部署前合并）
-├── src/                      # 旧 Vue 3 前端（已被 Sphinx 站点取代，待清理）
 ├── .github/workflows/build.yml  # CI：增量渲染 + Sphinx 构建 + 部署 Cloudflare Pages
-├── media/                    # 渲染产物（gitignore，由 CI 生成/缓存）
-└── dist/                     # 旧前端构建产物（gitignore，已弃用）
+├── media/                    # 渲染产物（gitignore，由 CI 生成/缓存在 media 分支）
+└── requirements.txt          # 渲染依赖（manim 0.21.0 锁版本，缓存哈希依赖它）
 ```
 
 ## 本地开发

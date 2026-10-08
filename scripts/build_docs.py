@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Convert content/chapters markdown into MyST sources under docs/.
 
-Reads the same content dialect as build_content.py (:::demo / :::params /
+Reads the chapter content dialect (:::demo / :::params /
 :::compare / :::notice / :::exercise / :::inheritance) and rewrites it into
 plain MyST / native Sphinx directives wherever possible:
 

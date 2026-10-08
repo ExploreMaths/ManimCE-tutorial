@@ -1,13 +1,10 @@
 node_modules/
-dist/
 .venv/
 media/
 __pycache__/
 *.pyc
 .DS_Store
 .env
-# 内容数据是构建产物（build_content.py 生成到 public/data，勿提交）
-/public/data/
 
 # Sphinx 站点：MyST 源文件由 scripts/build_docs.py 生成，构建输出不入库
 /docs/_build/
