@@ -16,3 +16,5 @@ __pycache__/
 /docs/source/inheritance-graph.rst
 _shots/
 /docs/source/_inv/
+dist/
+public/data/

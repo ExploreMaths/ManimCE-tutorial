@@ -176,7 +176,6 @@ jobs:
         uses: ExploreMaths/manim-doc-checks@v1
         with:
           checks: rst, layout, refs
-        with:
           # This repo nests RST blocks with 3 spaces, not the upstream
           # 4-space convention, so that style check only yields noise here.
           skip-indent-check: "true"

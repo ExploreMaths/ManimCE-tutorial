@@ -10,7 +10,7 @@ class ParagraphDemo(Scene):
             "排列成一个整体对象",
             "支持逐行设置对齐",
             alignment="center",
-            font_size=32,
+            font_size=56,
         )
         self.play(FadeIn(para, shift=UP))
         self.play(para[2].animate.set_color(YELLOW))
