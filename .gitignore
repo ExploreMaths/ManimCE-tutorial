@@ -6,9 +6,8 @@ __pycache__/
 .DS_Store
 .env
 
-# Sphinx 站点：reST 源文件由 scripts/build_docs.py 生成，构建输出不入库
+# Sphinx 站点：构建输出与生成文件不入库；章节教程为手写 reST 源文件，入库
 /docs/build/
-/docs/source/chapters/
 /docs/source/api/
 /docs/source/_api_map.json
 /docs/source/index.rst

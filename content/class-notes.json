@@ -286,11 +286,11 @@
   "ex": "self.play(Write(text))"
  },
  "ArrowVectorField": {
-  "zh": "把向量场画成带箭头的网格：每个采样点一支方向箭头，随场强缩放，是微分方程可视化的主力。",
+  "zh": "用箭头逐点表示向量场的可视化对象，可整体流动。",
   "ex": "field = ArrowVectorField(lambda p: np.array([-p[1], p[0], 0]))\nself.add(field)"
  },
  "ComplexValueTracker": {
-  "zh": "追踪复数的 ValueTracker：set_value 传复数，get_value 返回 complex，实部虚部同步插值。",
+  "zh": "跟踪复数值的 ValueTracker，适合复平面旋转与相位动画。",
   "ex": "z = ComplexValueTracker(1 + 2j)\nz.set_value(3 - 1j)"
  },
  "DecimalMatrix": {
@@ -301,15 +301,15 @@
   "ex": "table = DecimalTable([[3.14, 2.71], [1.41, 1.73]])"
  },
  "DiGraph": {
-  "zh": "有向图对象：顶点 + 带箭头的边，支持自动布局与顶点/边样式定制。",
+  "zh": "有向图：顶点与边都是 mobject，边自动带箭头，可做状态机与流程动画。",
   "ex": "g = DiGraph([1, 2, 3], [(1, 2), (2, 3)])"
  },
  "FullScreenRectangle": {
-  "zh": "恰好铺满整个画面（含边距）的矩形，常作背景板或全屏遮罩。",
+  "zh": "恰好铺满画面的矩形，背景块与转场遮罩的首选。",
   "ex": "bg = FullScreenRectangle(fill_color=BLACK, fill_opacity=0.8)"
  },
  "Graph": {
-  "zh": "通用图论对象：无向图，自动布局（如 spring/circular），顶点标签、边粗细颜色全能调。",
+  "zh": "图论对象：顶点、边都是 mobject，支持 networkx 布局，可整体动画。",
   "ex": "g = Graph([1, 2, 3], [(1, 2), (2, 3), (3, 1)])"
  },
  "Group": {
@@ -323,7 +323,7 @@
   "zh": "整数单元格表格，适合计数类数据展示。"
  },
  "ManimBanner": {
-  "zh": "官方 Logo 动画横幅：自带展开、收拢等现成动画方法，适合视频片头片尾。",
+  "zh": "Manim 官方徽标组合，自带 create() 与 expand() 配套动画。",
   "ex": "banner = ManimBanner()\nself.play(banner.expand())"
  },
  "MathTable": {
@@ -345,11 +345,11 @@
   "ex": "t = MobjectTable([[dot, circle], [square, star]])"
  },
  "ScreenRectangle": {
-  "zh": "按 16:9 屏幕比例裁出的矩形，适合作画中画框或参考取景框。",
+  "zh": "长宽比等于屏幕（默认 16:9）的矩形，安全区与画框占位。",
   "ex": "frame = ScreenRectangle(height=3)"
  },
  "StreamLines": {
-  "zh": "沿向量场绘出流线族（积分曲线），比 ArrowVectorField 更能表现场的整体走势。",
+  "zh": "沿向量场积分出的流线，Create 播放即得流体动画。",
   "ex": "lines = StreamLines(lambda p: np.array([-p[1], p[0], 0]))"
  },
  "Table": {
@@ -361,7 +361,7 @@
   "ex": "vt = ValueTracker(0)\nnumber.add_updater(lambda d: d.set_value(vt.get_value()))\nself.play(vt.animate.set_value(10))"
  },
  "VectorField": {
-  "zh": "向量场基类：ArrowVectorField 与 StreamLines 的共同父类，负责采样与归一化逻辑。"
+  "zh": "向量场基类：采样网格 + 颜色映射 + nudge 漂移，可做流场动画。"
  },
  "CurvesAsSubmobjects": {
   "zh": "把多段曲线拆成独立子对象的 VMobject 容器，方便对每一段单独上色或动画。"
@@ -434,10 +434,10 @@
   "ex": "arc = ArcBetweenPoints(a.get_center(), b.get_center())"
  },
  "ArcPolygon": {
-  "zh": "边为圆弧的多边形：顶点之间用弧连接而非直线，呈现「鼓包」轮廓。"
+  "zh": "顶点间以圆弧连接的“圆角多边形”，angle 控制弯曲程度。"
  },
  "ArcPolygonFromArcs": {
-  "zh": "用现成 Arc 对象拼成多边形，边完全由你给的弧决定。"
+  "zh": "直接由 Arc/ArcBetweenPoints 对象围成的封闭图形，逐段控制弧样式。"
  },
  "Arrow": {
   "zh": "带箭头的直线：start/end + 箭尖样式 buff 可调，是最常用的指向性图形。",
@@ -802,22 +802,22 @@
   "ex": "t = Torus(major_radius=2, minor_radius=0.5)"
  },
  "DotCloud": {
-  "zh": "大量点组成的点云：PMobject 的高效批量渲染版，可视化散点/粒子。"
+  "zh": "OpenGL 点云基类，GL 点图元整体绘制，需 OpenGL 渲染器。"
  },
  "OpenGLPGroup": {
-  "zh": "OpenGL 渲染下 PMobject 的分组容器（实验性）。"
+  "zh": "多个 OpenGLPMobject 的组合容器，需 OpenGL 渲染器。"
  },
  "OpenGLPMPoint": {
-  "zh": "OpenGL 渲染下的单点对象（实验性）。"
+  "zh": "单个 GL 点对象，需 OpenGL 渲染器。"
  },
  "OpenGLPMobject": {
-  "zh": "OpenGL 渲染管线的点集基类（实验性），与 cairo 版的 PMobject 平行。"
+  "zh": "OpenGL 点集对象基类，stroke_width 控制点尺寸。"
  },
  "TrueDot": {
-  "zh": "严格按点渲染的 Dot：无最小尺寸限制，配合 DotCloud 做精确散点。"
+  "zh": "OpenGL 标准圆点，任意半径无棱角，需 OpenGL 渲染器。"
  },
  "BackgroundColoredVMobjectDisplayer": {
-  "zh": "把 VMobject 按背景色反色显示的辅助相机组件，内部机制居多。"
+  "zh": "Camera 内部辅助类，负责背景色描边/填充 VMobject 的绘制顺序。"
  },
  "Camera": {
   "zh": "相机基类：管理画面帧、像素坐标与 Mobject 的投影，所有渲染都从它开始。",
@@ -839,7 +839,7 @@
   "zh": "分屏相机：左右分屏显示两个画面，对比演示可用。"
  },
  "ThreeDCamera": {
-  "zh": "三维相机：管理 phi/theta/gamma 视角参数与三维投影，ThreeDScene 的渲染核心。",
+  "zh": "三维相机：phi/theta/gamma 球坐标视角、焦距与光照控制。",
   "ex": "self.set_camera_orientation(phi=70 * DEGREES, theta=30 * DEGREES)"
  },
  "DefaultSectionType": {
@@ -877,7 +877,7 @@
   "zh": "局部放大场景：自带放大镜窗口，主画面 + 缩放插页同时呈现细节。"
  },
  "DictAsObject": {
-  "zh": "把字典包成属性访问的小工具类：d.key 替代 d[键]，配置读取更便捷。"
+  "zh": "把字典包装为属性可点访问的对象，ManimConfig 的嵌套配置视图。"
  },
  "HSV": {
   "zh": "HSV 颜色：色相/饱和度/明度三元组，做色轮、渐变等色彩动画用。"
@@ -903,15 +903,15 @@
   "zh": "常用 TexTemplate 的预置库：ctex、standalone 等开箱模板。"
  },
  "CairoRenderer": {
-  "zh": "Cairo 渲染器：默认的 2D 矢量光栅化后端，把 VMobject 画成帧。"
+  "zh": "默认渲染器：矢量光栅化为帧序列再编码，兼容性最好。"
  },
  "CapStyleType": {
-  "zh": "线帽样式枚举：butt/round/square，控制线段端点形状。"
+  "zh": "描边端点样式枚举：AUTO / ROUND / BUTT / SQUARE。"
  },
  "LineJointType": {
-  "zh": "线连接样式枚举：miter/round/bevel，控制折角处形状。"
+  "zh": "描边拐角样式枚举：AUTO / ROUND / BEVEL / MITER。"
  },
  "RendererType": {
-  "zh": "渲染器类型枚举：选择 cairo 或 OpenGL 渲染后端。"
+  "zh": "渲染器枚举：CAIRO（默认）/ OPENGL。"
  }
 }
