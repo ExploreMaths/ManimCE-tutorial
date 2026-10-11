@@ -1,0 +1,917 @@
+{
+ "Add": {
+  "zh": "把 Mobject 加入场景播放序列的动画：与其他动画组合时控制「何时真正把对象放上来」，常与 Succession 搭配精排时序。",
+  "ex": "self.play(Add(dot))"
+ },
+ "AddTextLetterByLetter": {
+  "zh": "让 Text 逐字母浮现，每个字母带微小放大效果，模拟打字机输入，可设置每字符耗时。",
+  "ex": "self.play(AddTextLetterByLetter(text))"
+ },
+ "AddTextWordByWord": {
+  "zh": "让 Text 逐词浮现，按空格分词，适合字幕式进场。",
+  "ex": "self.play(AddTextWordByWord(text))"
+ },
+ "AnimatedBoundary": {
+  "zh": "围绕 VMobject 持续流动的虚线边界动画，常用于高亮某个对象「正在被讨论」。",
+  "ex": "self.add(AnimatedBoundary(circle))"
+ },
+ "Animation": {
+  "zh": "一切动画的基类。自定义动画时继承它并实现 interpolate()：给定 alpha（0 到 1）描述画面状态。",
+  "ex": "class Fade(Animation):\n    def interpolate(self, alpha):\n        self.mobject.set_opacity(alpha)"
+ },
+ "AnimationGroup": {
+  "zh": "把多个动画打包同时播放，可用 lag_ratio 让组内动画依次错开，是最常用的复合动画容器。",
+  "ex": "self.play(AnimationGroup(FadeIn(a), GrowFromCenter(b), lag_ratio=0.5))"
+ },
+ "ApplyComplexFunction": {
+  "zh": "把复变函数作用到每个点的复坐标上，适合做共形变换等复分析可视化。",
+  "ex": "self.play(ApplyComplexFunction(lambda z: z**2, plane))"
+ },
+ "ApplyFunction": {
+  "zh": "用任意函数逐点变形 Mobject：先复制再插值到新形状，直观展示函数对图形的变换效果。",
+  "ex": "self.play(ApplyFunction(lambda m: m.shift(UP), mob))"
+ },
+ "ApplyMatrix": {
+  "zh": "用 2×2 矩阵对平面做线性变换，传入 numpy 矩阵即可，线性代数课的标配。",
+  "ex": "self.play(ApplyMatrix([[1, 1], [0, 1]], square))"
+ },
+ "ApplyMethod": {
+  "zh": "把任意 Mobject 方法（如 shift、set_color）包装成动画播放，是 mobject.animate 语法的底层实现。",
+  "ex": "self.play(ApplyMethod(dot.shift, UP))"
+ },
+ "ApplyPointwiseFunction": {
+  "zh": "对曲线上每个点应用 R³ 向量函数，比 ApplyFunction 更底层，直接操作点集。",
+  "ex": "self.play(ApplyPointwiseFunction(lambda p: p + UP, line))"
+ },
+ "ApplyPointwiseFunctionToCenter": {
+  "zh": "以对象中心为原点应用逐点函数，避免整体平移，适合「原地扭曲」效果。"
+ },
+ "ApplyWave": {
+  "zh": "让 VMobject 产生沿路径传播的波浪形变，给静态曲线注入流动感。",
+  "ex": "self.play(ApplyWave(sine_curve))"
+ },
+ "Blink": {
+  "zh": "让 Mobject 快速闪现再恢复，模拟眨眼或提示性闪烁。",
+  "ex": "self.play(Blink(dot))"
+ },
+ "Broadcast": {
+  "zh": "从中心向外扩散一圈圈涟漪的强调动画，类似水波或雷达扩散。",
+  "ex": "self.play(Broadcast(dot))"
+ },
+ "ChangeDecimalToValue": {
+  "zh": "把 DecimalNumber 从当前值滚动变化到目标值的动画，数字变动平滑自然。",
+  "ex": "self.play(ChangeDecimalToValue(number, 3.14))"
+ },
+ "ChangeSpeed": {
+  "zh": "包裹一个动画并动态改变其播放速度，speed_func 接收运行进度返回速度倍率。"
+ },
+ "ChangingDecimal": {
+  "zh": "持续变化的数字动画：每次显示当前 ValueTracker 的值，配合 updater 可做实时计数。",
+  "ex": "number.add_updater(lambda d: d.set_value(tracker.get_value()))"
+ },
+ "Circumscribe": {
+  "zh": "在 Mobject 周围画一个强调框（矩形或圆角），默认黄色，用于「注意这里」。",
+  "ex": "self.play(Circumscribe(formula))"
+ },
+ "ClockwiseTransform": {
+  "zh": "ReplacementTransform 的顺时针变体：路径按顺时针方向插值，适合旋转感的形态变化。"
+ },
+ "ComplexHomotopy": {
+  "zh": "复同伦动画：随 t 从 0 到 1 把复平面连续变形，复分析可视化的利器。"
+ },
+ "CounterclockwiseTransform": {
+  "zh": "ReplacementTransform 的逆时针变体，与 ClockwiseTransform 对应。"
+ },
+ "Create": {
+  "zh": "沿路径绘出 VMobject 的「一笔画」动画，是 ShowPartial 的便捷封装。",
+  "ex": "self.play(Create(circle))"
+ },
+ "CyclicReplace": {
+  "zh": "把一组 Mobject 沿环置换：A 移到 B 的位置、B 移到 C……最后回到 A，可循环往复。",
+  "ex": "self.play(CyclicReplace(a, b, c))"
+ },
+ "DrawBorderThenFill": {
+  "zh": "先描边再填充的两段式入场动画，兼具 Create 和 FadeIn 的效果，适合大面积图形。",
+  "ex": "self.play(DrawBorderThenFill(polygon))"
+ },
+ "FadeIn": {
+  "zh": "淡入动画。可指定 shift、scale、target_position，让对象从某处「长」进画面，是最常用的入场方式。",
+  "ex": "self.play(FadeIn(mob, shift=UP))"
+ },
+ "FadeOut": {
+  "zh": "淡出动画，出场首选；常配合 target_position 让对象朝某个点消散。",
+  "ex": "self.play(FadeOut(mob))"
+ },
+ "FadeToColor": {
+  "zh": "平滑地把 Mobject 颜色过渡到目标色，set_color 的动画版。",
+  "ex": "self.play(FadeToColor(circle, RED))"
+ },
+ "FadeTransform": {
+  "zh": "把一个 Mobject 淡出、另一个淡入并占据其位置与样式，介于替换与交叉淡化之间。"
+ },
+ "FadeTransformPieces": {
+  "zh": "FadeTransform 的逐子对象版本：按子对象配对交叉淡化，适合家族整体换形。"
+ },
+ "Flash": {
+  "zh": "在点或 Mobject 上打出一圈闪光线条的强调动画，视觉焦点效果强。",
+  "ex": "self.play(Flash(point))"
+ },
+ "FocusOn": {
+  "zh": "暗化全屏、用光圈聚焦目标点的提示动画，讲解时引导视线。",
+  "ex": "self.play(FocusOn(dot))"
+ },
+ "GrowArrow": {
+  "zh": "让 Arrow 沿自身方向从头生长出来的动画。",
+  "ex": "self.play(GrowArrow(arrow))"
+ },
+ "GrowFromCenter": {
+  "zh": "从中心向外长大的入场动画，可用于任意 Mobject。",
+  "ex": "self.play(GrowFromCenter(square))"
+ },
+ "GrowFromEdge": {
+  "zh": "从指定边缘向对侧生长的入场动画。",
+  "ex": "self.play(GrowFromEdge(dot, LEFT))"
+ },
+ "GrowFromPoint": {
+  "zh": "从指定点向外长大的入场动画，配合 Flash 效果极佳。",
+  "ex": "self.play(GrowFromPoint(mob, origin))"
+ },
+ "Homotopy": {
+  "zh": "同伦动画：传入关于 (x, y, z, t) 的函数，把对象连续形变到目标姿态。",
+  "ex": "self.play(Homotopy(lambda x, y, z, t: (x, y + t, z), mob))"
+ },
+ "Indicate": {
+  "zh": "轻推一下目标对象（放大再回弹）的提示动画，比 Circumscribe 更含蓄。",
+  "ex": "self.play(Indicate(formula))"
+ },
+ "LaggedStart": {
+  "zh": "让一组动画按固定间隔依次启动，start_lag_ratio 控制节奏，是排队式动效的基石。",
+  "ex": "self.play(LaggedStart(*[FadeIn(m) for m in group]))"
+ },
+ "LaggedStartMap": {
+  "zh": "LaggedStart 的函数式版本：对一组对象统一套用同一种动画并按序启动。",
+  "ex": "self.play(LaggedStartMap(FadeIn, group, lag_ratio=0.1))"
+ },
+ "MaintainPositionRelativeTo": {
+  "zh": "让 Mobject 在目标对象动画期间保持相对位置，常配合 ApplyFunction 锁定局部位移。"
+ },
+ "MoveAlongPath": {
+  "zh": "让 Mobject 沿给定路径（曲线）运动的动画。",
+  "ex": "self.play(MoveAlongPath(dot, circle))"
+ },
+ "MoveToTarget": {
+  "zh": "把 Mobject 移动到其 save_state 的快照位置，与 mob.target / generate_target 配合使用。",
+  "ex": "mob.generate_target()\nmob.target.shift(RIGHT)\nself.play(MoveToTarget(mob))"
+ },
+ "PhaseFlow": {
+  "zh": "对向量场（如微分方程相图）随时间演化做形变动画，动力系统可视化工具。"
+ },
+ "RemoveTextLetterByLetter": {
+  "zh": "AddTextLetterByLetter 的反向动画：Text 逐字母消失。"
+ },
+ "ReplacementTransform": {
+  "zh": "把一个 Mobject 原位变形替换为另一个，是最强的「变形」动画，两个对象会融合。",
+  "ex": "self.play(ReplacementTransform(square, circle))"
+ },
+ "Restore": {
+  "zh": "让 Mobject 回到 save_state() 保存的状态，常用于「变了再变回去」。",
+  "ex": "self.play(Restore(mob))"
+ },
+ "Rotate": {
+  "zh": "绕指定点旋转对象的动画，angle 为正逆时针。",
+  "ex": "self.play(Rotate(square, PI / 2))"
+ },
+ "Rotating": {
+  "zh": "持续旋转动画：不占用场景时间推进的「边转边讲」，常用于旋转对称演示。",
+  "ex": "self.add(Rotating(square))"
+ },
+ "ScaleInPlace": {
+  "zh": "原地缩放的强调动画，set(width=...) 类的动画版本。",
+  "ex": "self.play(ScaleInPlace(circle, 1.5))"
+ },
+ "ShowIncreasingSubsets": {
+  "zh": "让 VGroup 的子对象逐个显示，适合逐步揭示列表或矩阵元素。",
+  "ex": "self.play(ShowIncreasingSubsets(group))"
+ },
+ "ShowPartial": {
+  "zh": "按进度显示路径片段的底层动画，Create 与 Uncreate 的父类，可自定义绘制方向。"
+ },
+ "ShowPassingFlash": {
+  "zh": "一道亮斑沿路径扫过的「电流」效果动画，time_width 控制亮斑宽度。",
+  "ex": "self.play(ShowPassingFlash(line))"
+ },
+ "ShowPassingFlashWithThinningStrokeWidth": {
+  "zh": "ShowPassingFlash 的变体：扫过时笔画由粗变细，更像真实书写。"
+ },
+ "ShowSubmobjectsOneByOne": {
+  "zh": "把 VGroup 子对象按个显示后再按个移除的序列动画，适合对比展示。",
+  "ex": "self.play(ShowSubmobjectsOneByOne(group))"
+ },
+ "ShrinkToCenter": {
+  "zh": "向中心收缩消失的出场动画，FadeOut 的动感替代。",
+  "ex": "self.play(ShrinkToCenter(mob))"
+ },
+ "SmoothedVectorizedHomotopy": {
+  "zh": "Homotopy 的平滑变体：在变换中保持向量场曲线平滑，减少锯齿。"
+ },
+ "SpinInFromNothing": {
+  "zh": "一边旋转一边淡入的复合入场动画。",
+  "ex": "self.play(SpinInFromNothing(mob))"
+ },
+ "SpiralIn": {
+  "zh": "让一组子对象沿螺旋轨迹飞入的编排动画，开场集合类内容很出彩。",
+  "ex": "self.play(SpiralIn(group))"
+ },
+ "Succession": {
+  "zh": "把多个动画严格串成一条时间线依次播放，前一个播完才播下一个。",
+  "ex": "self.play(Succession(FadeIn(a), FadeOut(a)))"
+ },
+ "Swap": {
+  "zh": "让两个 Mobject 交换位置的动画，常带交叉路径。"
+ },
+ "TracedPath": {
+  "zh": "持续记录某点运动轨迹并实时绘出的「画笔」对象，配 MoveAlongPath 做轨迹可视化。",
+  "ex": "trace = TracedPath(dot.get_center)\nself.add(trace)\nself.play(MoveAlongPath(dot, circle))"
+ },
+ "Transform": {
+  "zh": "把一个 Mobject 平滑变形为另一个的标准变换动画，所有 Transform 家族的基类。",
+  "ex": "self.play(Transform(square, circle))"
+ },
+ "TransformAnimations": {
+  "zh": "把两个动画「对齐」：让第一个动画的结尾状态匹配第二个动画的起点，实现无缝衔接。"
+ },
+ "TransformFromCopy": {
+  "zh": "先复制出副本再变形到位的动画，原对象保留，强调「由它推导」的逻辑。",
+  "ex": "self.play(TransformFromCopy(a, b))"
+ },
+ "TransformMatchingShapes": {
+  "zh": "按形状相似度在两个 VGroup 间自动配对子对象逐一变形，重构公式、图形的神器。",
+  "ex": "self.play(TransformMatchingShapes(vg1, vg2))"
+ },
+ "TransformMatchingTex": {
+  "zh": "TransformMatchingShapes 的 Tex 特化：按 LaTeX 片段配对变形，公式演算的标配。",
+  "ex": "self.play(TransformMatchingTex(eq1, eq2))"
+ },
+ "TypeWithCursor": {
+  "zh": "打字机动画 + 闪烁光标：Text 逐字输入，末尾跟一个可自定义的光标 Mobject。",
+  "ex": "self.play(TypeWithCursor(text, cursor))"
+ },
+ "Uncreate": {
+  "zh": "Create 的反向动画：沿路径把图形擦除。",
+  "ex": "self.play(Uncreate(circle))"
+ },
+ "UntypeWithCursor": {
+  "zh": "TypeWithCursor 的反向动画：带光标逐字删除文本。"
+ },
+ "Unwrite": {
+  "zh": "Write 的反向动画：按书写顺序把文本或公式擦除。",
+  "ex": "self.play(Unwrite(text))"
+ },
+ "UpdateFromAlphaFunc": {
+  "zh": "用 updater 按动画进度 alpha 驱动任意更新逻辑的自定义动画骨架。"
+ },
+ "UpdateFromFunc": {
+  "zh": "在动画时长内对目标持续应用更新函数的自定义动画，适合「边播边算」的场景。"
+ },
+ "Wait": {
+  "zh": "停顿动画：让时间流逝 nothing 发生（或跑背景动画），self.wait() 的动画版。",
+  "ex": "self.play(Wait(2))"
+ },
+ "Wiggle": {
+  "zh": "让对象来回扭动摇摆的强调动画，适合标记不确定性或活跃状态。",
+  "ex": "self.play(Wiggle(mob))"
+ },
+ "Write": {
+  "zh": "按文字/笔画顺序「书写」文本的动画，Tex、Text 演算推导的标志性入场方式。",
+  "ex": "self.play(Write(text))"
+ },
+ "ArrowVectorField": {
+  "zh": "把向量场画成带箭头的网格：每个采样点一支方向箭头，随场强缩放，是微分方程可视化的主力。",
+  "ex": "field = ArrowVectorField(lambda p: np.array([-p[1], p[0], 0]))\nself.add(field)"
+ },
+ "ComplexValueTracker": {
+  "zh": "追踪复数的 ValueTracker：set_value 传复数，get_value 返回 complex，实部虚部同步插值。",
+  "ex": "z = ComplexValueTracker(1 + 2j)\nz.set_value(3 - 1j)"
+ },
+ "DecimalMatrix": {
+  "zh": "矩阵 + 每个元素都是可动 DecimalNumber：数值变化动画可直接播在矩阵上。"
+ },
+ "DecimalTable": {
+  "zh": "表格 + 可动的十进制数字单元格，做数据表动态更新最方便。",
+  "ex": "table = DecimalTable([[3.14, 2.71], [1.41, 1.73]])"
+ },
+ "DiGraph": {
+  "zh": "有向图对象：顶点 + 带箭头的边，支持自动布局与顶点/边样式定制。",
+  "ex": "g = DiGraph([1, 2, 3], [(1, 2), (2, 3)])"
+ },
+ "FullScreenRectangle": {
+  "zh": "恰好铺满整个画面（含边距）的矩形，常作背景板或全屏遮罩。",
+  "ex": "bg = FullScreenRectangle(fill_color=BLACK, fill_opacity=0.8)"
+ },
+ "Graph": {
+  "zh": "通用图论对象：无向图，自动布局（如 spring/circular），顶点标签、边粗细颜色全能调。",
+  "ex": "g = Graph([1, 2, 3], [(1, 2), (2, 3), (3, 1)])"
+ },
+ "Group": {
+  "zh": "Mobject 的通用容器：把任意对象打包统一管理（移动、淡入、整体动画）。注意 Group 不保证子对象是 VMobject。",
+  "ex": "group = Group(dot, label, square)\nself.play(FadeIn(group))"
+ },
+ "IntegerMatrix": {
+  "zh": "元素为整数的矩阵 Mobject，和 DecimalMatrix 类似但用固定整数显示。"
+ },
+ "IntegerTable": {
+  "zh": "整数单元格表格，适合计数类数据展示。"
+ },
+ "ManimBanner": {
+  "zh": "官方 Logo 动画横幅：自带展开、收拢等现成动画方法，适合视频片头片尾。",
+  "ex": "banner = ManimBanner()\nself.play(banner.expand())"
+ },
+ "MathTable": {
+  "zh": "单元格为 MathTex 的表格：每个格子都是公式，排版数学矩阵类内容用。"
+ },
+ "Matrix": {
+  "zh": "通用矩阵对象：元素可以是任意 Mobject，括号、行距列距可调，线性代数章节的核心道具。",
+  "ex": "m = Matrix([[1, 2], [3, 4]])"
+ },
+ "Mobject": {
+  "zh": "一切可见对象的基类。掌握它的 transform、shift、scale、fade 族方法与子对象树，就掌握了 Manim 的对象模型。",
+  "ex": "mob = Mobject()\nmob.shift(UP).scale(2)"
+ },
+ "MobjectMatrix": {
+  "zh": "元素为任意 Mobject 的矩阵：把图形本身排成矩阵布局展示。"
+ },
+ "MobjectTable": {
+  "zh": "单元格为任意 Mobject 的通用表格，最自由的表格形态。",
+  "ex": "t = MobjectTable([[dot, circle], [square, star]])"
+ },
+ "ScreenRectangle": {
+  "zh": "按 16:9 屏幕比例裁出的矩形，适合作画中画框或参考取景框。",
+  "ex": "frame = ScreenRectangle(height=3)"
+ },
+ "StreamLines": {
+  "zh": "沿向量场绘出流线族（积分曲线），比 ArrowVectorField 更能表现场的整体走势。",
+  "ex": "lines = StreamLines(lambda p: np.array([-p[1], p[0], 0]))"
+ },
+ "Table": {
+  "zh": "表格基类：字符串单元格 + 行列标签 + 边框样式，add_highlighted_cell 可做聚光单元格。",
+  "ex": "t = Table([[\"a\", \"b\"], [\"c\", \"d\"]], row_labels=[1, 2])"
+ },
+ "ValueTracker": {
+  "zh": "不可见数值容器：本身不渲染，配合 get_value/set_value 与 add_updater 驱动一切「数值驱动的动画」。",
+  "ex": "vt = ValueTracker(0)\nnumber.add_updater(lambda d: d.set_value(vt.get_value()))\nself.play(vt.animate.set_value(10))"
+ },
+ "VectorField": {
+  "zh": "向量场基类：ArrowVectorField 与 StreamLines 的共同父类，负责采样与归一化逻辑。"
+ },
+ "CurvesAsSubmobjects": {
+  "zh": "把多段曲线拆成独立子对象的 VMobject 容器，方便对每一段单独上色或动画。"
+ },
+ "DashedVMobject": {
+  "zh": "把任意 VMobject 变成虚线版：dash_length 与间距可调，常用来表示辅助线或预期位置。",
+  "ex": "dashed = DashedVMobject(circle)"
+ },
+ "ImageMobject": {
+  "zh": "把本地图片文件（PNG/JPG）作为 Mobject 摆进画面，可缩放、旋转、裁剪。",
+  "ex": "img = ImageMobject(\"photo.png\").scale(2)"
+ },
+ "ImageMobjectFromCamera": {
+  "zh": "捕获另一个相机画面作为图像的 Mobject，用于画中画或场景缩略预览。"
+ },
+ "Mobject1D": {
+  "zh": "一维对象基类（v0.21 标记为内部实验类型），普通教程较少直接使用。"
+ },
+ "Mobject2D": {
+  "zh": "二维对象基类（内部实验类型），面片类对象的祖先。"
+ },
+ "PGroup": {
+  "zh": "PMobject 的专用容器：把点集对象分组统一管理。"
+ },
+ "PMobject": {
+  "zh": "点云式 Mobject：只含离散点、无填充笔画，是 DotCloud 等实验性渲染类型的基类。"
+ },
+ "Point": {
+  "zh": "表示坐标点的轻量 Mobject：不渲染任何可见图形，只承载位置，常作动画的锚点参数。",
+  "ex": "self.play(GrowFromPoint(mob, Point().get_center()))"
+ },
+ "PointCloudDot": {
+  "zh": "把点集渲染成一群小圆点的 PMobject 显示形式，适合散点可视化。"
+ },
+ "VDict": {
+  "zh": "「键值对版 VGroup」：按键名索引子对象，方便在公式字典里做局部替换。",
+  "ex": "d = VDict({\"a\": MathTex(\"x^2\"), \"b\": MathTex(\"y^2\")})"
+ },
+ "VGroup": {
+  "zh": "VMobject 专用容器：子对象都是 VMobject，可使用只有矢量对象才有的整体方法（如 set_stroke），是日常最常用组合器。",
+  "ex": "vg = VGroup(circle, square, dot)\nvg.arrange(RIGHT)"
+ },
+ "VMobject": {
+  "zh": "矢量对象基类：一切「用路径曲线定义」的图形（圆、线、文字）都继承它。set_stroke/set_fill、贝塞尔操作都从这里来。",
+  "ex": "vm = VMobject()\nvm.set_points_as_corners([ORIGIN, RIGHT, UP])"
+ },
+ "VectorizedPoint": {
+  "zh": "带矢量渲染能力的点对象（Point 的 VMobject 版本），内部实验用途居多。"
+ },
+ "Angle": {
+  "zh": "两条线的夹角图形：自动找交点、按半径画出夹角弧，可标注度数，几何作图必备。",
+  "ex": "angle = Angle(line1, line2, radius=0.5)"
+ },
+ "AnnotationDot": {
+  "zh": "带描边强调的小圆点，比普通 Dot 在复杂背景上更醒目，常用于标记点。"
+ },
+ "AnnularSector": {
+  "zh": "扇环（圆环的一段）：内外半径 + 起止角度，饼图环图的基础件。",
+  "ex": "s = AnnularSector(inner_radius=1, outer_radius=2, angle=PI/2)"
+ },
+ "Annulus": {
+  "zh": "完整圆环：内半径 + 外半径，甜甜圈形状。"
+ },
+ "Arc": {
+  "zh": "圆弧：半径 + 起始角 + 张角，所有曲线类图形（Circle、Sector……）的祖宗。",
+  "ex": "arc = Arc(radius=2, start_angle=0, angle=PI)"
+ },
+ "ArcBetweenPoints": {
+  "zh": "过两点的一段圆弧：自动选半径让弧经过两点，画「连接箭头」或「跳跃路径」常用。",
+  "ex": "arc = ArcBetweenPoints(a.get_center(), b.get_center())"
+ },
+ "ArcPolygon": {
+  "zh": "边为圆弧的多边形：顶点之间用弧连接而非直线，呈现「鼓包」轮廓。"
+ },
+ "ArcPolygonFromArcs": {
+  "zh": "用现成 Arc 对象拼成多边形，边完全由你给的弧决定。"
+ },
+ "Arrow": {
+  "zh": "带箭头的直线：start/end + 箭尖样式 buff 可调，是最常用的指向性图形。",
+  "ex": "arrow = Arrow(LEFT, RIGHT, buff=0.1)"
+ },
+ "ArrowCircleFilledTip": {
+  "zh": "圆形实心箭尖样式类：配合 Arrow 的 tip_shape 使用（ArrowCircleTip 的实心版）。"
+ },
+ "ArrowCircleTip": {
+  "zh": "空心圆形箭尖样式类：把箭头末端换成小圆圈，思维导图风。"
+ },
+ "ArrowSquareFilledTip": {
+  "zh": "方形实心箭尖样式类。"
+ },
+ "ArrowSquareTip": {
+  "zh": "空心方形箭尖样式类。"
+ },
+ "ArrowTip": {
+  "zh": "所有箭尖样式的基类：自定义箭尖就继承它实现 set_points()，length/width 属性定义尺寸。"
+ },
+ "ArrowTriangleFilledTip": {
+  "zh": "三角实心箭尖（默认样式），一般不直接实例化。"
+ },
+ "ArrowTriangleTip": {
+  "zh": "空心三角箭尖样式类。"
+ },
+ "BackgroundRectangle": {
+  "zh": "自动包裹目标对象的背景色矩形：给文字图形加底色衬垫，防止与背景混淆。",
+  "ex": "bg = BackgroundRectangle(label, fill_opacity=0.7)"
+ },
+ "Circle": {
+  "zh": "圆：radius 或 diameter 指定大小，提供 from_three_points、point_at_angle、surround 等几何工厂方法。",
+  "ex": "c = Circle(radius=2, color=BLUE)"
+ },
+ "ConvexHull": {
+  "zh": "一组点的凸包多边形：自动计算外轮廓，计算几何可视化。"
+ },
+ "Cross": {
+  "zh": "叉号（×）图形：stroke_width 和比例可调，标记错误或否定语义。",
+  "ex": "cross = Cross(mob)"
+ },
+ "CubicBezier": {
+  "zh": "三次贝塞尔曲线：两个锚点 + 两个控制点，是矢量绘图的最小单元。",
+  "ex": "b = CubicBezier(a1, h1, h2, a2)"
+ },
+ "CurvedArrow": {
+  "zh": "弯曲的箭头：ArcBetweenPoints + 箭尖的组合体，流程图里绕过障碍的连线。"
+ },
+ "CurvedDoubleArrow": {
+  "zh": "两端都带箭尖的弯弧，双向关系专用。"
+ },
+ "Cutout": {
+  "zh": "带镂空的多边形：外部轮廓减内部孔洞，fill 模式下孔洞透明。",
+  "ex": "c = Cutout(square, circle)"
+ },
+ "DashedLine": {
+  "zh": "虚线直线：DashedVMobject 的直线便捷版，辅助线首选。",
+  "ex": "d = DashedLine(LEFT, RIGHT)"
+ },
+ "Difference": {
+  "zh": "布尔差集：从主体图形中挖掉重叠部分，属于 VMobject 布尔运算家族。",
+  "ex": "diff = Difference(square, circle)"
+ },
+ "Dot": {
+  "zh": "小圆点：radius 很小且 fill 为主，标记坐标、描点画图的基本单元。",
+  "ex": "dot = Dot(point, color=RED)"
+ },
+ "DoubleArrow": {
+  "zh": "两端都有箭头的直线，表示双向映射或区间。",
+  "ex": "d = DoubleArrow(LEFT, RIGHT)"
+ },
+ "Elbow": {
+  "zh": "直角弯头线：两条垂直短线段，管道图、直角坐标标记用。"
+ },
+ "Ellipse": {
+  "zh": "椭圆：width/height 分别指定两轴，圆形的长轴版。",
+  "ex": "e = Ellipse(width=4, height=2)"
+ },
+ "Exclusion": {
+  "zh": "布尔异或：只保留两个图形不重叠的部分。"
+ },
+ "Intersection": {
+  "zh": "布尔交集：只保留两个图形重叠的区域。",
+  "ex": "i = Intersection(square, circle)"
+ },
+ "Label": {
+  "zh": "几何图形上的标签：自带背景框的小文本，跟随目标位置摆放。"
+ },
+ "LabeledArrow": {
+  "zh": "带文字标签的箭头：label 自动置于箭身中点，省去手动对位。"
+ },
+ "LabeledDot": {
+  "zh": "带文字标签的圆点：标签居中于点内，图论顶点标注专用。"
+ },
+ "LabeledLine": {
+  "zh": "带标签的直线：标签自动放在线段中点。"
+ },
+ "LabeledPolygram": {
+  "zh": "带顶点标签的折线/多边形：每个顶点自动编号。"
+ },
+ "Line": {
+  "zh": "两点之间的直线：buff 让端点留白不压对象，put_start_and_end_on 可动画化，是构图的骨架。",
+  "ex": "line = Line(ORIGIN, RIGHT * 3)"
+ },
+ "Polygon": {
+  "zh": "多边形：顶点列表连线闭合，一切直边图形（三角形、矩形……）的基类。",
+  "ex": "p = Polygon(ORIGIN, RIGHT, UP)"
+ },
+ "Polygram": {
+  "zh": "折线组：可以含多个不闭合顶点组（组 = 一条折线），比 Polygon 更自由的连点工具。"
+ },
+ "Rectangle": {
+  "zh": "矩形：width/height 与角半径可调，包围、对齐、底衬的主力图形。",
+  "ex": "r = Rectangle(width=4, height=2)"
+ },
+ "RegularPolygon": {
+  "zh": "正多边形：n 指定边数，内切圆半径可调。",
+  "ex": "hexagon = RegularPolygon(n=6)"
+ },
+ "RegularPolygram": {
+  "zh": "正多角星：n 顶点按密度跳着连线（如五角星 density=2）。"
+ },
+ "RightAngle": {
+  "zh": "直角标记：两条线垂直时的小方框角标，几何证明标配。",
+  "ex": "ra = RightAngle(line1, line2, length=0.3)"
+ },
+ "RoundedRectangle": {
+  "zh": "圆角矩形：corner_radius 控制圆角，卡片式 UI 元素的首选。",
+  "ex": "card = RoundedRectangle(corner_radius=0.2, width=4, height=2)"
+ },
+ "Sector": {
+  "zh": "扇形：圆 + 张角，饼图的组成单元。",
+  "ex": "s = Sector(angle=PI/3)"
+ },
+ "Square": {
+  "zh": "正方形：Rectangle 的等边便捷版，边长用 side_length。",
+  "ex": "sq = Square(side_length=2)"
+ },
+ "Star": {
+  "zh": "五角星样式的正多角星：n 与密度决定角数，外内半径比决定胖瘦。",
+  "ex": "star = Star(n=5, fill_color=YELLOW)"
+ },
+ "StealthTip": {
+  "zh": "隐形战斗机风格的箭尖（默认箭尖），一般不直接实例化。"
+ },
+ "SurroundingRectangle": {
+  "zh": "围绕目标的矩形框：自动留边距包围对象，强调、圈选必备。",
+  "ex": "box = SurroundingRectangle(formula, color=YELLOW)"
+ },
+ "TangentLine": {
+  "zh": "曲线在指定参数处的切线：微分几何可视化直接可用。",
+  "ex": "t = TangentLine(circle, alpha=0.3)"
+ },
+ "TangentialArc": {
+  "zh": "以一点为端点、与曲线相切的弧：强调方向变化的小装饰。"
+ },
+ "TipableVMobject": {
+  "zh": "「可装箭尖」线段的基类：Arrow、Line 继承它获得 add_tip/tip 配置能力。"
+ },
+ "Triangle": {
+  "zh": "等边三角形：RegularPolygon(n=3) 的便捷版。",
+  "ex": "tri = Triangle()"
+ },
+ "Underline": {
+  "zh": "下划线：贴住目标底部的横线，强调文本用。",
+  "ex": "u = Underline(text)"
+ },
+ "Union": {
+  "zh": "布尔并集：合并两个图形为一个轮廓。",
+  "ex": "u = Union(square, circle)"
+ },
+ "Vector": {
+  "zh": "从原点出发的箭头（向量）：direction 与长度构造，线性代数可视化核心对象。",
+  "ex": "v = Vector(RIGHT * 2, color=RED)"
+ },
+ "Axes": {
+  "zh": "平面直角坐标系：x/y 轴 + 刻度 + 可扩展的坐标转换（c2p/p2c），函数绘图的主舞台。",
+  "ex": "axes = Axes(x_range=[-3, 3], y_range=[-2, 2])\nself.add(axes)\nself.play(Create(axes.plot(lambda x: x**2)))"
+ },
+ "BarChart": {
+  "zh": "柱状图：数值列表一键成图，柱色、标签、方向全能调，数据可视化入门件。",
+  "ex": "chart = BarChart(values=[3, 1, 4, 1, 5])"
+ },
+ "ComplexPlane": {
+  "zh": "复平面：实轴 + 虚轴 + 复数标注，复变函数可视化的坐标底图。",
+  "ex": "plane = ComplexPlane()"
+ },
+ "CoordinateSystem": {
+  "zh": "一切坐标系（Axes、NumberLine、PolarPlane 等）的基类：统一提供 c2p/p2c 坐标变换与 get_graph 等接口。"
+ },
+ "FunctionGraph": {
+  "zh": "函数图像对象：给定 f(x) 自动生成曲线，配合 Axes 使用。",
+  "ex": "graph = axes.plot(lambda x: np.sin(x))"
+ },
+ "ImplicitFunction": {
+  "zh": "隐函数图像：给定 F(x, y)=0 用采样方式画出曲线，如圆锥曲线。",
+  "ex": "imp = ImplicitFunction(lambda x, y: x**2 + y**2 - 4)"
+ },
+ "LinearBase": {
+  "zh": "线性刻度轴的刻度策略类：刻度等距分布，Axes 默认使用。"
+ },
+ "LogBase": {
+  "zh": "对数刻度轴的刻度策略类：数值按对数分布，画数量级差异大的数据用。"
+ },
+ "NumberLine": {
+  "zh": "一维数轴：范围、步长、刻度标签、单位长度全可配，数值可视化的地基。",
+  "ex": "nl = NumberLine(x_range=[-5, 5, 1])"
+ },
+ "NumberPlane": {
+  "zh": "网格纸坐标系：Axes + 背景网格线，默认淡色网格，函数演示常用底图。",
+  "ex": "plane = NumberPlane()"
+ },
+ "ParametricFunction": {
+  "zh": "参数方程曲线：传入 r(t) 自动采样成曲线，极坐标/物理轨迹必备。",
+  "ex": "curve = ParametricFunction(lambda t: np.array([np.cos(t), np.sin(t), 0]), t_range=[0, TAU])"
+ },
+ "PolarPlane": {
+  "zh": "极坐标系：同心圆 + 放射线网格，极坐标方程 r(θ) 的直接画布。",
+  "ex": "polar = PolarPlane()"
+ },
+ "SampleSpace": {
+  "zh": "概率样本空间矩形：横竖切分表示条件概率，概率论章节道具。"
+ },
+ "ThreeDAxes": {
+  "zh": "三维坐标轴：x/y/z 三轴 + 可旋转视角，3D 函数绘图底座。",
+  "ex": "axes3d = ThreeDAxes(x_range=[-3, 3], y_range=[-3, 3], z_range=[-3, 3])"
+ },
+ "UnitInterval": {
+  "zh": "0 到 1 的快捷数轴：概率论单位线段场景直接取用。",
+  "ex": "ui = UnitInterval()"
+ },
+ "ArcBrace": {
+  "zh": "贴合圆弧的大括号标注：沿曲线中点展开的弧形括号。"
+ },
+ "Brace": {
+  "zh": "贴合图形边缘的大括号：自动缩放适应目标宽度，配合标签写标注公式。",
+  "ex": "brace = Brace(group, DOWN, label=\"sum\")"
+ },
+ "BraceBetweenPoints": {
+  "zh": "两点之间的括号：不依附具体对象，任意位置放标注。"
+ },
+ "BraceLabel": {
+  "zh": "括号 + 标签的组合体：一行代码完成这组等于某公式的标注。"
+ },
+ "BraceText": {
+  "zh": "Brace 的 Text 标签便捷版：标签自动用 Text 渲染。"
+ },
+ "SVGMobject": {
+  "zh": "把 SVG 矢量文件解析成矢量路径的 Mobject：图标、自定义图形直接导入，可控每个子路径。",
+  "ex": "icon = SVGMobject(\"logo.svg\")"
+ },
+ "VMobjectFromSVGPath": {
+  "zh": "由单个 SVG path 数据字符串构造 VMobject 的底层工具，可程序化生成路径。"
+ },
+ "BulletedList": {
+  "zh": "项目符号列表：字符串数组一键排成带圆点的竖排列表，演示文稿风。",
+  "ex": "bl = BulletedList(\"第一项\", \"第二项\", \"第三项\")"
+ },
+ "Code": {
+  "zh": "代码高亮块：从文件或字符串渲染带语法着色的代码段，主题、字体、行号可调。",
+  "ex": "code = Code(\"script.py\", language=\"python\")"
+ },
+ "DecimalNumber": {
+  "zh": "可动小数的数字文本：set_value 即重排，配 ValueTracker 做计数器。",
+  "ex": "num = DecimalNumber(0, num_decimal_places=2)"
+ },
+ "Integer": {
+  "zh": "整数版 DecimalNumber：无小数点，步进计数常用。"
+ },
+ "MarkupText": {
+  "zh": "Pango 标记语言文本：字符串里直接写 b/i/span 等标签实现富文本混排。",
+  "ex": "mt = MarkupText('<b>bold</b> <span foreground=\"#FFFF00\">yellow</span>')"
+ },
+ "MathTex": {
+  "zh": "LaTeX 公式文本：每个 LaTeX 片段是独立子对象，可按下标索引做局部动画，数学视频的核心。",
+  "ex": "eq = MathTex(r\"\frac{a}{b} = \\sqrt{c}\")"
+ },
+ "MathTypst": {
+  "zh": "Typst 排版的公式对象（v0.21 新增）：用 Typst 语法替代 LaTeX，需安装 typst。"
+ },
+ "Paragraph": {
+  "zh": "多段落文本块：长文字自动分行成段，排文章类内容用。"
+ },
+ "SingleStringMathTex": {
+  "zh": "单个 LaTeX 字符串的公式对象：不做分词切片，MathTex 的底层形式。"
+ },
+ "Tex": {
+  "zh": "LaTeX 完整文档模式：可加载宏包与自定义导言区，出整个 LaTeX 页面效果。"
+ },
+ "Text": {
+  "zh": "Pango 渲染的系统字体文本：中文、emoji 原生支持，t2c/t2f 子串改色改字体，文字类内容首选。",
+  "ex": "t = Text(\"你好，Manim！\", t2c={\"Manim\": YELLOW})"
+ },
+ "Title": {
+  "zh": "居中放大加下划线的标题文本：章节标题专用。",
+  "ex": "self.add(Title(\"第三章：动画进阶\"))"
+ },
+ "Typst": {
+  "zh": "Typst 文档模式文本（v0.21 新增）：整个文档用 Typst 排版，类似 Tex 的定位。"
+ },
+ "Variable": {
+  "zh": "名字 + 数值的组合显示：变量名在上数值在下，配 ValueTracker 实时联动。",
+  "ex": "v = Variable(0, \"x\", num_decimal_places=2)"
+ },
+ "Arrow3D": {
+  "zh": "三维箭头：空间中的方向向量表示。",
+  "ex": "a3 = Arrow3D(ORIGIN, [1, 1, 1])"
+ },
+ "Cone": {
+  "zh": "圆锥体：底面半径 + 高度，3D 几何基本体。",
+  "ex": "cone = Cone(direction=Z_AXIS)"
+ },
+ "ConvexHull3D": {
+  "zh": "三维点集的凸包多面体，计算几何 3D 版。"
+ },
+ "Cube": {
+  "zh": "立方体：边长指定，可显示面与棱，3D 入门第一件。",
+  "ex": "cube = Cube(side_length=2)"
+ },
+ "Cylinder": {
+  "zh": "圆柱体：半径 + 高度。",
+  "ex": "cyl = Cylinder(radius=1, height=2)"
+ },
+ "Dodecahedron": {
+  "zh": "十二面体：12 个五边形面的正多面体，Polyhedron 的预制实例。"
+ },
+ "Dot3D": {
+  "zh": "三维空间中的小圆点：标记空间坐标用。"
+ },
+ "Icosahedron": {
+  "zh": "二十面体：20 个三角面的正多面体。"
+ },
+ "Line3D": {
+  "zh": "空间直线：两点连线，3D 构图骨架。",
+  "ex": "l3 = Line3D(ORIGIN, [2, 2, 2])"
+ },
+ "Octahedron": {
+  "zh": "八面体：8 个三角面的正多面体。"
+ },
+ "Polyhedron": {
+  "zh": "通用多面体：顶点列表 + 面列表定义任意凸多面体，正多面体家族由此派生。"
+ },
+ "Prism": {
+  "zh": "棱柱：正多边形底面沿法向拉伸而成。"
+ },
+ "Sphere": {
+  "zh": "球体：半径指定，可设分辨率，3D 最常用实体。",
+  "ex": "s = Sphere(radius=2, resolution=(24, 24))"
+ },
+ "Surface": {
+  "zh": "参数化曲面：uv 网格生成任意曲面，如抛物面，3D 函数可视化核心。",
+  "ex": "surf = Surface(lambda u, v: [u, v, u*u + v*v], u_range=[-1, 1], v_range=[-1, 1])"
+ },
+ "Tetrahedron": {
+  "zh": "四面体：4 个三角面的正多面体。"
+ },
+ "ThreeDVMobject": {
+  "zh": "三维矢量对象基类：兼容 2D 渲染的 3D 图形祖先。"
+ },
+ "Torus": {
+  "zh": "圆环体（救生圈面）：主半径 + 管半径。",
+  "ex": "t = Torus(major_radius=2, minor_radius=0.5)"
+ },
+ "DotCloud": {
+  "zh": "大量点组成的点云：PMobject 的高效批量渲染版，可视化散点/粒子。"
+ },
+ "OpenGLPGroup": {
+  "zh": "OpenGL 渲染下 PMobject 的分组容器（实验性）。"
+ },
+ "OpenGLPMPoint": {
+  "zh": "OpenGL 渲染下的单点对象（实验性）。"
+ },
+ "OpenGLPMobject": {
+  "zh": "OpenGL 渲染管线的点集基类（实验性），与 cairo 版的 PMobject 平行。"
+ },
+ "TrueDot": {
+  "zh": "严格按点渲染的 Dot：无最小尺寸限制，配合 DotCloud 做精确散点。"
+ },
+ "BackgroundColoredVMobjectDisplayer": {
+  "zh": "把 VMobject 按背景色反色显示的辅助相机组件，内部机制居多。"
+ },
+ "Camera": {
+  "zh": "相机基类：管理画面帧、像素坐标与 Mobject 的投影，所有渲染都从它开始。",
+  "ex": "self.camera.frame.set(width=10)"
+ },
+ "MappingCamera": {
+  "zh": "映射相机：局部应用变换映射后拍摄，做放大镜视窗用。"
+ },
+ "MovingCamera": {
+  "zh": "可移动相机：帧可随 updater 平移/缩放/旋转，是 MovingCameraScene 的底层。"
+ },
+ "MultiCamera": {
+  "zh": "多相机合成：把多个相机画面按子矩形拼到一个画面里。"
+ },
+ "OldMultiCamera": {
+  "zh": "旧版多相机实现，已被 MultiCamera 取代，仅作兼容保留。"
+ },
+ "SplitScreenCamera": {
+  "zh": "分屏相机：左右分屏显示两个画面，对比演示可用。"
+ },
+ "ThreeDCamera": {
+  "zh": "三维相机：管理 phi/theta/gamma 视角参数与三维投影，ThreeDScene 的渲染核心。",
+  "ex": "self.set_camera_orientation(phi=70 * DEGREES, theta=30 * DEGREES)"
+ },
+ "DefaultSectionType": {
+  "zh": "章节类型枚举：normal/skip/speedup，控制分节导出时该节的处理方式。"
+ },
+ "LinearTransformationScene": {
+  "zh": "线性变换演示场景：自带基向量网格与 apply_matrix 快捷方法，线代可视化开箱即用。",
+  "ex": "class Demo(LinearTransformationScene):\n    def construct(self):\n        self.apply_matrix([[1, 1], [0, 1]])"
+ },
+ "MovingCameraScene": {
+  "zh": "镜头运动场景：self.camera.frame 自由推拉摇移，适合走遍整张图的讲解。",
+  "ex": "self.play(self.camera.frame.animate.scale(0.5).shift(RIGHT))"
+ },
+ "Scene": {
+  "zh": "场景基类：一切动画的主入口。construct() 里用 add/play 编排，掌握 Scene 就掌握了 Manim 的导演椅。",
+  "ex": "class Demo(Scene):\n    def construct(self):\n        self.play(Write(Text(\"Hello\")))"
+ },
+ "SceneFileWriter": {
+  "zh": "负责把场景帧编码输出为视频/图片文件：分辨率、帧率、分段导出都由它落盘。"
+ },
+ "Section": {
+  "zh": "场景分节：把 construct 切成带类型的片段，配合 CLI 可导出分节视频清单。"
+ },
+ "SpecialThreeDScene": {
+  "zh": "固定相机参数的三维演示场景：低多边形默认配置，快速出 3D 效果。"
+ },
+ "ThreeDScene": {
+  "zh": "三维场景：自带相机朝向设置与 3D 动画辅助（如球面移动），3D 内容入口。",
+  "ex": "class Demo(ThreeDScene):\n    def construct(self):\n        self.set_camera_orientation(phi=70 * DEGREES, theta=-45 * DEGREES)\n        self.play(Create(Sphere()))"
+ },
+ "VectorScene": {
+  "zh": "向量演示场景：坐标系 + 向量工具方法，线性代数课场景。"
+ },
+ "ZoomedScene": {
+  "zh": "局部放大场景：自带放大镜窗口，主画面 + 缩放插页同时呈现细节。"
+ },
+ "DictAsObject": {
+  "zh": "把字典包成属性访问的小工具类：d.key 替代 d[键]，配置读取更便捷。"
+ },
+ "HSV": {
+  "zh": "HSV 颜色：色相/饱和度/明度三元组，做色轮、渐变等色彩动画用。"
+ },
+ "ManimColor": {
+  "zh": "v0.19 起的新颜色基类：RGB(A) 统一封装，hex/HSV/内置色互转，颜色运算的中枢。",
+  "ex": "c = ManimColor(\"#FFFF00\").interpolate(BLUE, 0.5)"
+ },
+ "RGBA": {
+  "zh": "带透明度的颜色表示：r/g/b/a 四通道，ManimColor 的底层载体。"
+ },
+ "RandomColorGenerator": {
+  "zh": "随机颜色生成器：按配色策略批量产色，做随机配色演示用。"
+ },
+ "TexFontTemplates": {
+  "zh": "Tex 字体模板集合：pdfLaTeX 各字体配置的现成模板。"
+ },
+ "TexTemplate": {
+  "zh": "LaTeX 导言区模板：自定义宏包、字体、命令，Tex/MathTex 渲染的编译配置。",
+  "ex": "tpl = TexTemplate()\ntpl.add_to_preamble(\"\\usepackage{amsmath}\")"
+ },
+ "TexTemplateLibrary": {
+  "zh": "常用 TexTemplate 的预置库：ctex、standalone 等开箱模板。"
+ },
+ "CairoRenderer": {
+  "zh": "Cairo 渲染器：默认的 2D 矢量光栅化后端，把 VMobject 画成帧。"
+ },
+ "CapStyleType": {
+  "zh": "线帽样式枚举：butt/round/square，控制线段端点形状。"
+ },
+ "LineJointType": {
+  "zh": "线连接样式枚举：miter/round/bevel，控制折角处形状。"
+ },
+ "RendererType": {
+  "zh": "渲染器类型枚举：选择 cairo 或 OpenGL 渲染后端。"
+ }
+}

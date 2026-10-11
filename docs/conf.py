@@ -15,7 +15,6 @@ version = release = "0.21.0"
 language = "zh_CN"
 
 extensions = [
-    "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
     "sphinx.ext.intersphinx",
@@ -45,17 +44,9 @@ autodoc_default_options = {
 # reported through different channels and stays audible.
 suppress_warnings = ["docutils"]
 
-source_suffix = {".md": "markdown"}
+source_suffix = {".rst": "restructuredtext"}
 root_doc = "index"
 exclude_patterns = ["_build", "_extra", "Thumbs.db"]
-
-# --- MyST -----------------------------------------------------------------
-myst_enable_extensions = [
-    "colon_fence",
-    "attrs_inline",
-    "attrs_block",
-]
-myst_heading_anchors = 4
 
 # --- Theme ----------------------------------------------------------------
 html_theme = "furo"

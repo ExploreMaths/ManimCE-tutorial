@@ -1,32 +1,34 @@
 #!/usr/bin/env python3
-"""Convert content/chapters markdown into MyST sources under docs/.
+"""Convert content/chapters markdown into reStructuredText sources under docs/.
 
-Reads the chapter content dialect (:::demo / :::params /
-:::compare / :::notice / :::exercise / :::inheritance) and rewrites it into
-plain MyST / native Sphinx directives wherever possible:
+The chapter content dialect (:::demo / :::params / :::compare /
+:::notice / :::exercise / :::inheritance) is rewritten into native reST
+directives wherever possible:
 
-  :::demo    -> ```{demo} <example> <Scene>```   (custom: build-time source
+  :::demo    -> .. demo:: <example> <Scene>   (custom: build-time source
                 injection + video lookup; no native equivalent)
-  :::params  -> native pipe table in a {container} table-scroll
-  :::compare -> native pipe table in a {container} table-scroll
-  :::notice warning|tip        -> ```{admonition}``` with class warning/tip
-  :::notice version|deprecated -> ```{admonition}``` with a custom class
-  :::exercise / :::answer      -> nested sphinx-design ```{dropdown}```
-  :::inheritance               -> native ```{graphviz}``` left-to-right chain
+  :::params  -> .. container:: table-scroll + .. list-table::
+  :::compare -> .. container:: table-scroll + .. list-table::
+  :::notice warning|tip        -> .. admonition:: with class warning/tip
+  :::notice version|deprecated -> .. admonition:: with a custom class
+  :::exercise / :::answer      -> nested sphinx-design .. dropdown::
+  :::inheritance               -> .. graphviz:: left-to-right chain
 
-Level-2 headings matching the section's `covers` entries are followed by a
-```{manimsig} <Cover>``` block (auto signature from the installed manim,
+Level-2 headings matching the section's `covers` entries are followed by
+a .. manimsig:: <Cover> block (auto signature from the installed manim,
 skipped for names manim does not export).
 
-Also generates docs/index.md, docs/api-index.md, docs/glossary.md,
-docs/api/*.md (full-class reference via native autodoc), docs/api/index.md,
-docs/inheritance-graph.md (full 256-class graph as native {graphviz} DOT
-with links) and docs/_extra/_redirects (old-route redirects).
+Also generates docs/index.rst, docs/api-index.rst, docs/glossary.rst,
+docs/api/*.rst (per-class tutorials: Chinese notes + inheritance chain +
+signature table + autodoc reference), docs/api/index.rst,
+docs/inheritance-graph.rst (auto-generated via the manim_inheritance
+extension) and docs/_extra/_redirects (old-route redirects).
 """
 
 from __future__ import annotations
 
 import argparse
+import inspect
 import json
 import re
 import sys
@@ -38,17 +40,48 @@ from manim_inheritance import API_GROUPS, group_api_page, load_manim_classes
 NOTICE_DIRECTIVES = {"warning": "warning", "tip": "tip"}
 NOTICE_CLASSES = {"version": "notice-version", "deprecated": "notice-deprecated"}
 
+HEADING_CHARS = {1: "=", 2: "-", 3: "~", 4: "^"}
+
+
+# --- inline markdown -> reST -------------------------------------------------
+_INLINE_CODE_RE = re.compile(r"`([^`]*)`")
+_MD_LINK_RE = re.compile(r"\[([^\]]*)\]\(([^)]*)\)")
+
+
+def inline_md_to_rst(text: str) -> str:
+    """Convert the markdown inline idioms used in chapter prose."""
+    text = _MD_LINK_RE.sub(r"`\1 <\2>`__", text)
+    text = _INLINE_CODE_RE.sub(r"``\1``", text)
+    return text
+
 
 def strip_first_codespan(text: str) -> str:
     return re.sub(r"`[^`]*`", "", text, count=1).strip()
 
 
-def myst_slug(text: str) -> str:
-    """MyST auto heading anchor: lowercase, drop punctuation, spaces -> hyphens."""
+def rst_section_id(text: str) -> str:
+    """Approximate docutils' section id (used to detect covers whose heading
+    text would not already produce the cover's anchor)."""
     t = re.sub(r"`([^`]*)`", r"\1", text.strip()).lower()
     t = re.sub(r"[^\w\u4e00-\u9fff\- ]", "", t, flags=re.UNICODE)
     t = re.sub(r"[\s_]+", "-", t)
     return t.strip("-")
+
+
+def display_width(text: str) -> int:
+    """docutils counts CJK/full-width characters as width 2 for title rules."""
+    return sum(2 if ord(c) > 0x2E7F else 1 for c in text)
+
+
+def rst_heading(level: int, text: str) -> list[str]:
+    t = inline_md_to_rst(text)
+    ch = HEADING_CHARS[level]
+    return [t, ch * max(display_width(t), 3)]
+
+
+def indent(lines: list[str], spaces: int = 3) -> list[str]:
+    pad = " " * spaces
+    return [pad + l if l.strip() else l for l in lines]
 
 
 def collect_until_close(lines: list[str], start: int) -> tuple[list[str], int]:
@@ -85,6 +118,35 @@ def parse_exercise(lines: list[str], start: int) -> tuple[list[str], list[str], 
     return question, answer, i
 
 
+def parse_pipe_table(body: list[str]) -> list[list[str]]:
+    """Split single-line pipe-table rows into cells (unescaping \\|)."""
+    rows: list[list[str]] = []
+    for line in body:
+        s = line.strip()
+        if not s.startswith("|"):
+            continue
+        if re.match(r"^\|[\s\-|:]+\|$", s):  # separator row
+            continue
+        cells = re.split(r"(?<!\\)\|", s)
+        cells = [c.strip().replace("\\|", "|") for c in cells]
+        rows.append(cells[1:-1] if cells and not cells[0] and not cells[-1] else cells)
+    return rows
+
+
+def emit_table(body: list[str]) -> list[str]:
+    rows = parse_pipe_table(body)
+    out = [".. container:: table-scroll", "", "   .. list-table::", "      :header-rows: 1", ""]
+    for row in rows:
+        for idx, cell in enumerate(row):
+            prefix = "      * - " if idx == 0 else "        - "
+            out.append(prefix + inline_md_to_rst(cell))
+    return out
+
+
+def emit_graphviz(dot: list[str]) -> list[str]:
+    return [".. graphviz::", ""] + indent(dot)
+
+
 def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
     lines = text.split("\n")
     matched: set[str] = set()
@@ -104,14 +166,18 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
         line = lines[i]
         s = line.strip()
         if s.startswith("```"):
-            out.append(line)
+            lang = s[3:].strip() or "text"
+            code: list[str] = []
             i += 1
-            while i < len(lines):
-                out.append(lines[i])
-                if lines[i].strip().startswith("```"):
-                    i += 1
-                    break
+            while i < len(lines) and lines[i].strip() != "```":
+                code.append(lines[i])
                 i += 1
+            i += 1  # closing fence
+            blank()
+            out.append(f".. code-block:: {lang}")
+            out.append("")
+            out.extend(indent(code))
+            blank()
             continue
         if s.startswith(":::"):
             kind, _, rest = s[3:].partition(" ")
@@ -120,21 +186,15 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
             if kind in ("params", "compare"):
                 body, i = collect_until_close(lines, i + 1)
                 blank()
-                # Native MyST pipe table inside a styled container; cells keep
-                # their markdown (code spans, \| escapes handled by MyST).
-                out.append(":::{container} table-scroll")
-                out.append("")
-                out.extend(body)
-                out.append("")
-                out.append(":::")
+                out.extend(emit_table(body))
                 blank()
                 continue
             if kind == "demo":
                 body, i = collect_until_close(lines, i + 1)
                 blank()
-                out.append(f"```{{demo}} {rest}")
-                out.extend(body)
-                out.append("```")
+                out.append(f".. demo:: {rest}")
+                out.append("")
+                out.extend(indent(inline_md_to_rst(b) for b in body))
                 blank()
                 continue
             if kind == "notice":
@@ -143,26 +203,23 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                 content_lines = body[1:] if len(body) > 1 else []
                 blank()
                 cls = NOTICE_DIRECTIVES.get(rest) or NOTICE_CLASSES.get(rest) or f"notice-{rest}"
-                out.append(f"```{{admonition}} {title or rest}")
-                out.append(f":class: {cls}")
+                out.append(f".. admonition:: {inline_md_to_rst(title) or rest}")
+                out.append(f"   :class: {cls}")
                 out.append("")
-                out.extend(content_lines)
-                out.append("```")
+                out.extend(indent([inline_md_to_rst(b) for b in content_lines]))
                 blank()
                 continue
             if kind == "exercise":
                 question, answer, i = parse_exercise(lines, i + 1)
                 blank()
-                # Colon fences: nested ``` code blocks inside answers cannot
-                # close a colon-fence dropdown early.
-                out.append('::::{dropdown} ✏️ 练习')
-                out.extend(question)
+                out.append(".. dropdown:: ✏️ 练习")
+                out.append("")
+                out.extend(indent([inline_md_to_rst(q) for q in question]))
                 if any(l.strip() for l in answer):
                     out.append("")
-                    out.append(":::{dropdown} ✅ 参考答案")
-                    out.extend(answer)
-                    out.append(":::")
-                out.append("::::")
+                    out.append("   .. dropdown:: ✅ 参考答案")
+                    out.append("")
+                    out.extend(indent([inline_md_to_rst(a) for a in answer], 6))
                 blank()
                 continue
             if kind == "inheritance":
@@ -175,16 +232,17 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                             chain.append(piece)
                 blank()
                 # Native graphviz diagram (small left-to-right chain).
-                out.append("```{graphviz}")
-                out.append("digraph G {")
-                out.append('  graph [rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, nodesep="0.15", ranksep="0.3"];')
-                out.append('  node  [shape=box, style="filled", fontname="Helvetica,sans-serif", fontsize=11, penwidth=1, width=0.05, height=0.05, margin="0.08,0.05", fillcolor="#ffffff", color="#c9ced8", fontcolor="#1f2733"];')
-                out.append('  edge  [color="#8b93a1", arrowsize=0.6, penwidth=1];')
+                dot = [
+                    "digraph G {",
+                    '  graph [rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, nodesep="0.15", ranksep="0.3"];',
+                    '  node  [shape=box, style="filled", fontname="Helvetica,sans-serif", fontsize=11, penwidth=1, width=0.05, height=0.05, margin="0.08,0.05", fillcolor="#ffffff", color="#c9ced8", fontcolor="#1f2733"];',
+                    '  edge  [color="#8b93a1", arrowsize=0.6, penwidth=1];',
+                ]
                 for idx, name in enumerate(chain):
                     if idx:
-                        out.append(f'  "{chain[idx-1]}" -> "{name}";')
-                out.append("}")
-                out.append("```")
+                        dot.append(f'  "{chain[idx-1]}" -> "{name}";')
+                dot.append("}")
+                out.extend(emit_graphviz(dot))
                 blank()
                 continue
             out.append(line)
@@ -198,20 +256,30 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                 stripped = strip_first_codespan(text_)
                 if stripped in covers:
                     matched.add(stripped)
-                    if myst_slug(text_) != stripped.lower():
-                        # auto heading anchor would not match the cover name:
+                    if rst_section_id(text_) != stripped.lower():
+                        # section id would not match the cover name:
                         # pin an explicit target with the exact id.
                         blank()
-                        out.append(f"({stripped})=")
-                    out.append(line)
+                        out.append(f".. _{stripped}:")
+                        out.append("")
+                    blank()
+                    out.extend(rst_heading(2, text_))
+                    out.append("")
                     # auto-generated signature line (skipped by the directive
                     # for names manim does not export: methods, flags, ...).
+                    out.append(f".. manimsig:: {stripped}")
                     out.append("")
-                    out.append(f"```{{manimsig}} {stripped}")
-                    out.append("```")
                     i += 1
                     continue
-        out.append(line)
+            blank()
+            out.extend(rst_heading(level, text_))
+            out.append("")
+            i += 1
+            continue
+        if s:
+            out.append(inline_md_to_rst(line))
+        else:
+            out.append("")
         i += 1
 
     while out and not out[-1].strip():
@@ -220,33 +288,39 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
 
 
 def ref(part: str, section: str, anchor: str | None = None) -> str:
-    base = f"chapters/{part}/{section}.md"
+    base = f"chapters/{part}/{section}.rst"
     return f"{base}#{anchor}" if anchor else base
+
+
+def rst_title(title: str, ch: str = "=") -> list[str]:
+    w = max(display_width(title), 3)
+    return [ch * w, title, ch * w]
 
 
 def build_index(config: dict, flat: list[tuple[dict, dict]], class_count: int) -> str:
     total = len(flat)
     parts = config["parts"]
-    L: list[str] = [
-        "# ManimCE 中文教程",
+    L: list[str] = rst_title("ManimCE 中文教程") + [
         "",
         "基于 **Manim Community v0.21.0** 的系统性中文教程：从安装到进阶，"
         "每个 API 配中文讲解、可交互示例视频与源码，全部例子可一键复现。",
         "",
-        '<div id="home-progress" data-total="%d"></div>' % total,
+        ".. raw:: html",
         "",
-        "::::{grid} 1 2 2 2",
-        ":gutter: 2",
+        f'   <div id="home-progress" data-total="{total}"></div>',
+        "",
+        ".. grid:: 1 2 2 2",
+        "   :gutter: 2",
         "",
     ]
     cards = [
         ("🚀 开始学习",
-         ref(flat[0][0]['id'], flat[0][1]['id'])[:-3],
+         f"chapters/{flat[0][0]['id']}/{flat[0][1]['id']}",
          f"**{parts[0]['title']}**：{flat[0][1]['title']}"),
         ("📚 API 索引", "api-index",
          "全部 259 个类与函数，按字母分组，直达中文讲解。"),
         ("🧪 API 参考（全类）", "api/index",
-         f"{class_count} 个公开类的 autodoc 自动文档：签名、方法、继承关系。"),
+         f"{class_count} 个公开类逐一精讲：中文说明、继承链、参数表、上手示例与 autodoc 参考。"),
         ("🧬 继承关系图", "inheritance-graph",
          f"全部 {class_count} 个公开类的继承全景图，构建时自动遍历生成，节点可点击跳转。"),
         ("📖 术语表", "glossary",
@@ -254,49 +328,47 @@ def build_index(config: dict, flat: list[tuple[dict, dict]], class_count: int) -
     ]
     for title, link, body in cards:
         L += [
-            ":::{grid-item-card} " + title,
-            f":link: {link}",
-            ":link-type: doc",
+            f"   .. grid-item-card:: {title}",
+            f"      :link: {link}",
+            "      :link-type: doc",
             "",
-            body,
-            ":::",
+            "      " + body,
             "",
         ]
+    for part in parts:
+        L += [
+            ".. toctree::",
+            "   :maxdepth: 1",
+            "   :hidden:",
+            f"   :caption: {part['title']}",
+            "",
+        ]
+        for s in part["sections"]:
+            L.append(f"   chapters/{part['id']}/{s['id']}")
+        L.append("")
     L += [
-        "::::",
+        ".. toctree::",
+        "   :maxdepth: 1",
+        "   :hidden:",
+        "   :caption: 站内",
+        "",
+        "   api-index",
+        "   inheritance-graph",
+        "   glossary",
+        "",
+        ".. toctree::",
+        "   :maxdepth: 1",
+        "   :hidden:",
+        "   :caption: API 参考（全类）",
+        "",
+        "   api/index",
         "",
     ]
-    for part in parts:
-        L.append("```{toctree}")
-        L.append(":maxdepth: 1")
-        L.append(":hidden:")
-        L.append(f":caption: {part['title']}")
-        L.append("")
-        for s in part["sections"]:
-            L.append(f"chapters/{part['id']}/{s['id']}")
-        L.append("```")
-        L.append("")
-    L.append("```{toctree}")
-    L.append(":maxdepth: 1")
-    L.append(":hidden:")
-    L.append(":caption: 站内")
-    L.append("")
-    L.extend(["api-index", "inheritance-graph", "glossary"])
-    L.append("```")
-    L.append("")
-    L.append("```{toctree}")
-    L.append(":maxdepth: 1")
-    L.append(":hidden:")
-    L.append(":caption: API 参考（全类）")
-    L.append("")
-    L.append("api/index")
-    L.append("```")
-    L.append("")
     return "\n".join(L)
 
 
 def build_api_index(config: dict) -> str:
-    items: list[tuple[str, str]] = []  # (name, link)
+    items: list[tuple[str, str]] = []  # (name, section path)
     for part in config["parts"]:
         for s in part["sections"]:
             for c in s.get("covers", []):
@@ -304,35 +376,110 @@ def build_api_index(config: dict) -> str:
     groups: dict[str, list[tuple[str, str]]] = {}
     for name, sec in items:
         groups.setdefault(name[:1].upper(), []).append((name, sec))
-    L = ["# API 索引", "", "按字母分组，点击进入对应章节的中文讲解。", ""]
+    L = rst_title("API 索引") + [
+        "",
+        "按字母分组，点击进入对应章节的中文讲解。",
+        "",
+    ]
     for letter in sorted(groups):
-        L.append(f"## {letter}")
-        L.append("")
+        L += [letter, "-" * len(letter), ""]
         for name, sec in sorted(groups[letter]):
             kind = "class" if name[:1].isupper() else "函数"
-            L.append(f"- [`{name}`]({ref_from_root(sec, name)})（{kind}）")
+            L.append(f"- `{name} <chapters/{sec}.html#{name.lower()}>`__（{kind}）")
         L.append("")
     return "\n".join(L)
 
 
-def ref_from_root(section_path: str, anchor: str) -> str:
-    part, sec = section_path.split("/")
-    # MyST/docutils normalizes explicit target names to lowercase ids.
-    return f"chapters/{part}/{sec}.md#{anchor.lower()}"
-
-
 def build_glossary(glossary: list[dict]) -> str:
-    L = ["# 术语表", "", "| 术语 | 中文 | 说明 |", "| --- | --- | --- |"]
+    L = rst_title("术语表") + ["", ".. container:: table-scroll", "",
+                               "   .. list-table::", "      :header-rows: 1", ""]
     for it in glossary:
-        L.append(f"| `{it['term']}` | {it['zh']} | {it['desc']} |")
+        L.append(f"      * - ``{it['term']}``")
+        L.append(f"        - {it['zh']}")
+        L.append(f"        - {it['desc']}")
     L.append("")
     return "\n".join(L)
 
 
-def build_api_pages(classes: dict[str, type], docs: Path) -> dict[str, str]:
-    """Write docs/api/<group>.md (autoclass per class), docs/api/index.md
+# --- per-class tutorial pages ------------------------------------------------
+def _signature_params(obj: type) -> list[tuple[str, str]]:
+    """(name, default-or-annotation text) for __init__, skipping self/*args."""
+    try:
+        sig = inspect.signature(obj.__init__)
+    except (TypeError, ValueError):
+        return []
+    rows: list[tuple[str, str]] = []
+    for p in sig.parameters.values():
+        if p.name == "self" or p.kind in (p.VAR_POSITIONAL, p.VAR_KEYWORD):
+            continue
+        if p.default is p.empty:
+            default = "—"
+        else:
+            r = repr(p.default)
+            default = r if len(r) <= 30 else r[:27] + "…"
+        if p.annotation is not p.empty:
+            ann = getattr(p.annotation, "__name__", str(p.annotation))
+            if len(ann) <= 24:
+                default += f"，{ann}"
+        rows.append((p.name, default))
+    return rows
+
+
+def _inheritance_chain(name: str, classes: dict[str, type]) -> list[str]:
+    """Base -> ... -> class chain through documented manim ancestors."""
+    if name not in classes:
+        return []
+    chain = [n for n in (c.__name__ for c in inspect.getmro(classes[name])) if n in classes]
+    return list(reversed(chain))
+
+
+_CHAIN_DOT_ATTRS = (
+    '  graph [rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, '
+    'nodesep="0.15", ranksep="0.3"];',
+    '  node  [shape=box, style="filled", fontname="Helvetica,sans-serif", fontsize=11, '
+    'penwidth=1, width=0.05, height=0.05, margin="0.08,0.05", fillcolor="#ffffff", '
+    'color="#c9ced8", fontcolor="#1f2733"];',
+    '  edge  [color="#8b93a1", arrowsize=0.6, penwidth=1];',
+)
+
+
+def build_class_tutorial(name: str, classes: dict[str, type], notes: dict) -> list[str]:
+    """One class entry: Chinese notes + chain + params + example + autodoc."""
+    obj = classes[name]
+    note = notes.get(name, {})
+    L: list[str] = [name, "-" * max(len(name), 3), ""]
+    if note.get("zh"):
+        L += [note["zh"], ""]
+    chain = _inheritance_chain(name, classes)
+    if len(chain) > 1:
+        dot = ["digraph G {", *_CHAIN_DOT_ATTRS]
+        dot += [f'  "{chain[i-1]}" -> "{chain[i]}";' for i in range(1, len(chain))]
+        dot.append("}")
+        L += ["继承关系", "~~~~~~~~", ""]
+        L += emit_graphviz(dot)
+        L.append("")
+    params = _signature_params(obj)
+    if params:
+        L += ["参数", "~~~~", "", ".. container:: table-scroll", "",
+              "   .. list-table::", "      :header-rows: 1", ""]
+        for pname, default in params:
+            L.append(f"      * - ``{pname}``")
+            L.append(f"        - {default}")
+        L.append("")
+    if note.get("ex"):
+        L += ["快速上手", "~~~~~~~~", "", ".. code-block:: python", ""]
+        L += indent(note["ex"].split("\n"))
+        L.append("")
+    L += ["API 文档", "~~~~~~~~", "", f".. autoclass:: manim.{name}", ""]
+    return L
+
+
+def build_api_pages(
+    classes: dict[str, type], notes: dict, docs: Path
+) -> dict[str, str]:
+    """Write docs/api/<group>.rst (per-class tutorials), docs/api/index.rst
     and docs/_api_map.json (class name -> api page anchor) used by the
-    {manim-inheritance} directive for node links. Returns the api map."""
+    manim-inheritance directive for node links. Returns the api map."""
     groups: dict[str, list[str]] = {gid: [] for gid, _t, _p in API_GROUPS}
     for name, obj in sorted(classes.items()):
         groups[group_api_page(getattr(obj, "__module__", ""))].append(name)
@@ -344,46 +491,34 @@ def build_api_pages(classes: dict[str, type], docs: Path) -> dict[str, str]:
         if not names:
             continue
         used.append((gid, title, len(names)))
-        L = [
-            f"# API 参考：{title}",
+        L = rst_title(f"API 参考：{title}") + [
             "",
-            f"共 **{len(names)}** 个类，按字母排序。签名与方法由 autodoc 从 "
-            "manim v0.21.0 源码自动生成；带中文精讲的类见 "
-            "[API 索引](../api-index.md)。",
+            f"共 **{len(names)}** 个类，按字母排序。每个类含中文说明、继承链、"
+            "参数表与上手示例，API 文档由 autodoc 从 manim v0.21.0 源码自动生成；"
+            "带完整中文精讲的类见 `API 索引 <../api-index.html>`__。",
             "",
         ]
         for n in names:
             api_map[n] = f"/api/{gid}.html#{n.lower()}"
-            # eval-rst: autodoc generates reST internally, so it must run
-            # under the reST parser, not the MyST parser.
-            L += [
-                f"## {n}",
-                "",
-                "```{eval-rst}",
-                f".. autoclass:: manim.{n}",
-                "```",
-                "",
-            ]
-        page = docs / "api" / f"{gid}.md"
+            L += build_class_tutorial(n, classes, notes)
+        page = docs / "api" / f"{gid}.rst"
         page.parent.mkdir(parents=True, exist_ok=True)
         page.write_text("\n".join(L), encoding="utf-8")
 
     total = sum(c for _g, _t, c in used)
-    L = [
-        "# API 参考（全类）",
+    L = rst_title("API 参考（全类）") + [
         "",
-        f"Manim Community v0.21.0 全部 **{total}** 个公开类，按模块分组，"
-        "由 Sphinx autodoc 自动生成：每个类含签名、方法列表与继承关系；"
-        "docstring 中的官方示例以静态代码形式保留。带中文精讲的类另见 "
-        "[API 索引](../api-index.md)。",
+        f"Manim Community v0.21.0 全部 **{total}** 个公开类，按模块分组。"
+        "每个类一页式教程：中文说明、继承关系、参数表、快速上手示例，"
+        "并附 autodoc 自动生成的完整 API 文档。",
         "",
-        "```{toctree}",
-        ":maxdepth: 1",
+        ".. toctree::",
+        "   :maxdepth: 1",
         "",
     ]
-    L += [gid for gid, _t, _c in used]
-    L += ["```", ""]
-    (docs / "api" / "index.md").write_text("\n".join(L), encoding="utf-8")
+    L += [f"   {gid}" for gid, _t, _c in used]
+    L += ["", ""]
+    (docs / "api" / "index.rst").write_text("\n".join(L), encoding="utf-8")
     (docs / "_api_map.json").write_text(
         json.dumps(api_map, ensure_ascii=False, indent=1), encoding="utf-8"
     )
@@ -392,21 +527,18 @@ def build_api_pages(classes: dict[str, type], docs: Path) -> dict[str, str]:
 
 def build_inheritance_graph_page(class_count: int) -> str:
     # The DOT itself is produced at Sphinx build time by the
-    # {manim-inheritance} directive (docs/_ext/manim_inheritance.py), which
+    # manim-inheritance directive (docs/_ext/manim_inheritance.py), which
     # auto-enumerates the installed manim and resolves node links to
     # chapter anchors / api pages.
-    L = [
-        "# 继承关系图",
+    return "\n".join(rst_title("继承关系图") + [
         "",
         f"Manim Community v0.21.0 全部 **{class_count}** 个公开类的继承全景图，"
         "构建时自动遍历生成。点击节点：有中文精讲的类跳转到对应教程章节，"
-        "其余跳转到 [API 参考](api/index.md) 中的 autodoc 条目。",
+        "其余跳转到 `API 参考 <api/index.html>`__ 中的教程条目。",
         "",
-        "```{manim-inheritance}",
-        "```",
+        ".. manim-inheritance::",
         "",
-    ]
-    return "\n".join(L)
+    ])
 
 
 def build_redirects(flat: list[tuple[dict, dict]]) -> str:
@@ -431,11 +563,14 @@ def main() -> int:
     config = json.loads((content_dir / "site.config.json").read_text(encoding="utf-8"))
 
     flat = [(p, s) for p in config["parts"] for s in p["sections"]]
-    part_ids = {p["id"] for p in config["parts"]}
     classes = load_manim_classes()
     if not classes:
         print("WARNING: manim not importable; api pages and full graph skipped",
               file=sys.stderr)
+
+    notes_path = content_dir / "class-notes.json"
+    notes = (json.loads(notes_path.read_text(encoding="utf-8"))
+             if notes_path.is_file() else {})
 
     chapters_root = content_dir / "chapters"
     out_root = docs / "chapters"
@@ -443,7 +578,7 @@ def main() -> int:
     converted = 0
     for part, section in flat:
         md_path = chapters_root / part["id"] / f"{section['id']}.md"
-        dest = out_root / part["id"] / f"{section['id']}.md"
+        dest = out_root / part["id"] / f"{section['id']}.rst"
         if not md_path.is_file():
             warnings.append(f"missing md: {part['id']}/{section['id']}")
             continue
@@ -456,12 +591,12 @@ def main() -> int:
         if missing:
             warnings.append(f"MISSING covers {part['id']}/{section['id']}: {', '.join(missing)}")
 
-    (docs / "index.md").write_text(build_index(config, flat, len(classes)), encoding="utf-8")
-    (docs / "api-index.md").write_text(build_api_index(config), encoding="utf-8")
+    (docs / "index.rst").write_text(build_index(config, flat, len(classes)), encoding="utf-8")
+    (docs / "api-index.rst").write_text(build_api_index(config), encoding="utf-8")
     glossary = json.loads((content_dir / "glossary.json").read_text(encoding="utf-8"))
-    (docs / "glossary.md").write_text(build_glossary(glossary), encoding="utf-8")
-    build_api_pages(classes, docs)
-    (docs / "inheritance-graph.md").write_text(
+    (docs / "glossary.rst").write_text(build_glossary(glossary), encoding="utf-8")
+    build_api_pages(classes, notes, docs)
+    (docs / "inheritance-graph.rst").write_text(
         build_inheritance_graph_page(len(classes)), encoding="utf-8"
     )
     extra = docs / "_extra"
