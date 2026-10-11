@@ -185,7 +185,11 @@
 
 .graphviz > object {
   display: block;
-  max-width: none;
+  /* Scale oversized diagrams down to the container width while keeping the
+     aspect ratio (SVG has a viewBox); smaller diagrams are not upscaled. */
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
 }
 
 /* avoid a horizontal scrollbar from the toast transform on small screens */

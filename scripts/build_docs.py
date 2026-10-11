@@ -173,9 +173,9 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                 # Native graphviz diagram (small left-to-right chain).
                 out.append("```{graphviz}")
                 out.append("digraph G {")
-                out.append('  graph [rankdir=LR, bgcolor="transparent", nodesep="0.25", ranksep="0.35"];')
-                out.append('  node  [shape=box, style="rounded,filled", fontname="Helvetica,sans-serif", fontsize=11, height=0.3, color="#8b93a1", fillcolor="#f2f4f7", fontcolor="#1f2733"];')
-                out.append('  edge  [color="#a6adba", arrowsize=0.6, penwidth=1.1];')
+                out.append('  graph [rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, nodesep="0.15", ranksep="0.3"];')
+                out.append('  node  [shape=box, style="filled", fontname="Helvetica,sans-serif", fontsize=11, penwidth=1, width=0.05, height=0.05, margin="0.08,0.05", fillcolor="#ffffff", color="#c9ced8", fontcolor="#1f2733"];')
+                out.append('  edge  [color="#8b93a1", arrowsize=0.6, penwidth=1];')
                 for idx, name in enumerate(chain):
                     if idx:
                         out.append(f'  "{chain[idx-1]}" -> "{name}";')
@@ -322,9 +322,9 @@ def build_inheritance_graph_page(inheritance: dict) -> str:
     nodes = inheritance.get("nodes", [])
     dot_lines = [
         "digraph G {",
-        '  graph [rankdir=LR, bgcolor="transparent", nodesep="0.3", ranksep="0.6", splines=spline];',
-        '  node  [shape=box, style="rounded,filled", fontname="Helvetica,sans-serif", fontsize=11, height=0.34, color="#8b93a1", fillcolor="#f2f4f7", fontcolor="#1f2733"];',
-        '  edge  [color="#a6adba", arrowsize=0.6, penwidth=1.1];',
+        '  graph [rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, nodesep="0.15", ranksep="0.3"];',
+        '  node  [shape=box, style="filled", fontname="Helvetica,sans-serif", fontsize=11, penwidth=1, width=0.05, height=0.05, margin="0.08,0.05", fillcolor="#ffffff", color="#c9ced8", fontcolor="#1f2733"];',
+        '  edge  [color="#8b93a1", arrowsize=0.6, penwidth=1];',
     ]
     for n in nodes:
         name = n["name"]
