@@ -6,12 +6,18 @@
   margin: 1.25rem 0;
   border: 1px solid var(--color-background-border, #e0e0e0);
   border-radius: 0.75rem;
-  padding: 1rem;
+  padding: 0.75rem 0 0;
   background: var(--color-background-secondary, #f7f7f7);
+  /* square video/code corners are clipped by the card's own radius */
+  overflow: hidden;
 }
 
-.demo-caption {
-  margin-bottom: 0.75rem;
+/* text is inset left/right; video and code stay flush with the card edges.
+   Scoped to .demo-block: furo-extensions sets `[role=main] .container
+   { padding: 0 }` for docutils containers, which would otherwise win. */
+.demo-block .demo-caption {
+  margin: 0 0 0.75rem;
+  padding: 0 1rem;
   font-size: 0.92rem;
 }
 
@@ -20,14 +26,13 @@
 }
 
 .demo-video-area {
-  max-width: 640px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .demo-video-area video {
   display: block;
   width: 100%;
-  border-radius: 0.5rem;
+  border-radius: 0;
   background: #000;
 }
 
@@ -36,7 +41,7 @@
   align-items: center;
   justify-content: center;
   min-height: 180px;
-  border-radius: 0.5rem;
+  border-radius: 0;
   background: var(--color-background-item, #eee);
   color: var(--color-foreground-secondary, #666);
   font-size: 0.9rem;
@@ -45,7 +50,7 @@
 .demo-source {
   margin-top: 0.75rem;
   border-top: 1px dashed var(--color-background-border, #ddd);
-  padding-top: 0.5rem;
+  padding: 0.5rem 1rem 0;
 }
 
 .demo-source > summary {
@@ -55,10 +60,12 @@
   user-select: none;
 }
 
+/* bleed the code block to the card edges, no rounded corners */
 .demo-source .literal-block-wrapper,
 .demo-source .highlight,
 .demo-source pre {
-  margin-top: 0.75rem;
+  margin: 0.75rem -1rem 0;
+  border-radius: 0;
 }
 
 /* ---------- tables ---------- */
