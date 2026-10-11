@@ -127,7 +127,10 @@ jobs:
         run: python scripts/build_docs.py
 
       - name: Build site
-        run: python -m sphinx -E -b html docs/source docs/build/html
+        # -W --keep-going: any Sphinx warning fails the build (deploy
+        # gate). docutils noise from upstream manim docstrings stays
+        # suppressed via suppress_warnings in conf.py.
+        run: python -m sphinx -E -b html -W --keep-going docs/source docs/build/html
 
       - name: Merge media into site output
         run: python scripts/merge_media.py --media-dir media --dist docs/build/html
