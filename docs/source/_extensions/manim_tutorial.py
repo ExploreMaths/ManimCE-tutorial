@@ -117,9 +117,13 @@ class DemoDirective(ManimDirective):
         media_url = env.config.manim_media_url.rstrip("/")
 
         caption = [line for line in self.content if line.strip()]
-        source_block = "\n".join("      " + line for line in code.split("\n"))
+        # 4-space indent: the code-block now sits at top level inside the
+        # raw-html admonition div (same layout as manim's own template).
+        source_block = "\n".join("    " + line for line in code.split("\n"))
         rendered_template = jinja2.Template(DEMO_TEMPLATE).render(
             caption=caption,
+            scene=html.escape(scene),
+            scene_id=html.escape(scene.lower()),
             basename=html.escape(basename),
             video_exists=video_exists,
             media_url=html.escape(media_url),
@@ -133,37 +137,35 @@ class DemoDirective(ManimDirective):
         return []
 
 
+# Mirrors manim.utils.docbuild.manim_directive.TEMPLATE: an
+# ``admonition-manim-example`` card titled "Example: <Scene> ¶", the video
+# (CI-pre-rendered under manim_media_dir, placeholder when missing) and the
+# example source as a code-block — so the rendered result matches manim's
+# own documentation. The only additions over the upstream template are the
+# optional caption paragraph and the not-yet-rendered placeholder.
 DEMO_TEMPLATE = r"""
-.. container:: demo-block
+.. raw:: html
+
+   <div id="{{ scene_id }}" class="admonition admonition-manim-example">
+   <p class="admonition-title">Example: {{ scene }} <a class="headerlink" href="#{{ scene_id }}">¶</a></p>
 
 {% if caption %}
-   .. container:: demo-caption
-
 {% for line in caption %}
-      {{ line }}
+{{ line }}
 {% endfor %}
+
 {% endif %}
-   .. raw:: html
+.. raw:: html
 
-      <div class="demo-video-area{% if not video_exists %} demo-video-missing{% endif %}"{% if not video_exists %} data-src="{{ media_url }}/{{ video_rel }}"{% endif %}>
-{% if video_exists %}
-      <video controls preload="metadata" playsinline src="{{ media_url }}/{{ video_rel }}"></video>
-{% else %}
-      <span>🎬 视频渲染中……</span>
-{% endif %}
-      </div>
+   <video class="manim-video{% if not video_exists %} demo-video-missing{% endif %}" controls loop playsinline{% if video_exists %} src="{{ media_url }}/{{ video_rel }}"{% else %} data-src="{{ media_url }}/{{ video_rel }}"{% endif %}>{% if not video_exists %}🎬 视频渲染中……{% endif %}</video>
 
-   .. raw:: html
-
-      <details class="demo-source"><summary>查看源码 <code class="docutils literal">{{ basename }}.py</code></summary>
-
-   .. code-block:: python
+.. code-block:: python
 
 {{ source_block }}
 
-   .. raw:: html
+.. raw:: html
 
-      </details>
+   </div>
 """
 
 

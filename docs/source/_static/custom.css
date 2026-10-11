@@ -1,71 +1,34 @@
 /* ManimCE tutorial — custom styles on top of Furo. */
 
-/* ---------- demo blocks ---------- */
+/* ---------- demo blocks (ManimDirective layout) ---------- */
 
-.demo-block {
-  margin: 1.25rem 0;
-  border: 1px solid var(--color-background-border, #e0e0e0);
-  border-radius: 0.75rem;
-  padding: 0.75rem 0 0;
-  background: var(--color-background-secondary, #f7f7f7);
-  /* square video/code corners are clipped by the card's own radius */
-  overflow: hidden;
-}
+/* Structure mirrors manim.utils.docbuild.manim_directive.TEMPLATE:
+   .admonition-manim-example card > title "Example: <Scene> ¶" >
+   caption paragraph > .manim-video > python code-block. Furo already
+   styles the admonition shell; here we only tune the video/code. */
 
-/* text is inset left/right; video and code stay flush with the card edges.
-   Scoped to .demo-block: furo-extensions sets `[role=main] .container
-   { padding: 0 }` for docutils containers, which would otherwise win. */
-.demo-block .demo-caption {
-  margin: 0 0 0.75rem;
-  padding: 0 1rem;
-  font-size: 0.92rem;
-}
-
-.demo-caption p {
-  margin: 0;
-}
-
-.demo-video-area {
-  margin: 0;
-}
-
-.demo-video-area video {
+.admonition-manim-example .manim-video {
   display: block;
   width: 100%;
+  max-width: 100%;
+  margin: 0.5rem 0;
   border-radius: 0;
   background: #000;
 }
 
-.demo-video-missing {
+/* keep code blocks square inside the example card */
+.admonition-manim-example .highlight,
+.admonition-manim-example pre {
+  border-radius: 0;
+}
+
+.admonition-manim-example .demo-video-missing {
+  min-height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 180px;
-  border-radius: 0;
-  background: var(--color-background-item, #eee);
   color: var(--color-foreground-secondary, #666);
   font-size: 0.9rem;
-}
-
-.demo-source {
-  margin-top: 0.75rem;
-  border-top: 1px dashed var(--color-background-border, #ddd);
-  padding: 0.5rem 1rem 0;
-}
-
-.demo-source > summary {
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: var(--color-link, #0645ad);
-  user-select: none;
-}
-
-/* bleed the code block to the card edges, no rounded corners */
-.demo-source .literal-block-wrapper,
-.demo-source .highlight,
-.demo-source pre {
-  margin: 0.75rem -1rem 0;
-  border-radius: 0;
 }
 
 /* ---------- tables ---------- */
@@ -86,6 +49,18 @@
 
 .table-scroll td:first-child code {
   white-space: nowrap;
+}
+
+/* docutils 0.22+ wraps every table in an inner .table-wrapper, and furo
+   gives [role=main] .table-wrapper.container its own overflow-x: auto.
+   Inside our .table-scroll that produced two nested horizontal scrollbars
+   (and a vertical one from the computed auto axis). The outer
+   .table-scroll owns scrolling; neutralize the inner wrapper. */
+[role="main"] .table-scroll > .table-wrapper.container {
+  overflow-x: visible;
+  margin: 0;
+  padding: 0;
+  width: auto;
 }
 
 /* ---------- custom notices ---------- */
