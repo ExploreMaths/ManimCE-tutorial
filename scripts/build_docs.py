@@ -88,7 +88,11 @@ def inline_md_to_rst(text: str) -> str:
     return text
 
 
-def convert_body(body: list[str]) -> list[str]:
+def convert_body(
+    body: list[str],
+    link_maps: dict[str, str] | None = None,
+    const_urls: dict[str, str] | None = None,
+) -> list[str]:
     """Convert fenced code blocks and md pipe tables inside a block body
     (:::demo / :::notice / :::exercise); everything else goes inline."""
     out: list[str] = []
@@ -116,7 +120,7 @@ def convert_body(body: list[str]) -> list[str]:
                 i += 1
             if out and out[-1].strip():
                 out.append("")
-            out.extend(emit_table(tbl))
+            out.extend(emit_table(tbl, link_maps, const_urls))
             continue
         out.append(inline_md_to_rst(body[i]))
         i += 1
@@ -201,13 +205,133 @@ def parse_pipe_table(body: list[str]) -> list[list[str]]:
     return rows
 
 
-def emit_table(body: list[str]) -> list[str]:
+# --- table-cell cross references ----------------------------------------------
+# Official v0.21.0 API pages that document constants and predefined colors.
+_OFFICIAL_BASE = "https://docs.manim.community/en/v0.21.0"
+_CONST_PAGE = f"{_OFFICIAL_BASE}/reference/manim.constants.html"
+_COLOR_PAGE = f"{_OFFICIAL_BASE}/reference/manim.utils.color.manim_colors.html"
+
+_TOKEN_RE = re.compile(r"[A-Za-z_]\w*")
+# reST literals and inline references already emitted by inline_md_to_rst:
+# tokens inside them must not be linkified a second time.
+_RST_SPAN_RE = re.compile(r"``[^`\n]*``|`[^`\n]+`__?")
+
+
+def _const_urls() -> dict[str, str]:
+    """UPPER_CASE manim namespace values -> official docs URL (lazy, cached)."""
+    global _CONST_URLS
+    if _CONST_URLS is not None:
+        return _CONST_URLS
+    urls: dict[str, str] = {}
+    try:
+        import manim
+        import manim.constants as _mc
+        from manim.utils.color import manim_colors as _colors
+    except Exception:  # noqa: BLE001 - manim optional at build time
+        _CONST_URLS = {}
+        return _CONST_URLS
+    for name in dir(manim):
+        if not re.fullmatch(r"[A-Z][A-Z0-9_]*", name):
+            continue
+        value = getattr(manim, name)
+        if callable(value) or isinstance(value, type):
+            continue
+        if hasattr(_colors, name):
+            urls[name] = _COLOR_PAGE
+        elif hasattr(_mc, name):
+            urls[name] = f"{_CONST_PAGE}#manim.constants.{name}"
+    # Typing aliases (Point3DLike, Vector3D, ...) and the color type aliases
+    # (ParsableManimColor, ...): documented on their own official module
+    # pages. Imported utility names (np, Callable, ...) are excluded.
+    try:
+        import manim.typing as _mt
+        import manim.utils.color.core as _mcc
+    except Exception:  # noqa: BLE001
+        pass
+    else:
+        imported = {
+            "Any", "Callable", "ClassVar", "Final", "Hashable", "Iterable",
+            "Literal", "Mapping", "MutableMapping", "NamedTuple", "NewType",
+            "Optional", "PathLike", "Protocol", "Sequence", "TYPE_CHECKING",
+            "TypeAlias", "TypeVar", "Union", "annotations", "cast", "np",
+            "npt", "overload", "runtime_checkable",
+        }
+        for name in dir(_mt):
+            if not name.startswith("_") and name not in imported:
+                urls.setdefault(
+                    name,
+                    f"{_OFFICIAL_BASE}/reference/manim.typing.html"
+                    f"#manim.typing.{name}",
+                )
+        for name in ("HSV", "ManimColor", "ParsableManimColor", "RGBA",
+                     "RandomColorGenerator"):
+            if hasattr(_mcc, name):
+                urls.setdefault(
+                    name,
+                    f"{_OFFICIAL_BASE}/reference/manim.utils.color.core.html"
+                    f"#manim.utils.color.core.{name}",
+                )
+    _CONST_URLS = urls
+    return urls
+
+
+_CONST_URLS: dict[str, str] | None = None
+
+
+def linkify_rst(
+    text: str,
+    link_maps: dict[str, str] | None = None,
+    const_urls: dict[str, str] | None = None,
+) -> str:
+    """Turn known class names / manim constants into reference links.
+
+    Classes resolve to the local docs (chapter tutorial preferred, api/
+    page fallback — same targets as the inheritance graphs); constants
+    resolve to the official v0.21.0 reference. Existing reST literals are
+    linked whole when their content is a single known name; other tokens
+    are linked only outside literals and existing inline references.
+    """
+    link_maps = link_maps or {}
+
+    def link_token(tok: str) -> str:
+        url = link_maps.get(tok) or const_urls.get(tok)
+        return f"`{tok} <{url}>`__" if url else tok
+
+    out: list[str] = []
+    pos = 0
+    for m in _RST_SPAN_RE.finditer(text):
+        seg = text[pos:m.start()]
+        out.append(_TOKEN_RE.sub(lambda t: link_token(t.group(0)), seg))
+        span = m.group(0)
+        if span.startswith("``"):
+            inner = span[2:-2]
+            url = link_maps.get(inner) or const_urls.get(inner)
+            out.append(f"`{inner} <{url}>`__" if url else span)
+        else:  # inline reference from inline_md_to_rst — leave untouched
+            out.append(span)
+        pos = m.end()
+    out.append(_TOKEN_RE.sub(lambda t: link_token(t.group(0)), text[pos:]))
+    result = "".join(out)
+    # docutils rejects an inline-reference end-string directly followed by
+    # an ASCII word char or a markup-sensitive char ("Inline interpreted
+    # text or phrase reference start-string without end-string" -> a
+    # crimson .problematic span). A narrow no-break space (treated as
+    # whitespace, visually negligible) after `__ keeps the reference
+    # parseable, e.g. `ManimColor </...>`__('#000000').
+    return re.sub(r"`__(?=[A-Za-z0-9_(<*=%])", "`__\u202f", result)
+
+
+def emit_table(
+    body: list[str],
+    link_maps: dict[str, str] | None = None,
+    const_urls: dict[str, str] | None = None,
+) -> list[str]:
     rows = parse_pipe_table(body)
     out = [".. container:: table-scroll", "", "   .. list-table::", "      :header-rows: 1", ""]
     for row in rows:
         for idx, cell in enumerate(row):
             prefix = "      * - " if idx == 0 else "        - "
-            out.append(prefix + inline_md_to_rst(cell))
+            out.append(prefix + linkify_rst(inline_md_to_rst(cell), link_maps, const_urls))
     return out
 
 
@@ -256,6 +380,7 @@ def chain_dot(chain: list[str], links: dict[str, str]) -> list[str]:
 def convert_section(
     text: str, covers: list[str], link_maps: dict[str, str] | None = None,
     class_names: set[str] | None = None,
+    const_urls: dict[str, str] | None = None,
 ) -> tuple[str, set[str]]:
     link_maps = link_maps or {}
     class_names = class_names or set()
@@ -304,7 +429,7 @@ def convert_section(
             if kind in ("params", "compare"):
                 body, i = collect_until_close(lines, i + 1)
                 blank()
-                out.extend(emit_table(body))
+                out.extend(emit_table(body, link_maps, const_urls))
                 blank()
                 continue
             if kind == "demo":
@@ -312,7 +437,7 @@ def convert_section(
                 blank()
                 out.append(f".. demo:: {rest}")
                 out.append("")
-                out.extend(indent(convert_body(body)))
+                out.extend(indent(convert_body(body, link_maps, const_urls)))
                 blank()
                 continue
             if kind == "notice":
@@ -324,7 +449,7 @@ def convert_section(
                 out.append(f".. admonition:: {inline_md_to_rst(title) or rest}")
                 out.append(f"   :class: {cls}")
                 out.append("")
-                out.extend(indent(convert_body(content_lines)))
+                out.extend(indent(convert_body(content_lines, link_maps, const_urls)))
                 blank()
                 continue
             if kind == "exercise":
@@ -332,12 +457,12 @@ def convert_section(
                 blank()
                 out.append(".. dropdown:: ✏️ 练习")
                 out.append("")
-                out.extend(indent(convert_body(question)))
+                out.extend(indent(convert_body(question, link_maps, const_urls)))
                 if any(l.strip() for l in answer):
                     out.append("")
                     out.append("   .. dropdown:: ✅ 参考答案")
                     out.append("")
-                    out.extend(indent(convert_body(answer), 6))
+                    out.extend(indent(convert_body(answer, link_maps, const_urls), 6))
                 blank()
                 continue
             if kind == "inheritance":
@@ -362,7 +487,7 @@ def convert_section(
                 tbl.append(lines[i])
                 i += 1
             blank()
-            out.extend(emit_table(tbl))
+            out.extend(emit_table(tbl, link_maps, const_urls))
             blank()
             continue
         m = re.match(r"^(#{1,4})\s+(.+?)\s*$", line)
@@ -579,6 +704,7 @@ _CHAIN_DOT_ATTRS = (
 def build_class_tutorial(
     name: str, classes: dict[str, type], notes: dict,
     link_maps: dict[str, str] | None = None,
+    const_urls: dict[str, str] | None = None,
 ) -> list[str]:
     """One class entry: Chinese notes + chain + params + example + autodoc."""
     obj = classes[name]
@@ -597,7 +723,7 @@ def build_class_tutorial(
               "   .. list-table::", "      :header-rows: 1", ""]
         for pname, default in params:
             L.append(f"      * - ``{pname}``")
-            L.append(f"        - {default}")
+            L.append(f"        - {linkify_rst(default, link_maps, const_urls)}")
         L.append("")
     if note.get("ex"):
         L += ["快速上手", "~~~~~~~~", "", ".. code-block:: python", ""]
@@ -610,6 +736,7 @@ def build_class_tutorial(
 def build_api_pages(
     classes: dict[str, type], notes: dict, docs: Path,
     link_maps: dict[str, str] | None = None,
+    const_urls: dict[str, str] | None = None,
 ) -> dict[str, str]:
     """Write docs/api/<group>.rst (per-class tutorials), docs/api/index.rst
     and docs/_api_map.json (class name -> api page anchor) used by the
@@ -634,7 +761,7 @@ def build_api_pages(
         ]
         for n in names:
             api_map[n] = f"/api/{gid}.html#{n.lower()}"
-            L += build_class_tutorial(n, classes, notes, link_maps)
+            L += build_class_tutorial(n, classes, notes, link_maps, const_urls)
         page = docs / "api" / f"{gid}.rst"
         page.parent.mkdir(parents=True, exist_ok=True)
         page.write_text("\n".join(L), encoding="utf-8")
@@ -696,6 +823,7 @@ def main() -> int:
              if notes_path.is_file() else {})
 
     link_maps = build_link_maps(classes, content_dir)
+    const_urls = _const_urls()
     chapters_root = content_dir / "chapters"
     out_root = docs / "chapters"
     warnings: list[str] = []
@@ -709,7 +837,7 @@ def main() -> int:
         covers = section.get("covers", [])
         text, matched = convert_section(
             md_path.read_text(encoding="utf-8"), covers, link_maps,
-            set(classes))
+            set(classes), const_urls)
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(text, encoding="utf-8")
         converted += 1
@@ -721,7 +849,7 @@ def main() -> int:
     (docs / "api-index.rst").write_text(build_api_index(config), encoding="utf-8")
     glossary = json.loads((content_dir / "glossary.json").read_text(encoding="utf-8"))
     (docs / "glossary.rst").write_text(build_glossary(glossary), encoding="utf-8")
-    build_api_pages(classes, notes, docs, link_maps)
+    build_api_pages(classes, notes, docs, link_maps, const_urls)
     (docs / "inheritance-graph.rst").write_text(
         build_inheritance_graph_page(len(classes)), encoding="utf-8"
     )

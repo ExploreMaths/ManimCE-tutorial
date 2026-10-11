@@ -24,8 +24,10 @@ import inspect
 import re
 from pathlib import Path
 
+import jinja2
 from docutils import nodes
 from docutils.parsers.rst import Directive
+from manim.utils.docbuild.manim_directive import ManimDirective
 from sphinx import addnodes
 from sphinx.util import logging
 
@@ -71,17 +73,30 @@ def _signature_text(name: str, obj: object) -> str | None:
     return f"{name}({', '.join(parts)})"
 
 
-class DemoDirective(Directive):
-    """```{demo} examples/ch04/number_line.py NumberLineDemo
+class DemoDirective(ManimDirective):
+    r"""```{demo} examples/ch04/number_line.py NumberLineDemo
 
     optional caption (markdown, parsed inline)
     ```
+
+    A subclass of manim's own ``.. manim::`` directive
+    (:class:`manim.utils.docbuild.manim_directive.ManimDirective`) that keeps
+    its jinja-template + ``insert_input`` rendering mechanism but replaces the
+    build-time rendering with a lookup of CI-pre-rendered videos under
+    ``manim_media_dir`` (falling back to a placeholder when the video is not
+    rendered yet). The directive arguments are ``<example> <Scene>`` instead
+    of the scene class name, and the source comes from ``manim_examples_dir``
+    instead of the directive content. Options are inherited from the base
+    directive (``:ref_classes:`` and friends are accepted for parity; they are
+    not rendered because no build-time rendering happens).
     """
+
     required_arguments = 2
     optional_arguments = 0
     has_content = True
+    option_spec = ManimDirective.option_spec
 
-    def run(self):
+    def run(self) -> list[nodes.Element]:
         env = self.state.document.settings.env
         example_arg = self.arguments[0].replace("\\", "/")
         scene = self.arguments[1]
@@ -101,36 +116,55 @@ class DemoDirective(Directive):
         video_exists = (Path(env.config.manim_media_dir) / video_rel).is_file()
         media_url = env.config.manim_media_url.rstrip("/")
 
-        container = nodes.container(classes=["demo-block"])
-        # caption
-        if any(line.strip() for line in self.content):
-            cap = nodes.container(classes=["demo-caption"])
-            self.state.nested_parse(self.content, self.content_offset, cap)
-            container.append(cap)
-        # video or placeholder
-        if video_exists:
-            video_html = (
-                '<div class="demo-video-area">'
-                f'<video controls preload="metadata" playsinline '
-                f'src="{media_url}/{html.escape(video_rel)}"></video>'
-                "</div>"
-            )
-        else:
-            video_html = (
-                '<div class="demo-video-area demo-video-missing" '
-                f'data-src="{media_url}/{html.escape(video_rel)}">'
-                "<span>🎬 视频渲染中……</span></div>"
-            )
-        container.append(nodes.raw("", video_html, format="html"))
-        # source in <details>
-        container.append(nodes.raw(
-            "", '<details class="demo-source"><summary>查看源码 '
-               f'<code class="docutils literal">{html.escape(basename)}.py</code>'
-               "</summary>",
-            format="html"))
-        container.append(nodes.literal_block(code, code, language="python"))
-        container.append(nodes.raw("", "</details>", format="html"))
-        return [container]
+        caption = [line for line in self.content if line.strip()]
+        source_block = "\n".join("      " + line for line in code.split("\n"))
+        rendered_template = jinja2.Template(DEMO_TEMPLATE).render(
+            caption=caption,
+            basename=html.escape(basename),
+            video_exists=video_exists,
+            media_url=html.escape(media_url),
+            video_rel=html.escape(video_rel),
+            source_block=source_block,
+        )
+        self.state_machine.insert_input(
+            rendered_template.split("\n"),
+            source=self.state.document.attributes["source"],
+        )
+        return []
+
+
+DEMO_TEMPLATE = r"""
+.. container:: demo-block
+
+{% if caption %}
+   .. container:: demo-caption
+
+{% for line in caption %}
+      {{ line }}
+{% endfor %}
+{% endif %}
+   .. raw:: html
+
+      <div class="demo-video-area{% if not video_exists %} demo-video-missing{% endif %}"{% if not video_exists %} data-src="{{ media_url }}/{{ video_rel }}"{% endif %}>
+{% if video_exists %}
+      <video controls preload="metadata" playsinline src="{{ media_url }}/{{ video_rel }}"></video>
+{% else %}
+      <span>🎬 视频渲染中……</span>
+{% endif %}
+      </div>
+
+   .. raw:: html
+
+      <details class="demo-source"><summary>查看源码 <code class="docutils literal">{{ basename }}.py</code></summary>
+
+   .. code-block:: python
+
+{{ source_block }}
+
+   .. raw:: html
+
+      </details>
+"""
 
 
 class ManimSigDirective(Directive):

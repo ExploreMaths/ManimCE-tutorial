@@ -72,6 +72,11 @@
 
 .table-scroll {
   overflow-x: auto;
+  /* overflow-x: auto computes the other axis to "auto" per CSS spec,
+     which spawns a spurious vertical scrollbar once the horizontal
+     one appears; "clip" keeps the axis non-scrollable without clipping
+     any content (the container height is unconstrained). */
+  overflow-y: clip;
   margin: 1rem 0;
 }
 
