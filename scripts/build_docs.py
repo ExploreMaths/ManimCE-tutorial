@@ -62,13 +62,29 @@ _MARKUP_END_CJK_RE = re.compile(
 )
 
 
+# The symmetric start-string problem: markup directly *preceded* by a CJK
+# char is not recognized either — docutils stays silent and the asterisks
+# or backticks are rendered literally ("中文**加粗**中文" never bolds).
+# A narrow no-break space before the start-string fixes recognition and is
+# visually negligible. (Inline links are exempt: their start-string is
+# lenient and parses fine against a CJK char.)
+_MARKUP_START_CJK_RE = re.compile(
+    r"(?<=[\u2e80-\u9fff\uf900-\ufaff\uff00-\uffef])"
+    r"(\*\*[^*]+\*\*|\*[^*\s](?:[^*]*[^*\s])?\*|``[^`]+``)"
+)
+
+
 def inline_md_to_rst(text: str) -> str:
     """Convert the markdown inline idioms used in chapter prose."""
     # codespans first: a generated `text <url>` link below must keep its
     # single backticks (converting links first would wrap them in ``...``).
+    # GFM-style bold with padding spaces inside the delimiters
+    # ("** 静态快照 **") is invalid reST — trim the inner whitespace.
+    text = re.sub(r"\*\*[ \t]+([^*]*\S)[ \t]+\*\*", r"**\1**", text)
     text = _INLINE_CODE_RE.sub(r"``\1``", text)
     text = _MD_LINK_RE.sub(r"`\1 <\2>`__", text)
     text = _MARKUP_END_CJK_RE.sub(lambda m: m.group(1) + " ", text)
+    text = _MARKUP_START_CJK_RE.sub(lambda m: " " + m.group(1), text)
     return text
 
 
@@ -239,8 +255,11 @@ def chain_dot(chain: list[str], links: dict[str, str]) -> list[str]:
 
 def convert_section(
     text: str, covers: list[str], link_maps: dict[str, str] | None = None,
+    class_names: set[str] | None = None,
 ) -> tuple[str, set[str]]:
     link_maps = link_maps or {}
+    class_names = class_names or set()
+    current_cover: str | None = None  # last seen cover heading
     lines = text.split("\n")
     matched: set[str] = set()
     out: list[str] = []
@@ -266,6 +285,12 @@ def convert_section(
                 code.append(lines[i])
                 i += 1
             i += 1  # closing fence
+            # a handwritten "Name(" signature fence right under a cover
+            # heading duplicates the autoclass signature — drop it
+            if (current_cover and current_cover in class_names
+                    and len(code) > 1 and code[0].strip() == f"{current_cover}("):
+                blank()
+                continue
             blank()
             out.append(f".. code-block:: {lang}")
             out.append("")
@@ -357,15 +382,26 @@ def convert_section(
                     blank()
                     out.extend(rst_heading(2, text_))
                     out.append("")
-                    # auto-generated signature line (skipped by the directive
-                    # for names manim does not export: methods, flags, ...).
-                    out.append(f".. manimsig:: {stripped}")
-                    out.append("")
+                    current_cover = stripped
+                    if stripped in class_names:
+                        # autodoc-style signature (class docstring is dropped
+                        # by the autodoc handler; no :members: so methods
+                        # stay undocumented here — they live on api/ pages).
+                        out.append(f".. autoclass:: manim.{stripped}")
+                        out.append("   :noindex:")
+                        out.append("")
+                    else:
+                        # auto-generated signature line (skipped by the
+                        # directive for names manim does not export:
+                        # methods, flags, ...).
+                        out.append(f".. manimsig:: {stripped}")
+                        out.append("")
                     i += 1
                     continue
             blank()
             out.extend(rst_heading(level, text_))
             out.append("")
+            current_cover = None
             i += 1
             continue
         if s:
@@ -567,7 +603,7 @@ def build_class_tutorial(
         L += ["快速上手", "~~~~~~~~", "", ".. code-block:: python", ""]
         L += indent(note["ex"].split("\n"))
         L.append("")
-    L += ["API 文档", "~~~~~~~~", "", f".. autoclass:: manim.{name}", ""]
+    L += ["API 文档", "~~~~~~~~", "", f".. autoclass:: manim.{name}", "   :members:", ""]
     return L
 
 
@@ -672,7 +708,8 @@ def main() -> int:
             continue
         covers = section.get("covers", [])
         text, matched = convert_section(
-            md_path.read_text(encoding="utf-8"), covers, link_maps)
+            md_path.read_text(encoding="utf-8"), covers, link_maps,
+            set(classes))
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(text, encoding="utf-8")
         converted += 1

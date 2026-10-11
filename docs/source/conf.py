@@ -35,7 +35,6 @@ graphviz_output_format = "svg"
 
 # Full-class API reference: document every public manim class automatically.
 autodoc_default_options = {
-    "members": True,
     "show-inheritance": True,
 }
 
