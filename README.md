@@ -23,9 +23,9 @@ Manim Community Edition v0.21.0 的完整中文交互式教程站：
 │   ├── requirements.txt      #   站点构建依赖（与渲染依赖分离，避免缓存失效）
 │   └── source/               # 源文件目录
 │       ├── conf.py           #   Sphinx 配置（Furo 主题、扩展）
-│       ├── _ext/manim_tutorial.py    # 自定义指令：demo（构建时注入示例源码）、
+│       ├── _extensions/manim_tutorial.py    # 自定义指令：demo（构建时注入示例源码）、
 │       │                             #   manimsig（inspect 生成签名行）
-│       ├── _ext/manim_inheritance.py # 扩展：构建时自动遍历 manim 生成全量继承图，
+│       ├── _extensions/manim_inheritance.py # 扩展：构建时自动遍历 manim 生成全量继承图，
 │       │                             #   节点链接指向教程章节 / API 参考页
 │       ├── _static/          #   custom.css / custom.js（进度记忆等交互）
 │       └── chapters/ …       #   reST 源（scripts/build_docs.py 生成，勿手改）

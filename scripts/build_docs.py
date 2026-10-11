@@ -34,7 +34,7 @@ import re
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "docs" / "source" / "_ext"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "docs" / "source" / "_extensions"))
 from manim_inheritance import API_GROUPS, group_api_page, load_manim_classes
 
 NOTICE_DIRECTIVES = {"warning": "warning", "tip": "tip"}
@@ -527,7 +527,7 @@ def build_api_pages(
 
 def build_inheritance_graph_page(class_count: int) -> str:
     # The DOT itself is produced at Sphinx build time by the
-    # manim-inheritance directive (docs/_ext/manim_inheritance.py), which
+    # manim-inheritance directive (docs/source/_extensions/manim_inheritance.py), which
     # auto-enumerates the installed manim and resolves node links to
     # chapter anchors / api pages.
     return "\n".join(rst_title("继承关系图") + [

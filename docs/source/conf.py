@@ -7,7 +7,7 @@ from pathlib import Path
 
 DOCS = Path(__file__).resolve().parent  # docs/source
 ROOT = DOCS.parent.parent               # repository root
-sys.path.insert(0, str(DOCS / "_ext"))
+sys.path.insert(0, str(DOCS / "_extensions"))
 
 project = "ManimCE 中文教程"
 author = "ExploreMaths"
