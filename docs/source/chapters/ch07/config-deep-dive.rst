@@ -291,6 +291,10 @@ DictAsObject
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``dictin``
         - dict
         - —

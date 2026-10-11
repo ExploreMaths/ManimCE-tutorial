@@ -372,6 +372,7 @@ CapStyleType
         - 端点齐平，线条精确止于端点
       * - ``SQUARE``
         - 端点外扩半个线宽的正方形
+
 LineJointType
 -------------
 

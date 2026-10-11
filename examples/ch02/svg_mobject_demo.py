@@ -17,5 +17,5 @@ class SvgMobjectDemo(Scene):
             stroke_width=6,
         ).shift(RIGHT * 0.2)
         self.play(Transform(star, star_colored))
-        self.play(star.animate.shift(LEFT * 2).scale(0.6))
+        self.play(star.animate.shift(LEFT * 2))
         self.wait(0.5)

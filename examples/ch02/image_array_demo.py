@@ -15,7 +15,7 @@ class ImageArrayDemo(Scene):
         rgb[grid == 1] = (10, 20, 68, 255)  # dark navy
 
         image = ImageMobject(rgb)
-        image.scale(3)
+        image.scale(6)
 
         self.play(FadeIn(image))
         self.play(image.animate.rotate(PI / 8).shift(LEFT * 2))

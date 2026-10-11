@@ -19,5 +19,7 @@ class TypstDemo(Scene):
                 """
             )
         )
+        if doc.width > 12:
+            doc.scale_to_fit_width(12)
         self.play(FadeIn(doc))
         self.wait(0.5)

@@ -484,19 +484,23 @@ ArcPolygon
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``*vertices``
         - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
         - —
         - 依次连接的顶点
-        - ``angle``
+      * - ``angle``
         - float
         - ``45 * DEGREES``
         - 每段弧的圆心角，0 时退化为直线边
-        - ``radius``
+      * - ``radius``
         - float | None
         - None
         - 弧的半径；None 时按 angle 自动计算
-        - ``arc_config``
+      * - ``arc_config``
         - list[dict] | None
         - None
         - 逐段弧的样式（索引与顶点一一对应）
@@ -504,6 +508,7 @@ ArcPolygon
 .. demo:: examples/ch02/arc_polygon.py ArcPolygonDemo
 
    左侧 ``Polygon`` 直线边与右侧 ``ArcPolygon`` 圆弧边（angle=45°）的对比。
+
 ArcPolygonFromArcs
 ------------------
 
@@ -534,6 +539,10 @@ ArcPolygonFromArcs
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``*arcs``
         - `Arc </chapters/ch02/arcs-and-curves.html#arc>`__ / `ArcBetweenPoints </chapters/ch02/arcs-and-curves.html#arcbetweenpoints>`__
         - —

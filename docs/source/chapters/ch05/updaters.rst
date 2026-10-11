@@ -411,6 +411,10 @@ ComplexValueTracker
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``value``
         - float | complex
         - 0

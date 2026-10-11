@@ -152,18 +152,23 @@ CairoRenderer
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``file_writer_class``
         - type[SceneFileWriter]
         - SceneFileWriter
         - 输出视频/图片的写入器
-        - ``camera_class``
+      * - ``camera_class``
         - type[Camera] | None
         - None
         - 使用的相机类；None 取默认
-        - ``skip_animations``
+      * - ``skip_animations``
         - bool
         - False
         - 跳过所有动画，只输出末帧
+
 RendererType
 ------------
 
@@ -184,6 +189,7 @@ RendererType
         - Cairo 渲染器（默认）
       * - ``OPENGL``
         - OpenGL 渲染器（更快，支持 ``TrueDot`` / ``DotCloud`` 等 GL 对象）
+
 OpenGLPMobject
 --------------
 
@@ -211,6 +217,7 @@ OpenGLPMobject
    :class: warning
 
    该类需要 ``--renderer=opengl``；在 Cairo 渲染器下添加到场景不会正常显示。
+
 OpenGLPGroup
 ------------
 
@@ -241,10 +248,15 @@ OpenGLPGroup
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``*pmobs``
         - OpenGLPMobject
         - —
         - 要组合的点集对象
+
 OpenGLPMPoint
 -------------
 
@@ -275,11 +287,15 @@ OpenGLPMPoint
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``location``
         - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
         - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
         - 点的位置
-        - ``stroke_width``
+      * - ``stroke_width``
         - float
         - 4.0
         - 点的尺寸

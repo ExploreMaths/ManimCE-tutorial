@@ -145,3 +145,36 @@ jobs:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: pages deploy docs/build/html --project-name=manimce-tutorial --commit-dirty=true
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  validate:
+    # Reusable checks promoted from ExploreMaths/manim_extensions
+    # (TODO(push): promote workflow/ to ExploreMaths/setup-manim-env and
+    # consume from there once the network allows pushing).
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Manim environment
+        uses: ExploreMaths/setup-manim-env@v1
+        with:
+          python-version: "3.12"
+          # Layout probing constructs scenes headlessly (skip_animations):
+          # no TeX/ffmpeg needed; TeX-based examples probe-error as warnings.
+          install-full-deps: "false"
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install docutils
+
+      - name: Validate reST sources
+        # --skip-indent-check: this repo nests RST blocks with 3 spaces, not
+        # the upstream 4-space convention, so that style check only yields
+        # noise here.
+        run: python workflow/validate_rst.py --skip-indent-check
+
+      - name: Check example layout
+        run: python workflow/check_example_layout.py --workers 4

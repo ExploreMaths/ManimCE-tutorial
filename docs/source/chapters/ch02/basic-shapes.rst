@@ -744,14 +744,19 @@ ScreenRectangle
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``aspect_ratio``
         - float
         - 16/9
         - 宽除以高；传 1 即正方形
-        - ``height``
+      * - ``height``
         - float
         - 4
         - 矩形高度，宽度随之确定
+
 FullScreenRectangle
 -------------------
 

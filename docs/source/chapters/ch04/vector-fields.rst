@@ -36,19 +36,23 @@ VectorField
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``func``
         - Callable[[Point3D], Vector3D]
         - —
         - 向量值函数
-        - ``color_scheme``
+      * - ``color_scheme``
         - Callable | None
         - None
         - 向量 → [0,1] 颜色映射
-        - ``min/max_color_scheme_value``
+      * - ``min/max_color_scheme_value``
         - float
         - 0 / 2
         - 颜色映射的值域
-        - ``colors``
+      * - ``colors``
         - Sequence[color]
         - 蓝→绿→黄→红
         - 渐变的取色序列
@@ -118,4 +122,4 @@ StreamLines
 .. admonition:: 提示
    :class: tip
 
-   ``StreamLines`` 的采样密度由 x/y_range 的步长决定（步长越小线越密），渲染时间也随之增长；讲解用场取步长 0.8~1 即可。
+   ``StreamLines`` 的采样密度由 x/y_range 的步长决定（步长越小线越密），渲染时间也随之增长；讲解用场取步长 0.5~1 即可。

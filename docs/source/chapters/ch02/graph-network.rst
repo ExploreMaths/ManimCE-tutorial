@@ -34,27 +34,31 @@ Graph
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``vertices``
         - Sequence[Hashable]
         - —
         - 顶点集合（任意可哈希值）
-        - ``edges``
+      * - ``edges``
         - Sequence[tuple]
         - —
         - 顶点对列表
-        - ``layout``
+      * - ``layout``
         - str | dict | callable
         - ``spring``
         - 布局名 / 坐标字典 / 布局函数
-        - ``labels``
+      * - ``labels``
         - bool | dict
         - False
         - 顶点标签；True 时自动编号
-        - ``vertex_config`` / ``edge_config``
+      * - ``vertex_config`` / ``edge_config``
         - dict | None
         - None
         - 顶点 / 边样式
-        - ``partitions`` + ``root_vertex``
+      * - ``partitions`` + ``root_vertex``
         - —
         - None
         - 分层布局的分区与根

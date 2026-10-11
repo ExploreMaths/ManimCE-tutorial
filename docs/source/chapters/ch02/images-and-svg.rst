@@ -285,6 +285,10 @@ ManimBanner
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``dark_theme``
         - bool
         - True

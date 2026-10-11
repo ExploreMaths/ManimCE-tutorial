@@ -459,14 +459,19 @@ TrueDot
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``center``
         - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
         - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
         - 圆点中心位置
-        - ``stroke_width``
+      * - ``stroke_width``
         - float
         - 2.0
         - 点的描边宽度
+
 DotCloud
 --------
 
@@ -497,19 +502,23 @@ DotCloud
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``color``
         - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
         - ``PURE_YELLOW``
         - 点云颜色
-        - ``stroke_width``
+      * - ``stroke_width``
         - float
         - 2.0
         - 点的大小相关参数
-        - ``radius``
+      * - ``radius``
         - float
         - 2.0
         - 点云分布半径
-        - ``density``
+      * - ``density``
         - float
         - 10
         - 点的密度

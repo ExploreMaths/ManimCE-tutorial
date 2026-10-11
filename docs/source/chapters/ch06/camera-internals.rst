@@ -291,26 +291,31 @@ ThreeDCamera
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``phi`` / ``theta`` / ``gamma``
         - float
         - 0 / -90° / 0
         - 球坐标视角与画面自转
-        - ``focal_distance``
+      * - ``focal_distance``
         - float
         - 20
         - 焦距：透视收缩的强弱
-        - ``default_distance``
+      * - ``default_distance``
         - float
         - 5
         - 物体到相机的默认距离
-        - ``should_apply_shading``
+      * - ``should_apply_shading``
         - bool
         - True
         - 是否按光源方向给 3D 对象打光
-        - ``exponential_projection``
+      * - ``exponential_projection``
         - bool
         - False
         - 透视投影是否按指数缩放
+
 BackgroundColoredVMobjectDisplayer
 ----------------------------------
 
@@ -337,6 +342,10 @@ BackgroundColoredVMobjectDisplayer
    .. list-table::
       :header-rows: 1
 
+      * - name
+        - type
+        - default
+        - desc
       * - ``camera``
         - `Camera </chapters/ch06/camera-internals.html#camera>`__
         - —
