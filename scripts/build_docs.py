@@ -20,9 +20,9 @@ skipped for names manim does not export).
 
 Also generates docs/index.rst, docs/api-index.rst, docs/glossary.rst,
 docs/api/*.rst (per-class tutorials: Chinese notes + inheritance chain +
-signature table + autodoc reference), docs/api/index.rst,
+signature table + autodoc reference), docs/api/index.rst and
 docs/inheritance-graph.rst (auto-generated via the manim_inheritance
-extension) and docs/_extra/_redirects (old-route redirects).
+extension).
 """
 
 from __future__ import annotations
@@ -541,17 +541,6 @@ def build_inheritance_graph_page(class_count: int) -> str:
     ])
 
 
-def build_redirects(flat: list[tuple[dict, dict]]) -> str:
-    L = [
-        "# Old Vue-router paths -> new Sphinx paths.",
-        "/ch/*  /chapters/:splat.html  301",
-        "/api  /api-index.html  301",
-        "/glossary  /glossary.html  301",
-        "",
-    ]
-    return "\n".join(L)
-
-
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--content", default="content")
@@ -599,9 +588,6 @@ def main() -> int:
     (docs / "inheritance-graph.rst").write_text(
         build_inheritance_graph_page(len(classes)), encoding="utf-8"
     )
-    extra = docs / "_extra"
-    extra.mkdir(parents=True, exist_ok=True)
-    (extra / "_redirects").write_text(build_redirects(flat), encoding="utf-8")
 
     print(f"converted {converted}/{len(flat)} sections -> {out_root}")
     for w in warnings:

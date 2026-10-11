@@ -10,7 +10,6 @@ __pycache__/
 /docs/build/
 /docs/source/chapters/
 /docs/source/api/
-/docs/source/_extra/
 /docs/source/_api_map.json
 /docs/source/index.rst
 /docs/source/api-index.rst

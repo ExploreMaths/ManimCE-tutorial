@@ -46,13 +46,12 @@ suppress_warnings = ["docutils"]
 
 source_suffix = {".rst": "restructuredtext"}
 root_doc = "index"
-exclude_patterns = ["_build", "_extra", "Thumbs.db"]
+exclude_patterns = ["_build", "Thumbs.db"]
 
 # --- Theme ----------------------------------------------------------------
 html_theme = "furo"
 html_title = "ManimCE 中文教程"
 html_static_path = ["_static"]
-html_extra_path = ["_extra"]
 html_css_files = ["custom.css"]
 html_js_files = ["custom.js"]
 html_search_language = "zh"

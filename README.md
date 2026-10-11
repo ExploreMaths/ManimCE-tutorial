@@ -65,7 +65,7 @@ py -3 scripts/merge_media.py --media-dir media --dist docs/build/html
 py -3 -m http.server 8000 --directory docs/build/html
 ```
 
-章节页面 URL 形如 `/chapters/ch04/number-line.html`。旧版 `/ch/<part>/<section>` 路径由 `_redirects` 301 重定向到新路径。
+章节页面 URL 形如 `/chapters/ch04/number-line.html`。
 
 > 本地不渲染视频也能跑：`{demo}` 块在 `media/` 下找不到对应 mp4 时输出“🎬 视频渲染中……”占位。
 
