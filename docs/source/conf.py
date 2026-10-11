@@ -48,7 +48,13 @@ suppress_warnings = ["docutils"]
 # Upstream manim docstrings write *args / **kwargs bare in prose, which
 # docutils parses as unbalanced emphasis and renders as crimson "problematic"
 # spans. Escape them as inline literals before autodoc renders them.
+# Class docstrings are dropped entirely: every class already has a Chinese
+# tutorial above the autodoc block, so only the auto-generated signature
+# (and member docs) are rendered.
 def _fix_vararg_docstrings(app, what, name, obj, options, lines):
+    if what == "class":
+        del lines[:]
+        return
     # napoleon has already converted the docstring when this runs: fields
     # look like ":keyword **kwargs: ..." at column 0, code samples are
     # indented literal blocks (skip those — escaping would break lexing).

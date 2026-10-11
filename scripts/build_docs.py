@@ -12,7 +12,7 @@ directives wherever possible:
   :::notice warning|tip        -> .. admonition:: with class warning/tip
   :::notice version|deprecated -> .. admonition:: with a custom class
   :::exercise / :::answer      -> nested sphinx-design .. dropdown::
-  :::inheritance               -> .. graphviz:: left-to-right chain
+  :::inheritance               -> .. manimchain:: left-to-right chain
 
 Level-2 headings matching the section's `covers` entries are followed by
 a .. manimsig:: <Cover> block (auto signature from the installed manim,
@@ -35,7 +35,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "docs" / "source" / "_extensions"))
-from manim_inheritance import API_GROUPS, group_api_page, load_manim_classes
+from manim_inheritance import (
+    API_GROUPS, _normalize_link, group_api_page, load_manim_classes,
+)
 
 NOTICE_DIRECTIVES = {"warning": "warning", "tip": "tip"}
 NOTICE_CLASSES = {"version": "notice-version", "deprecated": "notice-deprecated"}
@@ -197,7 +199,48 @@ def emit_graphviz(dot: list[str]) -> list[str]:
     return [".. graphviz::", ""] + indent(dot)
 
 
-def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
+def emit_chain(dot: list[str]) -> list[str]:
+    """Chain diagram rendered like the full inheritance graph: inline SVG,
+    clickable links, official Manim style (no <object> frame / double border)."""
+    return [".. manimchain::", ""] + indent(dot)
+
+
+def _dot_quote(text: str) -> str:
+    return text.replace("\\", "\\\\").replace('"', '\\"')
+
+
+def build_link_maps(classes: dict[str, type], content_dir: Path) -> dict[str, str]:
+    """Class name -> absolute doc URL, chapter tutorial preferred over the
+    api/ page (same resolution as the full inheritance graph)."""
+    links: dict[str, str] = {}
+    for n, obj in classes.items():
+        gid = group_api_page(getattr(obj, "__module__", ""))
+        links[n] = f"/api/{gid}.html#{n.lower()}"
+    inheritance = content_dir / "inheritance.json"
+    if inheritance.is_file():
+        data = json.loads(inheritance.read_text(encoding="utf-8"))
+        for node in data.get("nodes", []):
+            if node.get("name") and node.get("link"):
+                links[node["name"]] = _normalize_link(node["link"])
+    return links
+
+
+def chain_dot(chain: list[str], links: dict[str, str]) -> list[str]:
+    dot = ["digraph G {", *_CHAIN_DOT_ATTRS]
+    for name in chain:
+        link = links.get(name)
+        url = f', URL="{_dot_quote(link)}"' if link else ""
+        dot.append(f'  "{_dot_quote(name)}" [label="{_dot_quote(name)}"{url}];')
+    dot += [f'  "{_dot_quote(chain[i-1])}" -> "{_dot_quote(chain[i])}";'
+            for i in range(1, len(chain))]
+    dot.append("}")
+    return dot
+
+
+def convert_section(
+    text: str, covers: list[str], link_maps: dict[str, str] | None = None,
+) -> tuple[str, set[str]]:
+    link_maps = link_maps or {}
     lines = text.split("\n")
     matched: set[str] = set()
     out: list[str] = []
@@ -281,18 +324,8 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                         if piece:
                             chain.append(piece)
                 blank()
-                # Native graphviz diagram (small left-to-right chain).
-                dot = [
-                    "digraph G {",
-                    '  graph [rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, nodesep="0.15", ranksep="0.3"];',
-                    '  node  [shape=box, penwidth=0, width=0.05, height=0.05, margin=0.05];',
-                    '  edge  [penwidth=1];',
-                ]
-                for idx, name in enumerate(chain):
-                    if idx:
-                        dot.append(f'  "{chain[idx-1]}" -> "{name}";')
-                dot.append("}")
-                out.extend(emit_graphviz(dot))
+                # Homepage inheritance-graph style: inline SVG, linked nodes.
+                out.extend(emit_chain(chain_dot(chain, link_maps)))
                 blank()
                 continue
             out.append(line)
@@ -507,7 +540,10 @@ _CHAIN_DOT_ATTRS = (
 )
 
 
-def build_class_tutorial(name: str, classes: dict[str, type], notes: dict) -> list[str]:
+def build_class_tutorial(
+    name: str, classes: dict[str, type], notes: dict,
+    link_maps: dict[str, str] | None = None,
+) -> list[str]:
     """One class entry: Chinese notes + chain + params + example + autodoc."""
     obj = classes[name]
     note = notes.get(name, {})
@@ -516,11 +552,8 @@ def build_class_tutorial(name: str, classes: dict[str, type], notes: dict) -> li
         L += [note["zh"], ""]
     chain = _inheritance_chain(name, classes)
     if len(chain) > 1:
-        dot = ["digraph G {", *_CHAIN_DOT_ATTRS]
-        dot += [f'  "{chain[i-1]}" -> "{chain[i]}";' for i in range(1, len(chain))]
-        dot.append("}")
         L += ["继承关系", "~~~~~~~~", ""]
-        L += emit_graphviz(dot)
+        L += emit_chain(chain_dot(chain, link_maps or {}))
         L.append("")
     params = _signature_params(obj)
     if params:
@@ -539,7 +572,8 @@ def build_class_tutorial(name: str, classes: dict[str, type], notes: dict) -> li
 
 
 def build_api_pages(
-    classes: dict[str, type], notes: dict, docs: Path
+    classes: dict[str, type], notes: dict, docs: Path,
+    link_maps: dict[str, str] | None = None,
 ) -> dict[str, str]:
     """Write docs/api/<group>.rst (per-class tutorials), docs/api/index.rst
     and docs/_api_map.json (class name -> api page anchor) used by the
@@ -564,7 +598,7 @@ def build_api_pages(
         ]
         for n in names:
             api_map[n] = f"/api/{gid}.html#{n.lower()}"
-            L += build_class_tutorial(n, classes, notes)
+            L += build_class_tutorial(n, classes, notes, link_maps)
         page = docs / "api" / f"{gid}.rst"
         page.parent.mkdir(parents=True, exist_ok=True)
         page.write_text("\n".join(L), encoding="utf-8")
@@ -625,6 +659,7 @@ def main() -> int:
     notes = (json.loads(notes_path.read_text(encoding="utf-8"))
              if notes_path.is_file() else {})
 
+    link_maps = build_link_maps(classes, content_dir)
     chapters_root = content_dir / "chapters"
     out_root = docs / "chapters"
     warnings: list[str] = []
@@ -636,7 +671,8 @@ def main() -> int:
             warnings.append(f"missing md: {part['id']}/{section['id']}")
             continue
         covers = section.get("covers", [])
-        text, matched = convert_section(md_path.read_text(encoding="utf-8"), covers)
+        text, matched = convert_section(
+            md_path.read_text(encoding="utf-8"), covers, link_maps)
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(text, encoding="utf-8")
         converted += 1
@@ -648,7 +684,7 @@ def main() -> int:
     (docs / "api-index.rst").write_text(build_api_index(config), encoding="utf-8")
     glossary = json.loads((content_dir / "glossary.json").read_text(encoding="utf-8"))
     (docs / "glossary.rst").write_text(build_glossary(glossary), encoding="utf-8")
-    build_api_pages(classes, notes, docs)
+    build_api_pages(classes, notes, docs, link_maps)
     (docs / "inheritance-graph.rst").write_text(
         build_inheritance_graph_page(len(classes)), encoding="utf-8"
     )

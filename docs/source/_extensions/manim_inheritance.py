@@ -2,8 +2,9 @@
 
 The {manim-inheritance} directive enumerates every public class of the
 installed manim package at build time, derives the complete inheritance
-edge set, and emits a ``sphinx.ext.graphviz`` node — so SVG output and
-clickable-link rewriting stay on Sphinx's native rendering path.
+edge set, and renders it as an inline SVG (see inheritance_graph below).
+The {manimchain} directive renders a small hand-written DOT diagram (e.g.
+a single class's inheritance chain) through the same path.
 
 Node links resolve to documentation sections:
 
@@ -189,6 +190,26 @@ class ManimInheritanceDirective(Directive):
         return [node]
 
 
+class ManimChainDirective(Directive):
+    """```{manimchain}
+    digraph G { ... }
+    ```
+
+    A small hand-written DOT diagram (e.g. a single class's inheritance
+    chain), rendered exactly like the full inheritance graph: inline SVG
+    in the official Manim diagram style, clickable node links, no <object>
+    frame (so no double border and links navigate the whole page).
+    """
+
+    has_content = True
+
+    def run(self):
+        node = inheritance_graph("")
+        node["code"] = "\n".join(self.content)
+        node.source, node.line = self.state.document.current_source, self.lineno
+        return [node]
+
+
 # --- inline SVG rendering -----------------------------------------------------
 # The graph carries clickable node links. sphinx.ext.graphviz embeds SVG
 # via <object>, where anchors navigate *inside the object frame* (the
@@ -237,6 +258,7 @@ def setup(app):
     app.add_config_value("manim_inheritance_links", "inheritance.json", "env")
     app.add_config_value("manim_inheritance_api_map", "_api_map.json", "env")
     app.add_directive("manim-inheritance", ManimInheritanceDirective)
+    app.add_directive("manimchain", ManimChainDirective)
     app.add_node(
         inheritance_graph,
         html=(visit_inheritance_graph_html, None),
