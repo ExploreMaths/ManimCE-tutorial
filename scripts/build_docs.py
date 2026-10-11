@@ -34,7 +34,7 @@ import re
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "docs" / "_ext"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "docs" / "source" / "_ext"))
 from manim_inheritance import API_GROUPS, group_api_page, load_manim_classes
 
 NOTICE_DIRECTIVES = {"warning": "warning", "tip": "tip"}
@@ -555,7 +555,7 @@ def build_redirects(flat: list[tuple[dict, dict]]) -> str:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--content", default="content")
-    ap.add_argument("--docs", default="docs")
+    ap.add_argument("--docs", default="docs/source")
     args = ap.parse_args()
 
     content_dir = Path(args.content)

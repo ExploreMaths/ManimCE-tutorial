@@ -1,6 +1,6 @@
 # ManimCE Tutorial
 
-> A complete interactive tutorial site for ManimCE v0.21.0 — every class and function, rendered video demos, an interactive inheritance graph, and reading progress tracking. Built with Sphinx + MyST + Furo, GitHub Actions incremental rendering, deployed on Cloudflare Pages.
+> A complete interactive tutorial site for ManimCE v0.21.0 — every class and function, rendered video demos, an interactive inheritance graph, and reading progress tracking. Built with Sphinx (reStructuredText) + Furo, GitHub Actions incremental rendering, deployed on Cloudflare Pages.
 
 Manim Community Edition v0.21.0 的完整中文交互式教程站：
 
@@ -18,17 +18,21 @@ Manim Community Edition v0.21.0 的完整中文交互式教程站：
 │   ├── chapters/<part>/<section>.md   # 章节 Markdown（指令方言）
 │   ├── glossary.json         #   术语表
 │   ├── inheritance.json      #   继承图数据
-├── docs/                     # Sphinx 站点
-│   ├── conf.py               #   Sphinx 配置（Furo 主题、MyST、扩展）
-│   ├── _ext/manim_tutorial.py  # 仅剩两个自定义指令：demo（构建时注入示例源码）、
-│   │                           #   manimsig（inspect 生成签名行）；其余全走原生 MyST/Sphinx
-│   ├── _static/              #   custom.css / custom.js（进度记忆等交互）
+├── docs/                     # Sphinx 工程（标准布局）
+│   ├── Makefile / make.bat   #   sphinx-build 快捷入口
 │   ├── requirements.txt      #   站点构建依赖（与渲染依赖分离，避免缓存失效）
-│   └── chapters/ …           #   MyST 源（scripts/build_docs.py 生成，勿手改）
+│   └── source/               # 源文件目录
+│       ├── conf.py           #   Sphinx 配置（Furo 主题、扩展）
+│       ├── _ext/manim_tutorial.py    # 自定义指令：demo（构建时注入示例源码）、
+│       │                             #   manimsig（inspect 生成签名行）
+│       ├── _ext/manim_inheritance.py # 扩展：构建时自动遍历 manim 生成全量继承图，
+│       │                             #   节点链接指向教程章节 / API 参考页
+│       ├── _static/          #   custom.css / custom.js（进度记忆等交互）
+│       └── chapters/ …       #   reST 源（scripts/build_docs.py 生成，勿手改）
 ├── examples/                 # 示例场景源码（一文件一场景）
 │   └── _shared/              #   共享辅助代码（渲染时跳过）
 ├── scripts/
-│   ├── build_docs.py         #   章节 Markdown → docs/ MyST + 首页/API 索引/术语表/重定向
+│   ├── build_docs.py         #   章节 Markdown → docs/source/ reST + 首页/API 索引/术语表/重定向
 │   ├── render_examples.py    #   增量渲染 examples/ → media/*.mp4
 │   └── merge_media.py        #   media/ → 构建输出/media/（部署前合并）
 ├── .github/workflows/build.yml  # CI：增量渲染 + Sphinx 构建 + 部署 Cloudflare Pages
@@ -41,22 +45,24 @@ Manim Community Edition v0.21.0 的完整中文交互式教程站：
 **环境要求**
 
 - Python 3.10+（CI 使用 3.12）
-- 站点构建依赖：`pip install -r docs/requirements.txt`（Sphinx、Furo、MyST、sphinx-design）
-- **graphviz `dot`**：继承关系图与章节内继承链由原生 `{graphviz}` 指令在构建时渲染（Windows 装到 `C:\Program Files\Graphviz`，确认 `dot -V` 可用即可；CI 已用 apt 安装）
-- 可选：安装 `manim==0.21.0`（`pip install -r requirements.txt`，渲染缓存哈希依赖该版本号）与 LaTeX——仅本地渲染示例视频、或让 `{manimsig}` 生成真实签名行时需要
+- 站点构建依赖：`pip install -r docs/requirements.txt`（Sphinx、Furo、sphinx-design）
+- **graphviz `dot`**：继承关系图与章节内继承链由原生 `graphviz` 指令在构建时渲染（Windows 装到 `C:\Program Files\Graphviz`，确认 `dot -V` 可用即可；CI 已用 apt 安装）
+- 可选：安装 `manim==0.21.0`（`pip install -r requirements.txt`，渲染缓存哈希依赖该版本号）与 LaTeX——本地渲染示例视频、让 `manimsig` 生成真实签名行、生成全类 API 页与继承图时需要
 
 **构建与预览**（Windows 用 `py -3`，macOS/Linux 用 `python3`）
 
 ```bash
-# 1. 生成 MyST 源（章节 + 首页 + API 索引 + 术语表 + 重定向；缺 covers 时退出码 1）
+# 1. 生成 reST 源（章节 + 全类 API 教程页 + 首页 + API 索引 + 术语表 + 重定向；
+#    缺 covers 时退出码 1）
 py -3 scripts/build_docs.py
 
-# 2. 构建静态站点（输出 docs/_build/html/）
-py -3 -m sphinx -b html docs docs/_build/html
+# 2. 构建静态站点（标准 Sphinx 布局：source/ → build/html/）
+py -3 -m sphinx -b html docs/source docs/build/html
+# 或在 docs/ 目录下：make html
 
 # 3. 本地预览（视频需先把 media/ 合并进输出目录）
-py -3 scripts/merge_media.py --media-dir media --dist docs/_build/html
-py -3 -m http.server 8000 --directory docs/_build/html
+py -3 scripts/merge_media.py --media-dir media --dist docs/build/html
+py -3 -m http.server 8000 --directory docs/build/html
 ```
 
 章节页面 URL 形如 `/chapters/ch04/number-line.html`。旧版 `/ch/<part>/<section>` 路径由 `_redirects` 301 重定向到新路径。
@@ -115,9 +121,9 @@ py -3 scripts/render_examples.py --media-dir media --dry-run
 2. 安装系统依赖（ffmpeg、pango、cairo、完整 TeX Live、graphviz）与 `requirements.txt`；
 3. `render_examples.py` 增量渲染，渲染摘要（复用/新渲/失败清单）写入 Job Summary；
 4. 将 `media/` 提交回推 `media` 分支（推送被拒时自动 rebase 重试一次）——**视频不进入 main，缓存与历史留在 media 分支**；
-5. 安装 `docs/requirements.txt`，`build_docs.py` 生成 MyST 源（缺 covers 即失败），`sphinx-build` 构建静态站到 `docs/_build/html/`；
-6. `merge_media.py` 把 `media/*.mp4` 合并进 `docs/_build/html/media/`；
-7. `cloudflare/wrangler-action@v4` 部署 `docs/_build/html/` 到 Cloudflare Pages（项目名 `manimce-tutorial`）。
+5. 安装 `docs/requirements.txt`，`build_docs.py` 生成 reST 源（缺 covers 即失败），`sphinx-build` 构建静态站到 `docs/build/html/`；
+6. `merge_media.py` 把 `media/*.mp4` 合并进 `docs/build/html/media/`；
+7. `cloudflare/wrangler-action@v4` 部署 `docs/build/html/` 到 Cloudflare Pages（项目名 `manimce-tutorial`）。
 
 部署所需 `CF_API_TOKEN` / `CF_ACCOUNT_ID` 两个 secrets 已配置好，**推送 `main` 即自动部署**到 <https://manimce-tutorial.pages.dev>。
 

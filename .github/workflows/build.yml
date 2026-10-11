@@ -122,15 +122,15 @@ jobs:
       - name: Install site builder dependencies
         run: pip install -r docs/requirements.txt
 
-      - name: Convert chapters to MyST
+      - name: Generate reST sources
         # Exits non-zero on MISSING covers (content consistency gate).
         run: python scripts/build_docs.py
 
       - name: Build site
-        run: python -m sphinx -E -b html docs docs/_build/html
+        run: python -m sphinx -E -b html docs/source docs/build/html
 
       - name: Merge media into site output
-        run: python scripts/merge_media.py --media-dir media --dist docs/_build/html
+        run: python scripts/merge_media.py --media-dir media --dist docs/build/html
 
       - name: Deploy to Cloudflare Pages
         # pages-action was deleted by Cloudflare; wrangler-action is the
@@ -139,5 +139,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy docs/_build/html --project-name=manimce-tutorial --commit-dirty=true
+          command: pages deploy docs/build/html --project-name=manimce-tutorial --commit-dirty=true
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}

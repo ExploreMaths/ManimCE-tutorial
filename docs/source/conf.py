@@ -5,8 +5,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-DOCS = Path(__file__).resolve().parent
-ROOT = DOCS.parent
+DOCS = Path(__file__).resolve().parent  # docs/source
+ROOT = DOCS.parent.parent               # repository root
 sys.path.insert(0, str(DOCS / "_ext"))
 
 project = "ManimCE 中文教程"
