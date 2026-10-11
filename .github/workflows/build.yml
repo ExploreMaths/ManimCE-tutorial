@@ -169,9 +169,13 @@ jobs:
 
       - name: Run shared doc checks
         # Reusable action: https://github.com/ExploreMaths/manim-doc-checks
-        # (promoted from manim_extensions). Exemptions live in this repo's
-        # workflow/example_layout_exemptions.json.
+        # (promoted from manim_extensions). refs resolves against the
+        # pip-installed manim package (docs-only repo, no local package);
+        # inline-code style hints stay off (this repo uses literals
+        # intentionally). Exemptions live in this repo's workflow/.
         uses: ExploreMaths/manim-doc-checks@v1
+        with:
+          checks: rst, layout, refs
         with:
           # This repo nests RST blocks with 3 spaces, not the upstream
           # 4-space convention, so that style check only yields noise here.
