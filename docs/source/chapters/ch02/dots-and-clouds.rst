@@ -47,7 +47,7 @@ Dot
         - default
         - desc
       * - ``point``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
         - 圆点中心位置
       * - ``radius``
@@ -63,7 +63,7 @@ Dot
         - 1.0
         - 填充不透明度，默认实心
       * - ``color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - `WHITE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
         - 颜色
       * - ``kwargs``
@@ -183,7 +183,7 @@ Point
         - default
         - desc
       * - ``location``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
         - 点的位置
       * - ``color``
@@ -240,7 +240,7 @@ PointCloudDot
         - default
         - desc
       * - ``center``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
         - 圆盘中心
       * - ``radius``
@@ -464,7 +464,7 @@ TrueDot
         - default
         - desc
       * - ``center``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
         - 圆点中心位置
       * - ``stroke_width``
@@ -507,7 +507,7 @@ DotCloud
         - default
         - desc
       * - ``color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - ``PURE_YELLOW``
         - 点云颜色
       * - ``stroke_width``

@@ -41,7 +41,7 @@ Polyhedron
         - default
         - desc
       * - ``vertex_coords``
-        - `Point3DLike_Array <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike_Array>`__
+        - :class:`manim.typing.Point3DLike_Array`
         - —
         - 顶点三维坐标数组
       * - ``faces_list``
@@ -210,7 +210,7 @@ ConvexHull3D
         - default
         - desc
       * - ``*points``
-        - `Point3D <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3D>`__
+        - :class:`manim.typing.Point3D`
         - —
         - 任意多个三维点（至少 4 个不共面点）
       * - ``tolerance``

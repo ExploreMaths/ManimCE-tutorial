@@ -50,7 +50,7 @@ SampleSpace
         - 3
         - 矩形宽度
       * - ``fill_color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - '#444444'
         - 填充色
       * - ``fill_opacity``
@@ -62,7 +62,7 @@ SampleSpace
         - 0.5
         - 边框线宽
       * - ``stroke_color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - '#BBBBBB'
         - 边框颜色
       * - ``default_label_scale_val``

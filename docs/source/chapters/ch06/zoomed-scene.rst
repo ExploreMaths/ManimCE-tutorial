@@ -41,11 +41,11 @@ ZoomedScene
         - 3
         - 角落放大窗口的尺寸（画面单位）
       * - ``zoomed_display_corner``
-        - `Vector3D <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3D>`__
+        - :class:`manim.typing.Vector3D`
         - [1,1,0]
         - 窗口所在角落（如 `UR <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.UR>`__、`DL <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.DL>`__）
       * - ``zoomed_display_center``
-        - `Point3D <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3D>`__ | None
+        - :class:`manim.typing.Point3D` | None
         - None
         - 若给出则按中心定位窗口，覆盖 corner
       * - ``zoom_factor``
@@ -57,7 +57,7 @@ ZoomedScene
         - False
         - 是否一开始就激活放大
       * - ``zoomed_camera_frame_starting_position``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
         - 小取景框初始位置
 

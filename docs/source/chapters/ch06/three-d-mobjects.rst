@@ -40,7 +40,7 @@ Cone
         - 1
         - 高
       * - ``direction``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - [0,0,1]
         - 锥体朝向，默认沿 Z 轴
       * - ``show_base``
@@ -103,7 +103,7 @@ Cylinder
         - 2
         - 高
       * - ``direction``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - [0,0,1]
         - 轴向
       * - ``show_ends``
@@ -136,7 +136,7 @@ Sphere
         - default
         - desc
       * - ``center``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
         - 球心
       * - ``radius``

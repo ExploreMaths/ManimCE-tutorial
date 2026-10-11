@@ -61,7 +61,7 @@ Text
         - "`NORMAL <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.NORMAL>`__"
         - 字态： `NORMAL <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.NORMAL>`__/`ITALIC <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ITALIC>`__/`OBLIQUE <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.OBLIQUE>`__
       * - ``color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__ | None
+        - :class:`manim.utils.color.core.ParsableManimColor` | None
         - None
         - 整体颜色
       * - ``gradient``

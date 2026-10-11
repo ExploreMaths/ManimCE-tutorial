@@ -41,7 +41,11 @@ from manim_inheritance import (
 
 
 # --- table-cell cross references ----------------------------------------------
-# Official v0.21.0 API pages that document constants and predefined colors.
+# Official v0.21.0 API entries are emitted as :class: roles resolved through
+# intersphinx (see intersphinx_mapping in conf.py), so they render as proper
+# <code class="xref py py-class"> links. Constants and predefined colors have
+# no inventory entries, so they keep deep links to the official module pages;
+# only local chapter/api targets keep relative URLs.
 _OFFICIAL_BASE = "https://docs.manim.community/en/v0.21.0"
 _CONST_PAGE = f"{_OFFICIAL_BASE}/reference/manim.constants.html"
 _COLOR_PAGE = f"{_OFFICIAL_BASE}/reference/manim.utils.color.manim_colors.html"
@@ -53,7 +57,14 @@ _RST_SPAN_RE = re.compile(r"``[^`\n]*``|`[^`\n]+`__?")
 
 
 def _const_urls() -> dict[str, str]:
-    """UPPER_CASE manim namespace values -> official docs URL (lazy, cached)."""
+    """UPPER_CASE manim namespace values -> link targets (lazy, cached).
+
+    Values are either dotted Python-domain targets (``manim.typing.Point3DLike``,
+    resolved through intersphinx) for names present in the official inventory,
+    or absolute doc URLs for constants and predefined colors, which have no
+    inventory entries. linkify_rst renders the former as :class: roles and the
+    latter as deep links to the official module pages.
+    """
     global _CONST_URLS
     if _CONST_URLS is not None:
         return _CONST_URLS
@@ -72,8 +83,10 @@ def _const_urls() -> dict[str, str]:
         if callable(value) or isinstance(value, type):
             continue
         if hasattr(_colors, name):
+            # No inventory entry for predefined colors — deep page link.
             urls[name] = _COLOR_PAGE
         elif hasattr(_mc, name):
+            # Constants are not in the inventory either — keep the anchor URL.
             urls[name] = f"{_CONST_PAGE}#manim.constants.{name}"
     # Typing aliases (Point3DLike, Vector3D, ...) and the color type aliases
     # (ParsableManimColor, ...): documented on their own official module
@@ -93,19 +106,11 @@ def _const_urls() -> dict[str, str]:
         }
         for name in dir(_mt):
             if not name.startswith("_") and name not in imported:
-                urls.setdefault(
-                    name,
-                    f"{_OFFICIAL_BASE}/reference/manim.typing.html"
-                    f"#manim.typing.{name}",
-                )
+                urls.setdefault(name, f"manim.typing.{name}")
         for name in ("HSV", "ManimColor", "ParsableManimColor", "RGBA",
                      "RandomColorGenerator"):
             if hasattr(_mcc, name):
-                urls.setdefault(
-                    name,
-                    f"{_OFFICIAL_BASE}/reference/manim.utils.color.core.html"
-                    f"#manim.utils.color.core.{name}",
-                )
+                urls.setdefault(name, f"manim.utils.color.core.{name}")
     _CONST_URLS = urls
     return urls
 
@@ -129,8 +134,17 @@ def linkify_rst(
     link_maps = link_maps or {}
 
     def link_token(tok: str) -> str:
-        url = link_maps.get(tok) or const_urls.get(tok)
-        return f"`{tok} <{url}>`__" if url else tok
+        url = link_maps.get(tok)
+        if url:
+            return f"`{tok} <{url}>`__"
+        ref = const_urls.get(tok) if const_urls else None
+        if ref:
+            # Dotted names become :class: roles; http(s) values stay URL links
+            # (constants/colors have no intersphinx inventory entries).
+            if ref.startswith("http"):
+                return f"`{tok} <{ref}>`__"
+            return f":class:`{tok} <{ref}>`"
+        return tok
 
     out: list[str] = []
     pos = 0
@@ -140,8 +154,17 @@ def linkify_rst(
         span = m.group(0)
         if span.startswith("``"):
             inner = span[2:-2]
-            url = link_maps.get(inner) or const_urls.get(inner)
-            out.append(f"`{inner} <{url}>`__" if url else span)
+            url = link_maps.get(inner)
+            if url:
+                out.append(f"`{inner} <{url}>`__")
+            else:
+                ref = const_urls.get(inner) if const_urls else None
+                if not ref:
+                    out.append(span)
+                elif ref.startswith("http"):
+                    out.append(f"`{inner} <{ref}>`__")
+                else:
+                    out.append(f":class:`{inner} <{ref}>`")
         else:  # existing inline reference — leave untouched
             out.append(span)
         pos = m.end()

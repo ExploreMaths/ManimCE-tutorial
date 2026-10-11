@@ -40,11 +40,11 @@ Line
         - default
         - desc
       * - ``start``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__ | `Mobject </chapters/ch02/mobject-core.html#mobject>`__
+        - :class:`manim.typing.Point3DLike` | `Mobject </chapters/ch02/mobject-core.html#mobject>`__
         - [-1, 0, 0]
         - 起点；传 `Mobject </chapters/ch02/mobject-core.html#mobject>`__ 时取其中心
       * - ``end``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__ | `Mobject </chapters/ch02/mobject-core.html#mobject>`__
+        - :class:`manim.typing.Point3DLike` | `Mobject </chapters/ch02/mobject-core.html#mobject>`__
         - [1, 0, 0]
         - 终点；传 `Mobject </chapters/ch02/mobject-core.html#mobject>`__ 时取其中心
       * - ``buff``
@@ -195,7 +195,7 @@ Vector
         - default
         - desc
       * - ``direction``
-        - `Vector2DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector2DLike>`__ | `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector2DLike` | :class:`manim.typing.Vector3DLike`
         - [1, 0, 0]
         - 向量方向（长度即箭头长度）
       * - ``buff``
@@ -263,7 +263,7 @@ Angle
         - 0.55
         - 圆点距交点的比例位置
       * - ``dot_color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - `WHITE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
         - 圆点颜色
       * - ``elbow``
@@ -450,7 +450,7 @@ TipableVMobject
         - 0.35
         - 箭头尖默认长度
       * - ``normal_vector``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - [0, 0, 1]
         - 箭头尖朝向的法向量
       * - ``tip_style``

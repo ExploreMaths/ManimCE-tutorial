@@ -60,7 +60,7 @@ Arc
         - 9
         - 组成圆弧的贝塞尔曲线段数
       * - ``arc_center``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - [0, 0, 0]
         - 圆心位置
 
@@ -91,11 +91,11 @@ ArcBetweenPoints
         - default
         - desc
       * - ``start``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 起点
       * - ``end``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 终点
       * - ``angle``
@@ -260,11 +260,11 @@ AnnotationDot
         - 5
         - 白色描边宽度
       * - ``stroke_color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - `WHITE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
         - 描边颜色
       * - ``fill_color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - #58C4DD
         - 填充颜色（品牌青）
 
@@ -288,19 +288,19 @@ CubicBezier
         - default
         - desc
       * - ``start_anchor``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 曲线起点
       * - ``start_handle``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 起点方向手柄
       * - ``end_handle``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 终点方向手柄
       * - ``end_anchor``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 曲线终点
 
@@ -331,11 +331,11 @@ CurvedArrow
         - default
         - desc
       * - ``start_point``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 起点
       * - ``end_point``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 终点
       * - ``angle``
@@ -404,7 +404,7 @@ TipableVMobject
         - 0.35
         - 箭头尖默认长度
       * - ``normal_vector``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - [0, 0, 1]
         - 箭头尖法向量（决定朝向）
       * - ``tip_style``
@@ -489,7 +489,7 @@ ArcPolygon
         - default
         - desc
       * - ``*vertices``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 依次连接的顶点
       * - ``angle``

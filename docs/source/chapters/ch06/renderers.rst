@@ -292,7 +292,7 @@ OpenGLPMPoint
         - default
         - desc
       * - ``location``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
         - 点的位置
       * - ``stroke_width``

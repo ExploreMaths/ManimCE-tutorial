@@ -77,7 +77,7 @@ DecimalNumber
         - False
         - 给整个数字加背景矩形
       * - ``edge_to_fix``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - `LEFT <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.LEFT>`__
         - 数值增长时固定不动的边缘
 

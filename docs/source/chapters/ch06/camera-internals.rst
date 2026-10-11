@@ -37,7 +37,7 @@ Camera
         - default
         - desc
       * - ``frame_center``
-        - `Point3D <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3D>`__
+        - :class:`manim.typing.Point3D`
         - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
         - 帧坐标系原点对准的空间点
       * - ``frame_height`` / ``frame_width``

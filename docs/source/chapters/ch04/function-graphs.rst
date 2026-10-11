@@ -51,7 +51,7 @@ Manim 提供三种“画曲线”的 mobject，恰好覆盖函数图像的三种
         - None
         - x 取值范围（三段式可带步长）
       * - `ParametricFunction </chapters/ch04/function-graphs.html#parametricfunction>`__: ``function``
-        - Callable[[float], `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__]
+        - Callable[[float], :class:`manim.typing.Point3DLike`]
         - —
         - 参数方程，输入 t 输出点
       * - `ParametricFunction </chapters/ch04/function-graphs.html#parametricfunction>`__: ``t_range``

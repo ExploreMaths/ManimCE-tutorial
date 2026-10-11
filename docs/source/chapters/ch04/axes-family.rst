@@ -372,7 +372,7 @@ ThreeDAxes
         - None
         - z 轴（ `NumberLine </chapters/ch04/number-line.html#numberline>`__ ）配置
       * - ``z_normal``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - (0, -1, 0)
         - z 轴“朝向上方”的方向参考
       * - ``num_axis_pieces``

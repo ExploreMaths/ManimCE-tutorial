@@ -53,7 +53,7 @@ Circle
         - None
         - 半径；None 时取 1
       * - ``color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - #FC6255
         - 颜色，传给 `Arc </chapters/ch02/arcs-and-curves.html#arc>`__
       * - ``kwargs``
@@ -301,7 +301,7 @@ Polygon
         - default
         - desc
       * - ``*vertices``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 至少 3 个顶点，按顺序相连并首尾闭合
       * - ``kwargs``
@@ -442,11 +442,11 @@ Polygram
         - default
         - desc
       * - ``*vertex_groups``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__ 数组
+        - :class:`manim.typing.Point3DLike` 数组
         - —
         - 每组顶点一个闭合折线，组与组之间不连接
       * - ``color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - #58C4DD
         - 默认颜色
       * - ``kwargs``
@@ -585,7 +585,7 @@ ConvexHull
         - default
         - desc
       * - ``*points``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 参与计算的点（至少 3 个不共线的点）
       * - ``tolerance``

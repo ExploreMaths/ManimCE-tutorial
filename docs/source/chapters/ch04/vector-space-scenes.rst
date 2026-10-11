@@ -124,11 +124,11 @@ LinearTransformationScene
         - 6
         - 基向量线宽
       * - ``i_hat_color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - '#83C167'
         - i 帽颜色（绿）
       * - ``j_hat_color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - '#FC6255'
         - j 帽颜色（红）
       * - ``leave_ghost_vectors``

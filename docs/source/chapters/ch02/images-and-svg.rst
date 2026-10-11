@@ -51,7 +51,7 @@ ImageMobject
         - default
         - desc
       * - ``filename_or_array``
-        - `StrPath <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.StrPath>`__ | NDArray
+        - :class:`manim.typing.StrPath` | NDArray
         - —
         - 图片文件路径，或 HxW(xC) 的 numpy 数组
       * - ``scale_to_resolution``
@@ -119,7 +119,7 @@ SVGMobject
         - None
         - 缩放到该宽度；与 height 同时给时按最后逻辑生效
       * - ``color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__ | None
+        - :class:`manim.utils.color.core.ParsableManimColor` | None
         - None
         - 整体描边色覆盖
       * - ``opacity``

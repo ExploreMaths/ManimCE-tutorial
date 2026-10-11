@@ -54,7 +54,7 @@ Transform
         - `OUT <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.OUT>`__
         - 圆弧轴向
       * - ``path_arc_centers``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__ 等 | None
+        - :class:`manim.typing.Point3DLike` 等 | None
         - None
         - 各点分别绕指定圆心转弧
       * - ``replace_mobject_with_target_in_scene``

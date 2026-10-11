@@ -72,11 +72,11 @@ NumberLine
         - False
         - 是否自动添加数字标签（标签走 LaTeX）
       * - ``label_direction``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - `DOWN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.DOWN>`__
         - 数字标签相对数轴的方向
       * - ``label_constructor``
-        - type[`ManimTextLabel <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.ManimTextLabel>`__]
+        - type[:class:`manim.typing.ManimTextLabel`]
         - `MathTex </chapters/ch03/tex-and-mathtex.html#mathtex>`__
         - 标签构造函数；可换 `Text </chapters/ch03/text-and-paragraph.html#text>`__/`MathTypst </api/text.html#mathtypst>`__ 摆脱 LaTeX
       * - ``scaling``

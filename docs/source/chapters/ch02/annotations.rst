@@ -28,7 +28,7 @@ SurroundingRectangle
         - —
         - 被包围的对象（多个时取整体包围盒）
       * - ``color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - `YELLOW <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
         - 框线颜色
       * - ``buff``
@@ -84,7 +84,7 @@ BackgroundRectangle
         - —
         - 被垫底的对象
       * - ``color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__ | None
+        - :class:`manim.utils.color.core.ParsableManimColor` | None
         - None
         - 填充色；None 时取 ``config.background_color``
       * - ``stroke_width``
@@ -126,7 +126,7 @@ Cross
         - None
         - 叉号中心对齐的目标；None 时画在原点附近的小叉
       * - ``stroke_color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__
+        - :class:`manim.utils.color.core.ParsableManimColor`
         - #FC6255
         - 叉号线颜色
       * - ``stroke_width``
@@ -205,7 +205,7 @@ Label
         - default
         - desc
       * - ``label``
-        - str | `ManimTextLabel <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.ManimTextLabel>`__
+        - str | :class:`manim.typing.ManimTextLabel`
         - —
         - 文本；str 时默认用 `MathTex </chapters/ch03/tex-and-mathtex.html#mathtex>`__ 渲染，也可直接传 `Text </chapters/ch03/text-and-paragraph.html#text>`__ / `MathTex </chapters/ch03/tex-and-mathtex.html#mathtex>`__ / `Typst </api/text.html#typst>`__ 实例
       * - ``label_config``
@@ -249,7 +249,7 @@ LabeledLine
         - default
         - desc
       * - ``label``
-        - str | `ManimTextLabel <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.ManimTextLabel>`__
+        - str | :class:`manim.typing.ManimTextLabel`
         - —
         - 标签文本（同 `Label </api/geometry.html#label>`__）
       * - ``label_position``
@@ -342,11 +342,11 @@ LabeledPolygram
         - default
         - desc
       * - ``*vertex_groups``
-        - `Point3DLike_Array <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike_Array>`__
+        - :class:`manim.typing.Point3DLike_Array`
         - —
         - 顶点组，同 `Polygram </chapters/ch02/basic-shapes.html#polygram>`__ （每组自动首尾闭合）
       * - ``label``
-        - str | `ManimTextLabel <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.ManimTextLabel>`__
+        - str | :class:`manim.typing.ManimTextLabel`
         - —
         - 标签文本
       * - ``precision``
@@ -389,7 +389,7 @@ Brace
         - —
         - 被标注的对象
       * - ``direction``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - [0, -1, 0]
         - 大括号开口朝向（默认向下）
       * - ``buff``
@@ -433,15 +433,15 @@ BraceBetweenPoints
         - default
         - desc
       * - ``point_1``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 起点
       * - ``point_2``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - —
         - 终点
       * - ``direction``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - [0, 0, 0]
         - 开口方向；零向量时自动取垂直方向
 
@@ -489,7 +489,7 @@ BraceLabel
         - —
         - 标注文字
       * - ``brace_direction``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - [0, -1, 0]
         - 大括号开口方向
       * - ``label_constructor``
@@ -550,7 +550,7 @@ ArcBrace
         - None
         - 被标注的圆弧；None 时默认一段单位圆弧
       * - ``direction``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - [1, 0, 0]
         - 大括号整体朝向
       * - ``**kwargs``

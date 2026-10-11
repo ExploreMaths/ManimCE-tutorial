@@ -44,7 +44,7 @@ Matrix
         - default
         - desc
       * - ``matrix``
-        - Iterable[Iterable[Any] | `Vector2DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector2DLike>`__]
+        - Iterable[Iterable[Any] | :class:`manim.typing.Vector2DLike`]
         - —
         - 二维数据（必需）
       * - ``v_buff``
@@ -80,7 +80,7 @@ Matrix
         - {}
         - 传给元素构造函数的参数
       * - ``element_alignment_corner``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - `UR <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.UR>`__ ``(1,-1,0)``
         - 元素对齐角（默认右上）
       * - ``left_bracket`` / ``right_bracket``

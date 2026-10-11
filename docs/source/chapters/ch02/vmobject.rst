@@ -39,7 +39,7 @@ VMobject
         - default
         - desc
       * - ``fill_color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__ | None
+        - :class:`manim.utils.color.core.ParsableManimColor` | None
         - None
         - 填充色；None 时跟随 ``color``
       * - ``fill_opacity``
@@ -47,7 +47,7 @@ VMobject
         - 0.0
         - 填充不透明度，默认 0 即 **不填充**
       * - ``stroke_color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__ | None
+        - :class:`manim.utils.color.core.ParsableManimColor` | None
         - None
         - 描边色；None 时跟随 ``color``
       * - ``stroke_opacity``
@@ -59,7 +59,7 @@ VMobject
         - 4
         - 描边宽度
       * - ``background_stroke_color``
-        - `ParsableManimColor <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.core.html#manim.utils.color.core.ParsableManimColor>`__ | None
+        - :class:`manim.utils.color.core.ParsableManimColor` | None
         - `BLACK <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
         - 背景描边颜色（垫在填充下面）
       * - ``background_stroke_opacity``
@@ -75,7 +75,7 @@ VMobject
         - 0.0
         - 光泽强度：颜色向白色渐变的程度
       * - ``sheen_direction``
-        - `Vector3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Vector3DLike>`__
+        - :class:`manim.typing.Vector3DLike`
         - (-1, 1, 0)
         - 光泽渐变方向
       * - ``close_new_points``
@@ -289,7 +289,7 @@ VectorizedPoint
         - default
         - desc
       * - ``location``
-        - `Point3DLike <https://docs.manim.community/en/v0.21.0/reference/manim.typing.html#manim.typing.Point3DLike>`__
+        - :class:`manim.typing.Point3DLike`
         - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
         - 点的位置
       * - ``color``
