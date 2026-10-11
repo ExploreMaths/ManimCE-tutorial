@@ -19,8 +19,9 @@ Level-2 headings matching the section's `covers` entries are followed by a
 skipped for names manim does not export).
 
 Also generates docs/index.md, docs/api-index.md, docs/glossary.md,
-docs/inheritance-graph.md (full graph as native {graphviz} DOT with links)
-and docs/_extra/_redirects (old-route redirects).
+docs/api/*.md (full-class reference via native autodoc), docs/api/index.md,
+docs/inheritance-graph.md (full 256-class graph as native {graphviz} DOT
+with links) and docs/_extra/_redirects (old-route redirects).
 """
 
 from __future__ import annotations
@@ -30,6 +31,9 @@ import json
 import re
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "docs" / "_ext"))
+from manim_inheritance import API_GROUPS, group_api_page, load_manim_classes
 
 NOTICE_DIRECTIVES = {"warning": "warning", "tip": "tip"}
 NOTICE_CLASSES = {"version": "notice-version", "deprecated": "notice-deprecated"}
@@ -220,7 +224,7 @@ def ref(part: str, section: str, anchor: str | None = None) -> str:
     return f"{base}#{anchor}" if anchor else base
 
 
-def build_index(config: dict, flat: list[tuple[dict, dict]]) -> str:
+def build_index(config: dict, flat: list[tuple[dict, dict]], class_count: int) -> str:
     total = len(flat)
     parts = config["parts"]
     L: list[str] = [
@@ -241,8 +245,10 @@ def build_index(config: dict, flat: list[tuple[dict, dict]]) -> str:
          f"**{parts[0]['title']}**：{flat[0][1]['title']}"),
         ("📚 API 索引", "api-index",
          "全部 259 个类与函数，按字母分组，直达中文讲解。"),
+        ("🧪 API 参考（全类）", "api/index",
+         f"{class_count} 个公开类的 autodoc 自动文档：签名、方法、继承关系。"),
         ("🧬 继承关系图", "inheritance-graph",
-         "教程涉及的核心类继承全景图，可筛选、可折叠、可点击跳转。"),
+         f"全部 {class_count} 个公开类的继承全景图，构建时自动遍历生成，节点可点击跳转。"),
         ("📖 术语表", "glossary",
          "Mobject、VMobject 等核心术语的中文释义。"),
     ]
@@ -276,6 +282,14 @@ def build_index(config: dict, flat: list[tuple[dict, dict]]) -> str:
     L.append(":caption: 站内")
     L.append("")
     L.extend(["api-index", "inheritance-graph", "glossary"])
+    L.append("```")
+    L.append("")
+    L.append("```{toctree}")
+    L.append(":maxdepth: 1")
+    L.append(":hidden:")
+    L.append(":caption: API 参考（全类）")
+    L.append("")
+    L.append("api/index")
     L.append("```")
     L.append("")
     return "\n".join(L)
@@ -315,38 +329,80 @@ def build_glossary(glossary: list[dict]) -> str:
     return "\n".join(L)
 
 
-OLD_LINK_RE = re.compile(r"^/ch/([a-z0-9]+)/([a-z0-9-]+)#(.+)$")
+def build_api_pages(classes: dict[str, type], docs: Path) -> dict[str, str]:
+    """Write docs/api/<group>.md (autoclass per class), docs/api/index.md
+    and docs/_api_map.json (class name -> api page anchor) used by the
+    {manim-inheritance} directive for node links. Returns the api map."""
+    groups: dict[str, list[str]] = {gid: [] for gid, _t, _p in API_GROUPS}
+    for name, obj in sorted(classes.items()):
+        groups[group_api_page(getattr(obj, "__module__", ""))].append(name)
 
+    api_map: dict[str, str] = {}
+    used: list[tuple[str, str, int]] = []  # (gid, title, count)
+    for gid, title, _pred in API_GROUPS:
+        names = groups[gid]
+        if not names:
+            continue
+        used.append((gid, title, len(names)))
+        L = [
+            f"# API 参考：{title}",
+            "",
+            f"共 **{len(names)}** 个类，按字母排序。签名与方法由 autodoc 从 "
+            "manim v0.21.0 源码自动生成；带中文精讲的类见 "
+            "[API 索引](../api-index.md)。",
+            "",
+        ]
+        for n in names:
+            api_map[n] = f"/api/{gid}.html#{n.lower()}"
+            # eval-rst: autodoc generates reST internally, so it must run
+            # under the reST parser, not the MyST parser.
+            L += [
+                f"## {n}",
+                "",
+                "```{eval-rst}",
+                f".. autoclass:: manim.{n}",
+                "```",
+                "",
+            ]
+        page = docs / "api" / f"{gid}.md"
+        page.parent.mkdir(parents=True, exist_ok=True)
+        page.write_text("\n".join(L), encoding="utf-8")
 
-def build_inheritance_graph_page(inheritance: dict) -> str:
-    nodes = inheritance.get("nodes", [])
-    dot_lines = [
-        "digraph G {",
-        '  graph [rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, nodesep="0.15", ranksep="0.3"];',
-        '  node  [shape=box, style="filled", fontname="Helvetica,sans-serif", fontsize=11, penwidth=1, width=0.05, height=0.05, margin="0.08,0.05", fillcolor="#ffffff", color="#c9ced8", fontcolor="#1f2733"];',
-        '  edge  [color="#8b93a1", arrowsize=0.6, penwidth=1];',
+    total = sum(c for _g, _t, c in used)
+    L = [
+        "# API 参考（全类）",
+        "",
+        f"Manim Community v0.21.0 全部 **{total}** 个公开类，按模块分组，"
+        "由 Sphinx autodoc 自动生成：每个类含签名、方法列表与继承关系；"
+        "docstring 中的官方示例以静态代码形式保留。带中文精讲的类另见 "
+        "[API 索引](../api-index.md)。",
+        "",
+        "```{toctree}",
+        ":maxdepth: 1",
+        "",
     ]
-    for n in nodes:
-        name = n["name"]
-        label = name if len(name) <= 22 else name[:21] + "…"
-        link = n.get("link") or ""
-        m = OLD_LINK_RE.match(link)
-        if m:
-            part, sec, anchor = m.groups()
-            link = f"/chapters/{part}/{sec}.html#{anchor.lower()}"
-        url = f', URL="{link}"' if link else ""
-        dot_lines.append(f'  "{name}" [label="{label}"{url}];')
-    for n in nodes:
-        if n.get("parent"):
-            dot_lines.append(f'  "{n["name"]}" -> "{n["parent"]}";')
-    dot_lines.append("}")
+    L += [gid for gid, _t, _c in used]
+    L += ["```", ""]
+    (docs / "api" / "index.md").write_text("\n".join(L), encoding="utf-8")
+    (docs / "_api_map.json").write_text(
+        json.dumps(api_map, ensure_ascii=False, indent=1), encoding="utf-8"
+    )
+    return api_map
+
+
+def build_inheritance_graph_page(class_count: int) -> str:
+    # The DOT itself is produced at Sphinx build time by the
+    # {manim-inheritance} directive (docs/_ext/manim_inheritance.py), which
+    # auto-enumerates the installed manim and resolves node links to
+    # chapter anchors / api pages.
     L = [
         "# 继承关系图",
         "",
-        "教程涉及的核心类继承全景图，节点可点击跳转到对应章节。",
+        f"Manim Community v0.21.0 全部 **{class_count}** 个公开类的继承全景图，"
+        "构建时自动遍历生成。点击节点：有中文精讲的类跳转到对应教程章节，"
+        "其余跳转到 [API 参考](api/index.md) 中的 autodoc 条目。",
         "",
-        "```{graphviz}",
-        *dot_lines,
+        "```{manim-inheritance}",
         "```",
         "",
     ]
@@ -376,6 +432,10 @@ def main() -> int:
 
     flat = [(p, s) for p in config["parts"] for s in p["sections"]]
     part_ids = {p["id"] for p in config["parts"]}
+    classes = load_manim_classes()
+    if not classes:
+        print("WARNING: manim not importable; api pages and full graph skipped",
+              file=sys.stderr)
 
     chapters_root = content_dir / "chapters"
     out_root = docs / "chapters"
@@ -396,13 +456,13 @@ def main() -> int:
         if missing:
             warnings.append(f"MISSING covers {part['id']}/{section['id']}: {', '.join(missing)}")
 
-    (docs / "index.md").write_text(build_index(config, flat), encoding="utf-8")
+    (docs / "index.md").write_text(build_index(config, flat, len(classes)), encoding="utf-8")
     (docs / "api-index.md").write_text(build_api_index(config), encoding="utf-8")
     glossary = json.loads((content_dir / "glossary.json").read_text(encoding="utf-8"))
     (docs / "glossary.md").write_text(build_glossary(glossary), encoding="utf-8")
-    inheritance = json.loads((content_dir / "inheritance.json").read_text(encoding="utf-8"))
+    build_api_pages(classes, docs)
     (docs / "inheritance-graph.md").write_text(
-        build_inheritance_graph_page(inheritance), encoding="utf-8"
+        build_inheritance_graph_page(len(classes)), encoding="utf-8"
     )
     extra = docs / "_extra"
     extra.mkdir(parents=True, exist_ok=True)

@@ -10,12 +10,18 @@ directives:
   (inspected from the installed manim package) plus a link to the official
   v0.21.0 docs via intersphinx. Emits nothing for names not exported by
   manim (methods, CLI flags, IPython magics, ...).
+
+Also registers an autodoc-process-docstring hook: manim class docstrings
+contain ``.. manim::`` example blocks (rendered by manim's own Sphinx
+extension upstream, which we do not ship). They are demoted to static
+``code-block`` listings so the example code survives autodoc intact.
 """
 
 from __future__ import annotations
 
 import html
 import inspect
+import re
 from pathlib import Path
 
 from docutils import nodes
@@ -169,4 +175,32 @@ def setup(app):
     app.add_config_value("manim_media_url", "/media/", "env")
     app.add_directive("demo", DemoDirective)
     app.add_directive("manimsig", ManimSigDirective)
+    app.connect("autodoc-process-docstring", _sanitize_manim_docstrings)
     return {"version": "1.0", "parallel_read_safe": False}
+
+
+_MANIM_EXAMPLE_RE = re.compile(r"^(?P<indent>\s*)\.\. manim\s*::.*$")
+_MANIM_OPTION_RE = re.compile(r"^\s*:[a-zA-Z0-9_-]+:.*$")
+
+
+def _sanitize_manim_docstrings(app, what, name, obj, options, lines):
+    """Demote ``.. manim::`` example blocks to static python code-blocks.
+
+    Upstream manim renders these as videos with its own Sphinx extension;
+    here we keep the example source as a plain listing and drop the
+    directive options (:quality:, :save_last_frame:, :ref_classes:, ...).
+    Cross-manual ``:doc:`` references point at manim's own documentation
+    tree and do not exist here; they are downgraded to inline literals.
+    """
+    for idx, line in enumerate(lines):
+        lines[idx] = re.sub(r":doc:`([^`]*)`", r"``\1``", line)
+    i = 0
+    while i < len(lines):
+        m = _MANIM_EXAMPLE_RE.match(lines[i])
+        if not m:
+            i += 1
+            continue
+        lines[i] = f"{m.group('indent')}.. code-block:: python"
+        i += 1
+        while i < len(lines) and _MANIM_OPTION_RE.match(lines[i]):
+            del lines[i]
