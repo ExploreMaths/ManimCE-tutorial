@@ -168,10 +168,10 @@ jobs:
           pip install docutils
 
       - name: Run shared doc checks
-        # Reusable checks canonical in ExploreMaths/setup-manim-env
+        # Reusable action: https://github.com/ExploreMaths/manim-doc-checks
         # (promoted from manim_extensions). Exemptions live in this repo's
         # workflow/example_layout_exemptions.json.
-        uses: ExploreMaths/setup-manim-env/validate@v1
+        uses: ExploreMaths/manim-doc-checks@v1
         with:
           # This repo nests RST blocks with 3 spaces, not the upstream
           # 4-space convention, so that style check only yields noise here.
