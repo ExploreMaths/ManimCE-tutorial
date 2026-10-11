@@ -81,21 +81,24 @@ def load_manim_classes() -> dict[str, type]:
 
 
 # --- DOT generation ---------------------------------------------------------
-# Layout mirrors the Manim documentation inheritance diagrams (compact
-# white boxes, concentrated splines). rankdir=LR: the full 256-class tree
-# is tall but narrow, so it scales to the content column and scrolls;
-# a TB layout would be ~8200pt wide and unreadable at any scale.
-# Layout mirrors the Manim documentation inheritance diagrams exactly
-# (docs.manim.community conf.py: sphinx.ext.inheritance_diagram attrs
-# mapped to raw DOT): borderless transparent nodes with default serif
-# text, thin default edges, concentrated splines. rankdir=LR for the full
-# 256-class tree (TB would be ~8200pt wide and unreadable at any scale).
+# Style follows the manim_extensions docs conf.py exactly (ExploreMaths/
+# manim_extensions, matching the Manim Community inheritance diagrams):
+#   inheritance_graph_attrs = {size: "", splines: spline, concentrate: true,
+#                              nodesep: 0.15, ranksep: 0.3}
+#   inheritance_node_attrs = {penwidth: 0, shape: box, width/height/margin: 0.05}
+#   inheritance_edge_attrs = {penwidth: 1}
+# plus its node coloring: manim classes fill #EBF5FB / font #1A5276.
+# size="" keeps the SVG scale-free (proportional scaling via CSS). rankdir=LR
+# is ours: the full 256-class tree is tall but narrow, so it fits the content
+# column; TB would be ~8200pt wide and unreadable at any scale. bgcolor stays
+# transparent so the diagram works in dark mode.
 DOT_GRAPH_ATTRS = (
     'rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, '
-    'nodesep="0.15", ranksep="0.3"'
+    'size="", nodesep="0.15", ranksep="0.3"'
 )
 DOT_NODE_ATTRS = (
-    'shape=box, penwidth=0, width=0.05, height=0.05, margin=0.05'
+    'shape=box, style="filled", penwidth=0, width=0.05, height=0.05, '
+    'margin=0.05, fillcolor="#EBF5FB", fontcolor="#1A5276"'
 )
 DOT_EDGE_ATTRS = 'penwidth=1'
 

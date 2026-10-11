@@ -184,7 +184,7 @@
 
 /* ---------- graphviz (native sphinx.ext.graphviz SVG) ---------- */
 
-/* The SVG is light-themed and embedded via <object>, so it cannot follow
+/* The diagram SVG is light-themed and embedded inline, so it cannot follow
    the page theme: give it a fixed light card in both modes. */
 .graphviz {
   margin: 1rem 0;
@@ -195,10 +195,11 @@
   padding: 0.5rem;
 }
 
-.graphviz > object {
+.graphviz > svg {
   display: block;
-  /* Scale oversized diagrams down to the container width while keeping the
-     aspect ratio (SVG has a viewBox); smaller diagrams are not upscaled. */
+  /* dot is built with size="" (scale-free); scale oversized diagrams down
+     to the container width while keeping the aspect ratio (SVG has a
+     viewBox); smaller diagrams are not upscaled. */
   max-width: 100%;
   height: auto;
   margin: 0 auto;

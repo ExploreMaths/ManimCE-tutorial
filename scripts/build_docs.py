@@ -699,12 +699,14 @@ def _inheritance_chain(name: str, classes: dict[str, type]) -> list[str]:
     return list(reversed(chain))
 
 
-# Same look as the Manim official inheritance diagrams (borderless
-# transparent nodes, default serif text, thin edges).
+# Same look as the manim_extensions docs inheritance diagrams
+# (ExploreMaths/manim_extensions conf.py: sphinx.ext.inheritance_diagram
+# attrs mapped to raw DOT, plus its manim-class node colors).
 _CHAIN_DOT_ATTRS = (
     '  graph [rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, '
-    'nodesep="0.15", ranksep="0.3"];',
-    '  node  [shape=box, penwidth=0, width=0.05, height=0.05, margin=0.05];',
+    'size="", nodesep="0.15", ranksep="0.3"];',
+    '  node  [shape=box, style="filled", penwidth=0, width=0.05, height=0.05, '
+    'margin=0.05, fillcolor="#EBF5FB", fontcolor="#1A5276"];',
     '  edge  [penwidth=1];',
 )
 
