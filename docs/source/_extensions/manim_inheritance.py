@@ -25,11 +25,12 @@ import functools
 import inspect
 import json
 import re
+import subprocess
 from pathlib import Path
 
 from docutils import nodes
 from docutils.parsers.rst import Directive
-from sphinx.ext.graphviz import graphviz
+from sphinx.errors import SphinxError
 from sphinx.util import logging
 
 logger = logging.getLogger(__name__)
@@ -83,16 +84,19 @@ def load_manim_classes() -> dict[str, type]:
 # white boxes, concentrated splines). rankdir=LR: the full 256-class tree
 # is tall but narrow, so it scales to the content column and scrolls;
 # a TB layout would be ~8200pt wide and unreadable at any scale.
+# Layout mirrors the Manim documentation inheritance diagrams exactly
+# (docs.manim.community conf.py: sphinx.ext.inheritance_diagram attrs
+# mapped to raw DOT): borderless transparent nodes with default serif
+# text, thin default edges, concentrated splines. rankdir=LR for the full
+# 256-class tree (TB would be ~8200pt wide and unreadable at any scale).
 DOT_GRAPH_ATTRS = (
     'rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, '
-    'nodesep="0.15", ranksep="0.35"'
+    'nodesep="0.15", ranksep="0.3"'
 )
 DOT_NODE_ATTRS = (
-    'shape=box, style="filled", fontname="Helvetica,sans-serif", fontsize=11, '
-    'penwidth=1, width=0.05, height=0.05, margin="0.08,0.05", '
-    'fillcolor="#ffffff", color="#c9ced8", fontcolor="#1f2733"'
+    'shape=box, penwidth=0, width=0.05, height=0.05, margin=0.05'
 )
-DOT_EDGE_ATTRS = 'color="#8b93a1", arrowsize=0.6, penwidth=1'
+DOT_EDGE_ATTRS = 'penwidth=1'
 
 OLD_LINK_RE = re.compile(r"^/ch/([a-z0-9]+)/([a-z0-9-]+)#(.+)$")
 
@@ -179,14 +183,65 @@ class ManimInheritanceDirective(Directive):
             api_links = json.loads(map_path.read_text(encoding="utf-8"))
 
         dot = build_inheritance_dot(classes, chapter_links, api_links)
-        node = graphviz("", code=dot, options={})
-        node["classes"] = ["manim-inheritance"]
+        node = inheritance_graph("")
+        node["code"] = dot
         node.source, node.line = self.state.document.current_source, self.lineno
         return [node]
+
+
+# --- inline SVG rendering -----------------------------------------------------
+# The graph carries clickable node links. sphinx.ext.graphviz embeds SVG
+# via <object>, where anchors navigate *inside the object frame* (the
+# diagram gets replaced by the target page) — useless for jumping to a
+# doc section. Rendering the SVG inline makes anchors behave like normal
+# page links, and absolute URLs then need no relative-path rewriting.
+class inheritance_graph(nodes.General, nodes.Element):
+    pass
+
+
+def _render_inline_svg(code: str) -> str:
+    try:
+        proc = subprocess.run(
+            ["dot", "-Tsvg"], input=code.encode("utf-8"),
+            capture_output=True, timeout=120,
+        )
+    except FileNotFoundError as err:
+        raise SphinxError(
+            "graphviz 'dot' executable not found; install graphviz to render "
+            "the inheritance graph"
+        ) from err
+    if proc.returncode != 0:
+        raise SphinxError(f"dot failed on inheritance graph:\n{proc.stderr.decode('utf-8', 'replace')}")
+    svg = proc.stdout.decode("utf-8")
+    # drop the XML prolog / doctype / generator comments: inline SVG must
+    # start at the <svg> element.
+    start = svg.find("<svg")
+    if start == -1:
+        raise SphinxError("dot produced no <svg> output for the inheritance graph")
+    return svg[start:]
+
+
+def visit_inheritance_graph_html(self, node):
+    svg = _render_inline_svg(node["code"])
+    self.body.append(
+        '<div class="graphviz manim-inheritance">' + svg + "</div>"
+    )
+    raise nodes.SkipNode
+
+
+def skip_inheritance_graph(self, node):
+    raise nodes.SkipNode
 
 
 def setup(app):
     app.add_config_value("manim_inheritance_links", "inheritance.json", "env")
     app.add_config_value("manim_inheritance_api_map", "_api_map.json", "env")
     app.add_directive("manim-inheritance", ManimInheritanceDirective)
+    app.add_node(
+        inheritance_graph,
+        html=(visit_inheritance_graph_html, None),
+        latex=(skip_inheritance_graph, None),
+        text=(skip_inheritance_graph, None),
+        man=(skip_inheritance_graph, None),
+    )
     return {"version": "1.0", "parallel_read_safe": False}

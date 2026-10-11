@@ -192,6 +192,15 @@
   margin: 0 auto;
 }
 
+/* The full inheritance graph renders as inline SVG (so node links navigate
+   the whole page instead of the <object> frame); same scaling rules. */
+.graphviz > svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
 /* avoid a horizontal scrollbar from the toast transform on small screens */
 @media (max-width: 480px) {
   .mce-restore-toast {

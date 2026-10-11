@@ -235,8 +235,8 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                 dot = [
                     "digraph G {",
                     '  graph [rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, nodesep="0.15", ranksep="0.3"];',
-                    '  node  [shape=box, style="filled", fontname="Helvetica,sans-serif", fontsize=11, penwidth=1, width=0.05, height=0.05, margin="0.08,0.05", fillcolor="#ffffff", color="#c9ced8", fontcolor="#1f2733"];',
-                    '  edge  [color="#8b93a1", arrowsize=0.6, penwidth=1];',
+                    '  node  [shape=box, penwidth=0, width=0.05, height=0.05, margin=0.05];',
+                    '  edge  [penwidth=1];',
                 ]
                 for idx, name in enumerate(chain):
                     if idx:
@@ -433,13 +433,13 @@ def _inheritance_chain(name: str, classes: dict[str, type]) -> list[str]:
     return list(reversed(chain))
 
 
+# Same look as the Manim official inheritance diagrams (borderless
+# transparent nodes, default serif text, thin edges).
 _CHAIN_DOT_ATTRS = (
     '  graph [rankdir=LR, bgcolor="transparent", splines=spline, concentrate=true, '
     'nodesep="0.15", ranksep="0.3"];',
-    '  node  [shape=box, style="filled", fontname="Helvetica,sans-serif", fontsize=11, '
-    'penwidth=1, width=0.05, height=0.05, margin="0.08,0.05", fillcolor="#ffffff", '
-    'color="#c9ced8", fontcolor="#1f2733"];',
-    '  edge  [color="#8b93a1", arrowsize=0.6, penwidth=1];',
+    '  node  [shape=box, penwidth=0, width=0.05, height=0.05, margin=0.05];',
+    '  edge  [penwidth=1];',
 )
 
 
