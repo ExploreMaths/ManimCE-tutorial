@@ -147,9 +147,6 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   validate:
-    # Reusable checks promoted from ExploreMaths/manim_extensions
-    # (TODO(push): promote workflow/ to ExploreMaths/setup-manim-env and
-    # consume from there once the network allows pushing).
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -170,11 +167,12 @@ jobs:
           pip install -r requirements.txt
           pip install docutils
 
-      - name: Validate reST sources
-        # --skip-indent-check: this repo nests RST blocks with 3 spaces, not
-        # the upstream 4-space convention, so that style check only yields
-        # noise here.
-        run: python workflow/validate_rst.py --skip-indent-check
-
-      - name: Check example layout
-        run: python workflow/check_example_layout.py --workers 4
+      - name: Run shared doc checks
+        # Reusable checks canonical in ExploreMaths/setup-manim-env
+        # (promoted from manim_extensions). Exemptions live in this repo's
+        # workflow/example_layout_exemptions.json.
+        uses: ExploreMaths/setup-manim-env/validate@v1
+        with:
+          # This repo nests RST blocks with 3 spaces, not the upstream
+          # 4-space convention, so that style check only yields noise here.
+          skip-indent-check: "true"
