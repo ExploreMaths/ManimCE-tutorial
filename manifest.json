@@ -100,7 +100,7 @@
       "duration": null
     },
     "ch02/image_array_demo": {
-      "sha256": "e35eeb722b12f09e0e0a5316dd02c64031a7f327c9e1db2f9ae9c3ca969504ee",
+      "sha256": "51a351c9506d44fa7b2f653f3203345071b35e2a2d9a9918f3e3dfa5ca25809f",
       "video": "ch02/image_array_demo__ImageArrayDemo.mp4",
       "scene": "ImageArrayDemo",
       "status": "ok",
@@ -163,7 +163,7 @@
       "duration": null
     },
     "ch02/svg_mobject_demo": {
-      "sha256": "104b1c6981af3968e9beeb53c41c46d10d875ce22905e79de9b4fecc4f2f3212",
+      "sha256": "2bf4aeb87161dd359027457df39ff8b1bea6f62badd1157db643943cbc2a600c",
       "video": "ch02/svg_mobject_demo__SvgMobjectDemo.mp4",
       "scene": "SvgMobjectDemo",
       "status": "ok",
@@ -187,7 +187,7 @@
       "sha256": "ffba68917196525bee8cdfc9a611acae059f6caca070987fac678330f0863972",
       "status": "failed",
       "scene": "BulletedListDemo",
-      "error": "│    63 │   │   return svg_file                                                │\n│    64 │                                                                      │\n│ ❱  65 │   dvi_file = compile_tex(                                            │\n│    66 │   │   tex_file,                                                      │\n│    67 │   │   tex_template.tex_compiler,                                     │\n│    68 │   │   tex_template.output_format,                                    │\n│                                                                              │\n│ /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/manim/u │\n│ tils/tex_file_writing.py:218 in compile_tex                                  │\n│                                                                              │\n│   215 │   │   │   if cp.returncode != 0:                                     │\n│   216 │   │   │   │   log_file = tex_file.with_suffix(\".log\")                │\n│   217 │   │   │   │   print_all_tex_errors(log_file, compiler, tex_file)     │\n│ ❱ 218 │   │   │   │   raise ValueError(                                      │\n│   219 │   │   │   │   │   f\"{compiler} error converting to\"                  │\n│   220 │   │   │   │   │   f\" {output_format[1:]}. See log output above or\"   │\n│   221 │   │   │   │   │   f\" the log file: {log_file}\",                      │\n╰──────────────────────────────────────────────────────────────────────────────╯\nValueError: latex error converting to dvi. See log output above or the log file:\n/tmp/manim-ch03-bulleted_list_demo-_xowypnn/Tex/3f94b34939346e58.log"
+      "error": "│    63 │   │   return svg_file                                                │\n│    64 │                                                                      │\n│ ❱  65 │   dvi_file = compile_tex(                                            │\n│    66 │   │   tex_file,                                                      │\n│    67 │   │   tex_template.tex_compiler,                                     │\n│    68 │   │   tex_template.output_format,                                    │\n│                                                                              │\n│ /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/manim/u │\n│ tils/tex_file_writing.py:218 in compile_tex                                  │\n│                                                                              │\n│   215 │   │   │   if cp.returncode != 0:                                     │\n│   216 │   │   │   │   log_file = tex_file.with_suffix(\".log\")                │\n│   217 │   │   │   │   print_all_tex_errors(log_file, compiler, tex_file)     │\n│ ❱ 218 │   │   │   │   raise ValueError(                                      │\n│   219 │   │   │   │   │   f\"{compiler} error converting to\"                  │\n│   220 │   │   │   │   │   f\" {output_format[1:]}. See log output above or\"   │\n│   221 │   │   │   │   │   f\" the log file: {log_file}\",                      │\n╰──────────────────────────────────────────────────────────────────────────────╯\nValueError: latex error converting to dvi. See log output above or the log file:\n/tmp/manim-ch03-bulleted_list_demo-zfqrghb6/Tex/3f94b34939346e58.log"
     },
     "ch03/code_demo": {
       "sha256": "a7b0d226648572386a6b900ac3eddb84f7edbd677c128e6f28317710ef9f93f4",
@@ -228,7 +228,7 @@
       "sha256": "5b80d6cc58420c62ceba998d64c1b7eae03471755ef4e23e7ce7ee2d8d851107",
       "status": "failed",
       "scene": "MathTexLabels",
-      "error": "│    63 │   │   return svg_file                                                │\n│    64 │                                                                      │\n│ ❱  65 │   dvi_file = compile_tex(                                            │\n│    66 │   │   tex_file,                                                      │\n│    67 │   │   tex_template.tex_compiler,                                     │\n│    68 │   │   tex_template.output_format,                                    │\n│                                                                              │\n│ /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/manim/u │\n│ tils/tex_file_writing.py:218 in compile_tex                                  │\n│                                                                              │\n│   215 │   │   │   if cp.returncode != 0:                                     │\n│   216 │   │   │   │   log_file = tex_file.with_suffix(\".log\")                │\n│   217 │   │   │   │   print_all_tex_errors(log_file, compiler, tex_file)     │\n│ ❱ 218 │   │   │   │   raise ValueError(                                      │\n│   219 │   │   │   │   │   f\"{compiler} error converting to\"                  │\n│   220 │   │   │   │   │   f\" {output_format[1:]}. See log output above or\"   │\n│   221 │   │   │   │   │   f\" the log file: {log_file}\",                      │\n╰──────────────────────────────────────────────────────────────────────────────╯\nValueError: latex error converting to dvi. See log output above or the log file:\n/tmp/manim-ch03-mathtex_labels-nlmzd16x/Tex/803ceca61c0414e1.log"
+      "error": "│    63 │   │   return svg_file                                                │\n│    64 │                                                                      │\n│ ❱  65 │   dvi_file = compile_tex(                                            │\n│    66 │   │   tex_file,                                                      │\n│    67 │   │   tex_template.tex_compiler,                                     │\n│    68 │   │   tex_template.output_format,                                    │\n│                                                                              │\n│ /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/manim/u │\n│ tils/tex_file_writing.py:218 in compile_tex                                  │\n│                                                                              │\n│   215 │   │   │   if cp.returncode != 0:                                     │\n│   216 │   │   │   │   log_file = tex_file.with_suffix(\".log\")                │\n│   217 │   │   │   │   print_all_tex_errors(log_file, compiler, tex_file)     │\n│ ❱ 218 │   │   │   │   raise ValueError(                                      │\n│   219 │   │   │   │   │   f\"{compiler} error converting to\"                  │\n│   220 │   │   │   │   │   f\" {output_format[1:]}. See log output above or\"   │\n│   221 │   │   │   │   │   f\" the log file: {log_file}\",                      │\n╰──────────────────────────────────────────────────────────────────────────────╯\nValueError: latex error converting to dvi. See log output above or the log file:\n/tmp/manim-ch03-mathtex_labels-pw6u2261/Tex/803ceca61c0414e1.log"
     },
     "ch03/mathtypst_groups": {
       "sha256": "755cb35b175eb2d51d9be41be2a1d87d4fc9c8e5aeb5b1667eb3c7598ba77be9",
@@ -248,13 +248,13 @@
       "sha256": "4381ce8a7450d1397aaa5d48bcbbfe9f31ba7311971875b5268640401354de10",
       "status": "failed",
       "scene": "TexBasic",
-      "error": "│    63 │   │   return svg_file                                                │\n│    64 │                                                                      │\n│ ❱  65 │   dvi_file = compile_tex(                                            │\n│    66 │   │   tex_file,                                                      │\n│    67 │   │   tex_template.tex_compiler,                                     │\n│    68 │   │   tex_template.output_format,                                    │\n│                                                                              │\n│ /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/manim/u │\n│ tils/tex_file_writing.py:218 in compile_tex                                  │\n│                                                                              │\n│   215 │   │   │   if cp.returncode != 0:                                     │\n│   216 │   │   │   │   log_file = tex_file.with_suffix(\".log\")                │\n│   217 │   │   │   │   print_all_tex_errors(log_file, compiler, tex_file)     │\n│ ❱ 218 │   │   │   │   raise ValueError(                                      │\n│   219 │   │   │   │   │   f\"{compiler} error converting to\"                  │\n│   220 │   │   │   │   │   f\" {output_format[1:]}. See log output above or\"   │\n│   221 │   │   │   │   │   f\" the log file: {log_file}\",                      │\n╰──────────────────────────────────────────────────────────────────────────────╯\nValueError: xelatex error converting to xdv. See log output above or the log \nfile: /tmp/manim-ch03-tex_basic-q30j4xye/Tex/b5a111f241c16c81.log"
+      "error": "│    63 │   │   return svg_file                                                │\n│    64 │                                                                      │\n│ ❱  65 │   dvi_file = compile_tex(                                            │\n│    66 │   │   tex_file,                                                      │\n│    67 │   │   tex_template.tex_compiler,                                     │\n│    68 │   │   tex_template.output_format,                                    │\n│                                                                              │\n│ /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/manim/u │\n│ tils/tex_file_writing.py:218 in compile_tex                                  │\n│                                                                              │\n│   215 │   │   │   if cp.returncode != 0:                                     │\n│   216 │   │   │   │   log_file = tex_file.with_suffix(\".log\")                │\n│   217 │   │   │   │   print_all_tex_errors(log_file, compiler, tex_file)     │\n│ ❱ 218 │   │   │   │   raise ValueError(                                      │\n│   219 │   │   │   │   │   f\"{compiler} error converting to\"                  │\n│   220 │   │   │   │   │   f\" {output_format[1:]}. See log output above or\"   │\n│   221 │   │   │   │   │   f\" the log file: {log_file}\",                      │\n╰──────────────────────────────────────────────────────────────────────────────╯\nValueError: xelatex error converting to xdv. See log output above or the log \nfile: /tmp/manim-ch03-tex_basic-m5egzqzu/Tex/b5a111f241c16c81.log"
     },
     "ch03/tex_template_ctex": {
       "sha256": "cf15be3819584efec363816c36630eccc713ae005a436da477e874a1c689d137",
       "status": "failed",
       "scene": "TexTemplateCtex",
-      "error": "│    63 │   │   return svg_file                                                │\n│    64 │                                                                      │\n│ ❱  65 │   dvi_file = compile_tex(                                            │\n│    66 │   │   tex_file,                                                      │\n│    67 │   │   tex_template.tex_compiler,                                     │\n│    68 │   │   tex_template.output_format,                                    │\n│                                                                              │\n│ /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/manim/u │\n│ tils/tex_file_writing.py:218 in compile_tex                                  │\n│                                                                              │\n│   215 │   │   │   if cp.returncode != 0:                                     │\n│   216 │   │   │   │   log_file = tex_file.with_suffix(\".log\")                │\n│   217 │   │   │   │   print_all_tex_errors(log_file, compiler, tex_file)     │\n│ ❱ 218 │   │   │   │   raise ValueError(                                      │\n│   219 │   │   │   │   │   f\"{compiler} error converting to\"                  │\n│   220 │   │   │   │   │   f\" {output_format[1:]}. See log output above or\"   │\n│   221 │   │   │   │   │   f\" the log file: {log_file}\",                      │\n╰──────────────────────────────────────────────────────────────────────────────╯\nValueError: xelatex error converting to xdv. See log output above or the log \nfile: /tmp/manim-ch03-tex_template_ctex-abpfero2/Tex/5a4ac2b0e8c9e765.log"
+      "error": "│    63 │   │   return svg_file                                                │\n│    64 │                                                                      │\n│ ❱  65 │   dvi_file = compile_tex(                                            │\n│    66 │   │   tex_file,                                                      │\n│    67 │   │   tex_template.tex_compiler,                                     │\n│    68 │   │   tex_template.output_format,                                    │\n│                                                                              │\n│ /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/manim/u │\n│ tils/tex_file_writing.py:218 in compile_tex                                  │\n│                                                                              │\n│   215 │   │   │   if cp.returncode != 0:                                     │\n│   216 │   │   │   │   log_file = tex_file.with_suffix(\".log\")                │\n│   217 │   │   │   │   print_all_tex_errors(log_file, compiler, tex_file)     │\n│ ❱ 218 │   │   │   │   raise ValueError(                                      │\n│   219 │   │   │   │   │   f\"{compiler} error converting to\"                  │\n│   220 │   │   │   │   │   f\" {output_format[1:]}. See log output above or\"   │\n│   221 │   │   │   │   │   f\" the log file: {log_file}\",                      │\n╰──────────────────────────────────────────────────────────────────────────────╯\nValueError: xelatex error converting to xdv. See log output above or the log \nfile: /tmp/manim-ch03-tex_template_ctex-xspskj02/Tex/5a4ac2b0e8c9e765.log"
     },
     "ch03/text_basics": {
       "sha256": "45ac2c11050fdb434a8a5e90c81999566b2a32bc2eed06b298ec23eeb2376753",
@@ -267,7 +267,7 @@
       "sha256": "b3d5af732c78fd9daeb373ae5aa6ee4e99252abe373fba0220e78fab3923f12d",
       "status": "failed",
       "scene": "TitleDemo",
-      "error": "│    63 │   │   return svg_file                                                │\n│    64 │                                                                      │\n│ ❱  65 │   dvi_file = compile_tex(                                            │\n│    66 │   │   tex_file,                                                      │\n│    67 │   │   tex_template.tex_compiler,                                     │\n│    68 │   │   tex_template.output_format,                                    │\n│                                                                              │\n│ /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/manim/u │\n│ tils/tex_file_writing.py:218 in compile_tex                                  │\n│                                                                              │\n│   215 │   │   │   if cp.returncode != 0:                                     │\n│   216 │   │   │   │   log_file = tex_file.with_suffix(\".log\")                │\n│   217 │   │   │   │   print_all_tex_errors(log_file, compiler, tex_file)     │\n│ ❱ 218 │   │   │   │   raise ValueError(                                      │\n│   219 │   │   │   │   │   f\"{compiler} error converting to\"                  │\n│   220 │   │   │   │   │   f\" {output_format[1:]}. See log output above or\"   │\n│   221 │   │   │   │   │   f\" the log file: {log_file}\",                      │\n╰──────────────────────────────────────────────────────────────────────────────╯\nValueError: latex error converting to dvi. See log output above or the log file:\n/tmp/manim-ch03-title_demo-cxzzcc59/Tex/bb30f76c621cd49a.log"
+      "error": "│    63 │   │   return svg_file                                                │\n│    64 │                                                                      │\n│ ❱  65 │   dvi_file = compile_tex(                                            │\n│    66 │   │   tex_file,                                                      │\n│    67 │   │   tex_template.tex_compiler,                                     │\n│    68 │   │   tex_template.output_format,                                    │\n│                                                                              │\n│ /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/manim/u │\n│ tils/tex_file_writing.py:218 in compile_tex                                  │\n│                                                                              │\n│   215 │   │   │   if cp.returncode != 0:                                     │\n│   216 │   │   │   │   log_file = tex_file.with_suffix(\".log\")                │\n│   217 │   │   │   │   print_all_tex_errors(log_file, compiler, tex_file)     │\n│ ❱ 218 │   │   │   │   raise ValueError(                                      │\n│   219 │   │   │   │   │   f\"{compiler} error converting to\"                  │\n│   220 │   │   │   │   │   f\" {output_format[1:]}. See log output above or\"   │\n│   221 │   │   │   │   │   f\" the log file: {log_file}\",                      │\n╰──────────────────────────────────────────────────────────────────────────────╯\nValueError: latex error converting to dvi. See log output above or the log file:\n/tmp/manim-ch03-title_demo-v06d99dl/Tex/bb30f76c621cd49a.log"
     },
     "ch03/text_index_slice": {
       "sha256": "0c5fcdc115e67b6e206079fcdae6e5b4478ab9bd0ca923393c1bfb6b21a50991",
@@ -277,7 +277,7 @@
       "duration": null
     },
     "ch03/typst_demo": {
-      "sha256": "cc304dc237d818a65d7df2080a252bb6b93d1d9be96643288b565b3635a2e39d",
+      "sha256": "d6e6f2603864116487db55cb133f9b549bb9fac11643a649a727c53761a9e065",
       "video": "ch03/typst_demo__TypstDemo.mp4",
       "scene": "TypstDemo",
       "status": "ok",
@@ -445,7 +445,7 @@
       "duration": null
     },
     "ch04/vector_scene": {
-      "sha256": "b8545a543e85fb8346a2bbf3e8bf7b059ac99a608d470350a0a32f8ad3c2c1c3",
+      "sha256": "457373d5f35c972570ec01438fc6be7490f3425edd976022b39abe40967c4eca",
       "video": "ch04/vector_scene__VectorSceneDemo.mp4",
       "scene": "VectorSceneDemo",
       "status": "ok",
@@ -679,6 +679,41 @@
       "sha256": "02e6409a43a2cfb8f299b2e220dbcca67abe5c89001f9f2d7f5b89d40f7176f6",
       "video": "ch07/custom_gauge__CustomGauge.mp4",
       "scene": "CustomGauge",
+      "status": "ok",
+      "duration": null
+    },
+    "ch02/arc_polygon": {
+      "sha256": "985158a2b56159eab818ab2ba0a839c3e423d43a52585d603809b466013dd5d1",
+      "video": "ch02/arc_polygon__ArcPolygonDemo.mp4",
+      "scene": "ArcPolygonDemo",
+      "status": "ok",
+      "duration": null
+    },
+    "ch02/banner": {
+      "sha256": "fcecdaf323782491b8efbedfe7f4734ed4455d70b033792ea22415925574f3a5",
+      "video": "ch02/banner__BannerDemo.mp4",
+      "scene": "BannerDemo",
+      "status": "ok",
+      "duration": null
+    },
+    "ch02/graph_network": {
+      "sha256": "5289405b5036c25407384805e63923da9f1d100fd88966b0446a856ddf47d655",
+      "video": "ch02/graph_network__GraphDemo.mp4",
+      "scene": "GraphDemo",
+      "status": "ok",
+      "duration": null
+    },
+    "ch05/complex_tracker": {
+      "sha256": "a4e61b064e63358bf5e1388c711457fd5bd9472e0672bda2bebca96dda467764",
+      "video": "ch05/complex_tracker__ComplexTrackerDemo.mp4",
+      "scene": "ComplexTrackerDemo",
+      "status": "ok",
+      "duration": null
+    },
+    "ch04/vector_fields": {
+      "sha256": "aff59834f66c48d5af3c4115fd4d529c35d5540dc8ea66d39eb77e1917a41e37",
+      "video": "ch04/vector_fields__VectorFieldDemo.mp4",
+      "scene": "VectorFieldDemo",
       "status": "ok",
       "duration": null
     }
