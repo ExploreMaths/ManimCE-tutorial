@@ -643,11 +643,19 @@ def build_api_index(config: dict) -> str:
     return "\n".join(L)
 
 
-def build_glossary(glossary: list[dict]) -> str:
+def build_glossary(
+    glossary: list[dict],
+    link_maps: dict[str, str] | None = None,
+    const_urls: dict[str, str] | None = None,
+) -> str:
     L = rst_title("术语表") + ["", ".. container:: table-scroll", "",
                                "   .. list-table::", "      :header-rows: 1", ""]
+    # explicit header row — without it the first entry would be rendered
+    # as the table head (bold, centered) instead of a body row
+    L += ["      * - 术语", "        - 中文", "        - 说明"]
     for it in glossary:
-        L.append(f"      * - ``{it['term']}``")
+        term = linkify_rst(f"``{it['term']}``", link_maps, const_urls)
+        L.append(f"      * - {term}")
         L.append(f"        - {it['zh']}")
         L.append(f"        - {it['desc']}")
     L.append("")
@@ -721,6 +729,9 @@ def build_class_tutorial(
     if params:
         L += ["参数", "~~~~", "", ".. container:: table-scroll", "",
               "   .. list-table::", "      :header-rows: 1", ""]
+        # explicit header row — without it the first parameter would be
+        # rendered as the table head instead of a body row
+        L += ["      * - 参数", "        - 默认值"]
         for pname, default in params:
             L.append(f"      * - ``{pname}``")
             L.append(f"        - {linkify_rst(default, link_maps, const_urls)}")
@@ -848,7 +859,8 @@ def main() -> int:
     (docs / "index.rst").write_text(build_index(config, flat, len(classes)), encoding="utf-8")
     (docs / "api-index.rst").write_text(build_api_index(config), encoding="utf-8")
     glossary = json.loads((content_dir / "glossary.json").read_text(encoding="utf-8"))
-    (docs / "glossary.rst").write_text(build_glossary(glossary), encoding="utf-8")
+    (docs / "glossary.rst").write_text(
+        build_glossary(glossary, link_maps, const_urls), encoding="utf-8")
     build_api_pages(classes, notes, docs, link_maps, const_urls)
     (docs / "inheritance-graph.rst").write_text(
         build_inheritance_graph_page(len(classes)), encoding="utf-8"
