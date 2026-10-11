@@ -164,6 +164,6 @@ MobjectTable → Table → VGroup
 :::exercise
 要在没装 LaTeX 的机器上展示一张全数字表格，有哪些可行方案？
 :::answer
-两种：一是直接用基类 `Table(..., element_to_mobject=lambda x: Text(str(x)))`，字符串单元格由 Pango 渲染；二是预先把数字格式化成字符串（如 `f"{v:.2f}"）再交给默认的 `Paragraph`。`IntegerTable` / `DecimalTable` 在这类环境会失败，因为它们的数字字符默认由 `MathTex` 排版。
+两种：一是直接用基类 `Table(..., element_to_mobject=lambda x: Text(str(x)))`，字符串单元格由 Pango 渲染；二是预先把数字格式化成字符串（如 `f"{v:.2f}"`）再交给默认的 `Paragraph`。`IntegerTable` / `DecimalTable` 在这类环境会失败，因为它们的数字字符默认由 `MathTex` 排版。
 :::
 :::

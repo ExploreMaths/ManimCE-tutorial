@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -43,6 +44,34 @@ autodoc_default_options = {
 # ...). They are third-party noise; our own content is MyST, which is
 # reported through different channels and stays audible.
 suppress_warnings = ["docutils"]
+
+# Upstream manim docstrings write *args / **kwargs bare in prose, which
+# docutils parses as unbalanced emphasis and renders as crimson "problematic"
+# spans. Escape them as inline literals before autodoc renders them.
+def _fix_vararg_docstrings(app, what, name, obj, options, lines):
+    # napoleon has already converted the docstring when this runs: fields
+    # look like ":keyword **kwargs: ..." at column 0, code samples are
+    # indented literal blocks (skip those — escaping would break lexing).
+    for i, line in enumerate(lines):
+        if line.startswith((" ", "\t")) or "*" not in line:
+            continue
+        line = re.sub(r"(?<![\w`])\*\*kwargs\b", "``**kwargs``", line)
+        line = re.sub(r"(?<![\w`:*\\])\*(?:args|mobjects|cvmobjects)\b",
+                      lambda m: "``" + m.group(0) + "``", line)
+        # napoleon (use_param=False) renders "*mobs_to_add"-style numpy
+        # fields as bare definition-list terms at column 0 — escape the
+        # leading star(s) so docutils doesn't read them as emphasis.
+        line = re.sub(r"^(\*+)(?=\w)", lambda m: "\\*" * len(m.group(1)), line)
+        # remaining field names that lead with a literal star, e.g.
+        # ":param *animations:" — escape so docutils doesn't read them as
+        # emphasis start-strings.
+        line = re.sub(r"^(:param |:keyword |:type )(\*+)",
+                      lambda m: m.group(1) + "\\*" * len(m.group(2)), line)
+        lines[i] = line
+
+
+def setup(app):
+    app.connect("autodoc-process-docstring", _fix_vararg_docstrings)
 
 source_suffix = {".rst": "restructuredtext"}
 root_doc = "index"

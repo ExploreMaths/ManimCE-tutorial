@@ -48,11 +48,61 @@ _INLINE_CODE_RE = re.compile(r"`([^`]*)`")
 _MD_LINK_RE = re.compile(r"\[([^\]]*)\]\(([^)]*)\)")
 
 
+# docutils refuses any inline-markup end-string directly followed by a CJK
+# char (letter or full-width punctuation), rendering the whole construct as
+# a crimson "problematic" span. Insert a narrow no-break space (which
+# docutils treats as whitespace) so the markup closes cleanly; the NNBSP is
+# visually negligible in CJK text.
+_MARKUP_END_CJK_RE = re.compile(
+    r"(``[^`]+``|\*\*[^*]+\*\*|`[^`]+ <[^`>]+>`__"
+    r"|\*[^*\s](?:[^*]*[^*\s])?\*)"
+    r"(?=[\u2e80-\u9fff\uf900-\ufaff\uff00-\uffef])"
+)
+
+
 def inline_md_to_rst(text: str) -> str:
     """Convert the markdown inline idioms used in chapter prose."""
-    text = _MD_LINK_RE.sub(r"`\1 <\2>`__", text)
+    # codespans first: a generated `text <url>` link below must keep its
+    # single backticks (converting links first would wrap them in ``...``).
     text = _INLINE_CODE_RE.sub(r"``\1``", text)
+    text = _MD_LINK_RE.sub(r"`\1 <\2>`__", text)
+    text = _MARKUP_END_CJK_RE.sub(lambda m: m.group(1) + " ", text)
     return text
+
+
+def convert_body(body: list[str]) -> list[str]:
+    """Convert fenced code blocks and md pipe tables inside a block body
+    (:::demo / :::notice / :::exercise); everything else goes inline."""
+    out: list[str] = []
+    i = 0
+    while i < len(body):
+        s = body[i].strip()
+        if s.startswith("```"):
+            lang = s[3:].strip() or "text"
+            code: list[str] = []
+            i += 1
+            while i < len(body) and body[i].strip() != "```":
+                code.append(body[i])
+                i += 1
+            i += 1  # closing fence
+            if out and out[-1].strip():
+                out.append("")
+            out.append(f".. code-block:: {lang}")
+            out.append("")
+            out.extend(indent(code))
+            continue
+        if s.startswith("|"):
+            tbl: list[str] = []
+            while i < len(body) and body[i].strip().startswith("|"):
+                tbl.append(body[i])
+                i += 1
+            if out and out[-1].strip():
+                out.append("")
+            out.extend(emit_table(tbl))
+            continue
+        out.append(inline_md_to_rst(body[i]))
+        i += 1
+    return out
 
 
 def strip_first_codespan(text: str) -> str:
@@ -194,7 +244,7 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                 blank()
                 out.append(f".. demo:: {rest}")
                 out.append("")
-                out.extend(indent(inline_md_to_rst(b) for b in body))
+                out.extend(indent(convert_body(body)))
                 blank()
                 continue
             if kind == "notice":
@@ -206,7 +256,7 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                 out.append(f".. admonition:: {inline_md_to_rst(title) or rest}")
                 out.append(f"   :class: {cls}")
                 out.append("")
-                out.extend(indent([inline_md_to_rst(b) for b in content_lines]))
+                out.extend(indent(convert_body(content_lines)))
                 blank()
                 continue
             if kind == "exercise":
@@ -214,12 +264,12 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                 blank()
                 out.append(".. dropdown:: ✏️ 练习")
                 out.append("")
-                out.extend(indent([inline_md_to_rst(q) for q in question]))
+                out.extend(indent(convert_body(question)))
                 if any(l.strip() for l in answer):
                     out.append("")
                     out.append("   .. dropdown:: ✅ 参考答案")
                     out.append("")
-                    out.extend(indent([inline_md_to_rst(a) for a in answer], 6))
+                    out.extend(indent(convert_body(answer), 6))
                 blank()
                 continue
             if kind == "inheritance":
@@ -247,6 +297,15 @@ def convert_section(text: str, covers: list[str]) -> tuple[str, set[str]]:
                 continue
             out.append(line)
             i += 1
+            continue
+        if s.startswith("|"):
+            tbl: list[str] = []
+            while i < len(lines) and lines[i].strip().startswith("|"):
+                tbl.append(lines[i])
+                i += 1
+            blank()
+            out.extend(emit_table(tbl))
+            blank()
             continue
         m = re.match(r"^(#{1,4})\s+(.+?)\s*$", line)
         if m:
@@ -385,7 +444,7 @@ def build_api_index(config: dict) -> str:
         L += [letter, "-" * len(letter), ""]
         for name, sec in sorted(groups[letter]):
             kind = "class" if name[:1].isupper() else "函数"
-            L.append(f"- `{name} <chapters/{sec}.html#{name.lower()}>`__（{kind}）")
+            L.append(f"- `{name} <chapters/{sec}.html#{name.lower()}>`__\u202f（{kind}）")
         L.append("")
     return "\n".join(L)
 
@@ -421,6 +480,11 @@ def _signature_params(obj: type) -> list[tuple[str, str]]:
             ann = getattr(p.annotation, "__name__", str(p.annotation))
             if len(ann) <= 24:
                 default += f"，{ann}"
+        # repr'd defaults may contain <class 'manim.camera.x_y.Y'> whose
+        # angle brackets/underscores docutils would parse as inline markup;
+        # wrap such defaults in a literal.
+        if re.search(r"[<>`*_]", default):
+            default = "``" + default.replace("\\", "\\\\") + "``"
         rows.append((p.name, default))
     return rows
 
