@@ -137,7 +137,7 @@ Sphere
         - desc
       * - ``center``
         - :class:`manim.typing.Point3DLike`
-        - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
+        - :class:`manim.constants.ORIGIN`
         - 球心
       * - ``radius``
         - float
@@ -338,7 +338,7 @@ Surface
         - 每维网格份数，越高越平滑越慢
       * - ``checkerboard_colors``
         - Iterable | False
-        - [`BLUE_D <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__, `BLUE_E <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__]
+        - [:class:`manim.utils.color.manim_colors.BLUE_D`, :class:`manim.utils.color.manim_colors.BLUE_E`]
         - 棋盘格双色；传 False 关闭
       * - ``should_make_jagged``
         - bool

@@ -54,12 +54,12 @@ Text
         - 字体名或字体文件路径；空串用 Pango 默认字体
       * - ``weight``
         - str
-        - "`NORMAL <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.NORMAL>`__"
-        - 字重： `NORMAL <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.NORMAL>`__/`BOLD <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.BOLD>`__ 等，也可用常量 `BOLD <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.BOLD>`__
+        - ":class:`manim.constants.NORMAL`"
+        - 字重： :class:`manim.constants.NORMAL`/:class:`manim.constants.BOLD` 等，也可用常量 :class:`manim.constants.BOLD`
       * - ``slant``
         - str
-        - "`NORMAL <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.NORMAL>`__"
-        - 字态： `NORMAL <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.NORMAL>`__/`ITALIC <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ITALIC>`__/`OBLIQUE <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.OBLIQUE>`__
+        - ":class:`manim.constants.NORMAL`"
+        - 字态： :class:`manim.constants.NORMAL`/:class:`manim.constants.ITALIC`/:class:`manim.constants.OBLIQUE`
       * - ``color``
         - :class:`manim.utils.color.core.ParsableManimColor` | None
         - None

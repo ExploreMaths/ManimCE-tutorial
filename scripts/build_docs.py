@@ -43,12 +43,13 @@ from manim_inheritance import (
 # --- table-cell cross references ----------------------------------------------
 # Official v0.21.0 API entries are emitted as :class: roles resolved through
 # intersphinx (see intersphinx_mapping in conf.py), so they render as proper
-# <code class="xref py py-class"> links. Constants and predefined colors have
-# no inventory entries, so they keep deep links to the official module pages;
-# only local chapter/api targets keep relative URLs.
-_OFFICIAL_BASE = "https://docs.manim.community/en/v0.21.0"
-_CONST_PAGE = f"{_OFFICIAL_BASE}/reference/manim.constants.html"
-_COLOR_PAGE = f"{_OFFICIAL_BASE}/reference/manim.utils.color.manim_colors.html"
+# <code class="xref py py-class"> links. Classes, typing aliases and color
+# types come from the official objects.inv; constants and predefined colors
+# have no entries there, so build_docs.py generates a small local inventory
+# (docs/source/_inv/manim-constants.inv) mapping them to the official module
+# pages. Only local chapter/api targets keep hand-written relative URLs.
+_OFFICIAL_ROOT = "https://docs.manim.community"
+_INV_URI_PREFIX = "en/v0.21.0/reference"
 
 _TOKEN_RE = re.compile(r"[A-Za-z_]\w*")
 # reST literals and inline references: tokens inside them must not be
@@ -83,11 +84,9 @@ def _const_urls() -> dict[str, str]:
         if callable(value) or isinstance(value, type):
             continue
         if hasattr(_colors, name):
-            # No inventory entry for predefined colors — deep page link.
-            urls[name] = _COLOR_PAGE
+            urls[name] = f"manim.utils.color.manim_colors.{name}"
         elif hasattr(_mc, name):
-            # Constants are not in the inventory either — keep the anchor URL.
-            urls[name] = f"{_CONST_PAGE}#manim.constants.{name}"
+            urls[name] = f"manim.constants.{name}"
     # Typing aliases (Point3DLike, Vector3D, ...) and the color type aliases
     # (ParsableManimColor, ...): documented on their own official module
     # pages. Imported utility names (np, Callable, ...) are excluded.
@@ -118,6 +117,42 @@ def _const_urls() -> dict[str, str]:
 _CONST_URLS: dict[str, str] | None = None
 
 
+def write_const_inventory(docs: Path) -> Path | None:
+    """Write a local intersphinx inventory for constants and predefined colors.
+
+    The official objects.inv only indexes classes, functions, methods and
+    properties — module-level constants (PI, SMALL_BUFF, ...) and the
+    predefined colors (YELLOW, BLUE_A, ...) are absent, so a :class: role can
+    never resolve them. Register them here as py:class targets pointing at
+    the official module pages (the type is cosmetic; intersphinx matches the
+    role type exactly and we only ever reference them via :class:).
+    """
+    entries: list[str] = []
+    for name, target in sorted(_const_urls().items()):
+        if target.startswith("manim.constants."):
+            uri = f"{_INV_URI_PREFIX}/manim.constants.html#{target}"
+        elif target.startswith("manim.utils.color.manim_colors."):
+            uri = f"{_INV_URI_PREFIX}/manim.utils.color.manim_colors.html"
+        else:
+            continue  # typing / color-core aliases: official inventory covers them
+        entries.append(f"{target} py:class 1 {uri} -")
+    if not entries:
+        return None
+    import zlib
+
+    blob = zlib.compress(("\n".join(entries) + "\n").encode())
+    inv = docs / "_inv" / "manim-constants.inv"
+    inv.parent.mkdir(parents=True, exist_ok=True)
+    inv.write_bytes(
+        b"# Sphinx inventory version 2\n"
+        b"# Project: manim\n"
+        b"# Version: 0.21.0\n"
+        b"# The remainder of this file is compressed using zlib.\n" + blob
+    )
+    return inv
+
+
+
 def linkify_rst(
     text: str,
     link_maps: dict[str, str] | None = None,
@@ -137,13 +172,9 @@ def linkify_rst(
         url = link_maps.get(tok)
         if url:
             return f"`{tok} <{url}>`__"
-        ref = const_urls.get(tok) if const_urls else None
-        if ref:
-            # Dotted names become :class: roles; http(s) values stay URL links
-            # (constants/colors have no intersphinx inventory entries).
-            if ref.startswith("http"):
-                return f"`{tok} <{ref}>`__"
-            return f":class:`{tok} <{ref}>`"
+        target = const_urls.get(tok) if const_urls else None
+        if target:
+            return f":class:`{tok} <{target}>`"
         return tok
 
     out: list[str] = []
@@ -158,13 +189,8 @@ def linkify_rst(
             if url:
                 out.append(f"`{inner} <{url}>`__")
             else:
-                ref = const_urls.get(inner) if const_urls else None
-                if not ref:
-                    out.append(span)
-                elif ref.startswith("http"):
-                    out.append(f"`{inner} <{ref}>`__")
-                else:
-                    out.append(f":class:`{inner} <{ref}>`")
+                target = const_urls.get(inner) if const_urls else None
+                out.append(f":class:`{inner} <{target}>`" if target else span)
         else:  # existing inline reference — leave untouched
             out.append(span)
         pos = m.end()
@@ -530,6 +556,9 @@ def main() -> int:
     (docs / "inheritance-graph.rst").write_text(
         build_inheritance_graph_page(len(classes)), encoding="utf-8"
     )
+    inv = write_const_inventory(docs)
+    if inv:
+        print(f"wrote {len(_const_urls())} const/color targets -> {inv}")
 
     print(f"generated index/api/glossary for {len(flat)} sections -> {docs}")
     return 0

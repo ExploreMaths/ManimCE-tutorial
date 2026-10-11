@@ -43,7 +43,7 @@ ZoomedScene
       * - ``zoomed_display_corner``
         - :class:`manim.typing.Vector3D`
         - [1,1,0]
-        - 窗口所在角落（如 `UR <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.UR>`__、`DL <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.DL>`__）
+        - 窗口所在角落（如 :class:`manim.constants.UR`、:class:`manim.constants.DL`）
       * - ``zoomed_display_center``
         - :class:`manim.typing.Point3D` | None
         - None
@@ -58,7 +58,7 @@ ZoomedScene
         - 是否一开始就激活放大
       * - ``zoomed_camera_frame_starting_position``
         - :class:`manim.typing.Point3DLike`
-        - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
+        - :class:`manim.constants.ORIGIN`
         - 小取景框初始位置
 
 

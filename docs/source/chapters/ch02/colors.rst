@@ -181,28 +181,28 @@ Manim 内置了一套品牌调色板。每个彩色系有 5 个亮度阶梯（�
         - 常量
         - 说明
       * - 蓝
-        - `BLUE_A <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ … `BLUE_E <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `BLUE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.BLUE_A` … :class:`manim.utils.color.manim_colors.BLUE_E` 、 :class:`manim.utils.color.manim_colors.BLUE`
         - 品牌主色系
       * - 青
-        - `TEAL_A <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ … `TEAL_E <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `TEAL <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.TEAL_A` … :class:`manim.utils.color.manim_colors.TEAL_E` 、 :class:`manim.utils.color.manim_colors.TEAL`
         - 
       * - 绿
-        - `GREEN_A <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ … `GREEN_E <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `GREEN <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.GREEN_A` … :class:`manim.utils.color.manim_colors.GREEN_E` 、 :class:`manim.utils.color.manim_colors.GREEN`
         - 
       * - 黄
-        - `YELLOW_A <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ … `YELLOW_E <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `YELLOW <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.YELLOW_A` … :class:`manim.utils.color.manim_colors.YELLOW_E` 、 :class:`manim.utils.color.manim_colors.YELLOW`
         - 
       * - 金
-        - `GOLD_A <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ … `GOLD_E <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `GOLD <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.GOLD_A` … :class:`manim.utils.color.manim_colors.GOLD_E` 、 :class:`manim.utils.color.manim_colors.GOLD`
         - 
       * - 红
-        - `RED_A <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ … `RED_E <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `RED <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.RED_A` … :class:`manim.utils.color.manim_colors.RED_E` 、 :class:`manim.utils.color.manim_colors.RED`
         - 
       * - 栗
-        - `MAROON_A <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ … `MAROON_E <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `MAROON <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.MAROON_A` … :class:`manim.utils.color.manim_colors.MAROON_E` 、 :class:`manim.utils.color.manim_colors.MAROON`
         - 
       * - 紫
-        - `PURPLE_A <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ … `PURPLE_E <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `PURPLE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.PURPLE_A` … :class:`manim.utils.color.manim_colors.PURPLE_E` 、 :class:`manim.utils.color.manim_colors.PURPLE`
         - 
 
 
@@ -215,21 +215,21 @@ Manim 内置了一套品牌调色板。每个彩色系有 5 个亮度阶梯（�
 
       * - 常量
         - 说明
-      * - `GRAY_A <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ … `GRAY_E <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ / `GREY_A <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ … `GREY_E <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+      * - :class:`manim.utils.color.manim_colors.GRAY_A` … :class:`manim.utils.color.manim_colors.GRAY_E` / :class:`manim.utils.color.manim_colors.GREY_A` … :class:`manim.utils.color.manim_colors.GREY_E`
         - 五级灰
-      * - `GRAY <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ / `GREY <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `DARK_GRAY <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ / `DARK_GREY <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+      * - :class:`manim.utils.color.manim_colors.GRAY` / :class:`manim.utils.color.manim_colors.GREY` 、 :class:`manim.utils.color.manim_colors.DARK_GRAY` / :class:`manim.utils.color.manim_colors.DARK_GREY`
         - 中灰、深灰
-      * - `DARKER_GRAY <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ / `DARKER_GREY <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+      * - :class:`manim.utils.color.manim_colors.DARKER_GRAY` / :class:`manim.utils.color.manim_colors.DARKER_GREY`
         - 更深的灰
-      * - `LIGHT_GRAY <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ / `LIGHT_GREY <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `LIGHTER_GRAY <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ / `LIGHTER_GREY <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+      * - :class:`manim.utils.color.manim_colors.LIGHT_GRAY` / :class:`manim.utils.color.manim_colors.LIGHT_GREY` 、 :class:`manim.utils.color.manim_colors.LIGHTER_GRAY` / :class:`manim.utils.color.manim_colors.LIGHTER_GREY`
         - 浅灰
-      * - `GRAY_BROWN <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `DARK_BROWN <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `LIGHT_BROWN <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+      * - :class:`manim.utils.color.manim_colors.GRAY_BROWN` 、 :class:`manim.utils.color.manim_colors.DARK_BROWN` 、 :class:`manim.utils.color.manim_colors.LIGHT_BROWN`
         - 棕色系
-      * - `BLACK <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `WHITE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `PINK <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `LIGHT_PINK <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `ORANGE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+      * - :class:`manim.utils.color.manim_colors.BLACK` 、 :class:`manim.utils.color.manim_colors.WHITE` 、 :class:`manim.utils.color.manim_colors.PINK` 、 :class:`manim.utils.color.manim_colors.LIGHT_PINK` 、 :class:`manim.utils.color.manim_colors.ORANGE`
         - 独立色
-      * - `PURE_RED <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `PURE_GREEN <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `PURE_BLUE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `PURE_CYAN <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `PURE_MAGENTA <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `PURE_YELLOW <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+      * - :class:`manim.utils.color.manim_colors.PURE_RED` 、 :class:`manim.utils.color.manim_colors.PURE_GREEN` 、 :class:`manim.utils.color.manim_colors.PURE_BLUE` 、 :class:`manim.utils.color.manim_colors.PURE_CYAN` 、 :class:`manim.utils.color.manim_colors.PURE_MAGENTA` 、 :class:`manim.utils.color.manim_colors.PURE_YELLOW`
         - 通道纯值（绘图/示波风格）
-      * - `LOGO_WHITE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `LOGO_BLACK <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `LOGO_BLUE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `LOGO_GREEN <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__ 、 `LOGO_RED <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+      * - :class:`manim.utils.color.manim_colors.LOGO_WHITE` 、 :class:`manim.utils.color.manim_colors.LOGO_BLACK` 、 :class:`manim.utils.color.manim_colors.LOGO_BLUE` 、 :class:`manim.utils.color.manim_colors.LOGO_GREEN` 、 :class:`manim.utils.color.manim_colors.LOGO_RED`
         - 官方 Logo 用色
 
 

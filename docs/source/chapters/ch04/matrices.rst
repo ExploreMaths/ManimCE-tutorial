@@ -81,7 +81,7 @@ Matrix
         - 传给元素构造函数的参数
       * - ``element_alignment_corner``
         - :class:`manim.typing.Vector3DLike`
-        - `UR <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.UR>`__ ``(1,-1,0)``
+        - :class:`manim.constants.UR` ``(1,-1,0)``
         - 元素对齐角（默认右上）
       * - ``left_bracket`` / ``right_bracket``
         - str

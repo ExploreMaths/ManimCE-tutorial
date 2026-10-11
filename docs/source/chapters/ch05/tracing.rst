@@ -50,7 +50,7 @@ TracedPath
         - 轨迹线宽
       * - ``stroke_color``
         - color | None
-        - `WHITE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.WHITE`
         - 轨迹颜色；None 表示不描边
       * - ``dissipating_time``
         - float | None

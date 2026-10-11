@@ -128,22 +128,22 @@ Manim 的坐标系以“帧高”为基准： **默认 ``frame_height = 8.0``*
       * - 常量
         - 值
         - 含义
-      * - `DEFAULT_MOBJECT_TO_MOBJECT_BUFFER <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.DEFAULT_MOBJECT_TO_MOBJECT_BUFFER>`__
+      * - :class:`manim.constants.DEFAULT_MOBJECT_TO_MOBJECT_BUFFER`
         - 0.25
         - ``next_to`` 等布局的默认物体间距
-      * - `SMALL_BUFF <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.SMALL_BUFF>`__
+      * - :class:`manim.constants.SMALL_BUFF`
         - 0.1
         - 小间距
-      * - `MED_SMALL_BUFF <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.MED_SMALL_BUFF>`__
+      * - :class:`manim.constants.MED_SMALL_BUFF`
         - 0.25
         - 中间距
-      * - `MED_LARGE_BUFF <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.MED_LARGE_BUFF>`__
+      * - :class:`manim.constants.MED_LARGE_BUFF`
         - 0.5
         - 较大间距
-      * - `LARGE_BUFF <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.LARGE_BUFF>`__
+      * - :class:`manim.constants.LARGE_BUFF`
         - 1.0
         - 大间距
-      * - `DEFAULT_DOT_RADIUS <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.DEFAULT_DOT_RADIUS>`__
+      * - :class:`manim.constants.DEFAULT_DOT_RADIUS`
         - 0.08
         - `Dot </chapters/ch02/basic-shapes.html#dot>`__ 的默认半径
 

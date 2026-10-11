@@ -73,7 +73,7 @@ NumberLine
         - 是否自动添加数字标签（标签走 LaTeX）
       * - ``label_direction``
         - :class:`manim.typing.Point3DLike`
-        - `DOWN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.DOWN>`__
+        - :class:`manim.constants.DOWN`
         - 数字标签相对数轴的方向
       * - ``label_constructor``
         - type[:class:`manim.typing.ManimTextLabel`]

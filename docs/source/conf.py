@@ -28,6 +28,11 @@ extensions = [
 
 intersphinx_mapping = {
     "manim": ("https://docs.manim.community/en/v0.21.0/", None),
+    # Constants/colors are missing from the official inventory; build_docs.py
+    # generates a local inventory mapping them to the official module pages.
+    # The base URI must differ from the "manim" entry (Sphinx requires unique
+    # targets), so it uses the site root with full en/v0.21.0/ paths inside.
+    "manim-consts": ("https://docs.manim.community/", "_inv/manim-constants.inv"),
 }
 
 # Render {graphviz} diagrams as inline SVG (clickable node links work).

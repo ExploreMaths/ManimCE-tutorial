@@ -48,7 +48,7 @@ Dot
         - desc
       * - ``point``
         - :class:`manim.typing.Point3DLike`
-        - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
+        - :class:`manim.constants.ORIGIN`
         - 圆点中心位置
       * - ``radius``
         - float
@@ -64,7 +64,7 @@ Dot
         - 填充不透明度，默认实心
       * - ``color``
         - :class:`manim.utils.color.core.ParsableManimColor`
-        - `WHITE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.WHITE`
         - 颜色
       * - ``kwargs``
         - —
@@ -184,11 +184,11 @@ Point
         - desc
       * - ``location``
         - :class:`manim.typing.Point3DLike`
-        - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
+        - :class:`manim.constants.ORIGIN`
         - 点的位置
       * - ``color``
         - `ManimColor </api/utils.html#manimcolor>`__
-        - `BLACK <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.BLACK`
         - 颜色，默认黑色
       * - ``kwargs``
         - —
@@ -241,7 +241,7 @@ PointCloudDot
         - desc
       * - ``center``
         - :class:`manim.typing.Point3DLike`
-        - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
+        - :class:`manim.constants.ORIGIN`
         - 圆盘中心
       * - ``radius``
         - float
@@ -257,7 +257,7 @@ PointCloudDot
         - 点密度，越大点越多（每单位约 density² 量级）
       * - ``color``
         - `ManimColor </api/utils.html#manimcolor>`__
-        - `PURE_YELLOW <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.PURE_YELLOW`
         - 点云颜色
 
 
@@ -465,7 +465,7 @@ TrueDot
         - desc
       * - ``center``
         - :class:`manim.typing.Point3DLike`
-        - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
+        - :class:`manim.constants.ORIGIN`
         - 圆点中心位置
       * - ``stroke_width``
         - float

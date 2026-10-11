@@ -159,7 +159,7 @@ Title
         - 文字 + 下划线
       * - 定位
         - 原点附近纵向排列
-        - 自动贴 `UP <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.UP>`__ 边缘
+        - 自动贴 :class:`manim.constants.UP` 边缘
       * - 便捷方法
         - ``fade_all_but``
         - 无（ ``underline`` 属性）

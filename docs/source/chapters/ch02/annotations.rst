@@ -29,7 +29,7 @@ SurroundingRectangle
         - 被包围的对象（多个时取整体包围盒）
       * - ``color``
         - :class:`manim.utils.color.core.ParsableManimColor`
-        - `YELLOW <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.YELLOW`
         - 框线颜色
       * - ``buff``
         - float | tuple[float, float]

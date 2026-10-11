@@ -128,7 +128,7 @@ ManimConfig 常用字段
         - 渲染器（cairo/opengl）
       * - ``background_color``
         - `ManimColor </api/utils.html#manimcolor>`__
-        - `BLACK <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.BLACK`
         - 背景色
       * - ``background_opacity``
         - float

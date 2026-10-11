@@ -53,7 +53,7 @@ Arc
         - 起始角（弧度）
       * - ``angle``
         - float
-        - `PI <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.PI>`__ / 2
+        - :class:`manim.constants.PI` / 2
         - 圆弧张角（弧度）
       * - ``num_components``
         - int
@@ -100,7 +100,7 @@ ArcBetweenPoints
         - 终点
       * - ``angle``
         - float
-        - `PI <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.PI>`__ / 2
+        - :class:`manim.constants.PI` / 2
         - 圆心角；决定弯曲程度
       * - ``radius``
         - float | None
@@ -138,7 +138,7 @@ AnnularSector
         - 外半径
       * - ``angle``
         - float
-        - `PI <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.PI>`__ / 2
+        - :class:`manim.constants.PI` / 2
         - 张角（弧度）
       * - ``start_angle``
         - float
@@ -178,7 +178,7 @@ Sector
         - 扇形半径
       * - ``angle``
         - float
-        - `PI <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.PI>`__ / 2
+        - :class:`manim.constants.PI` / 2
         - 张角（弧度），经 kwargs 传入
       * - ``start_angle``
         - float
@@ -261,7 +261,7 @@ AnnotationDot
         - 白色描边宽度
       * - ``stroke_color``
         - :class:`manim.utils.color.core.ParsableManimColor`
-        - `WHITE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.WHITE`
         - 描边颜色
       * - ``fill_color``
         - :class:`manim.utils.color.core.ParsableManimColor`
@@ -340,7 +340,7 @@ CurvedArrow
         - 终点
       * - ``angle``
         - float
-        - `PI <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.PI>`__ / 2
+        - :class:`manim.constants.PI` / 2
         - 圆心角（kwargs）
       * - ``tip_shape``
         - type[`ArrowTip </api/geometry.html#arrowtip>`__]

@@ -38,7 +38,7 @@ Camera
         - desc
       * - ``frame_center``
         - :class:`manim.typing.Point3D`
-        - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
+        - :class:`manim.constants.ORIGIN`
         - 帧坐标系原点对准的空间点
       * - ``frame_height`` / ``frame_width``
         - float | None

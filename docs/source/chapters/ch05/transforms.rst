@@ -51,7 +51,7 @@ Transform
         - 路线为圆弧时的弧度；非 0 时各点沿圆弧走
       * - ``path_arc_axis``
         - np.ndarray
-        - `OUT <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.OUT>`__
+        - :class:`manim.constants.OUT`
         - 圆弧轴向
       * - ``path_arc_centers``
         - :class:`manim.typing.Point3DLike` 等 | None

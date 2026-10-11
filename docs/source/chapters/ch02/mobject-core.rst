@@ -38,7 +38,7 @@ Mobject
         - desc
       * - ``color``
         - :class:`manim.utils.color.core.ParsableManimColor` | list[:class:`manim.utils.color.core.ParsableManimColor`]
-        - `WHITE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.WHITE`
         - 基础颜色，作为描边、填充的默认取值
       * - ``name``
         - str | None

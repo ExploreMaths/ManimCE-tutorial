@@ -60,7 +60,7 @@ VMobject
         - 描边宽度
       * - ``background_stroke_color``
         - :class:`manim.utils.color.core.ParsableManimColor` | None
-        - `BLACK <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.BLACK`
         - 背景描边颜色（垫在填充下面）
       * - ``background_stroke_opacity``
         - float
@@ -181,7 +181,7 @@ DashedVMobject
         - 虚线相位偏移（按 0~1 的周期比例）
       * - ``color``
         - `ManimColor </api/utils.html#manimcolor>`__
-        - `WHITE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.WHITE`
         - 虚线颜色
       * - ``equal_lengths``
         - bool
@@ -290,11 +290,11 @@ VectorizedPoint
         - desc
       * - ``location``
         - :class:`manim.typing.Point3DLike`
-        - `ORIGIN <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.ORIGIN>`__
+        - :class:`manim.constants.ORIGIN`
         - 点的位置
       * - ``color``
         - `ManimColor </api/utils.html#manimcolor>`__
-        - `BLACK <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.BLACK`
         - 颜色（默认不可见，改色也看不出）
       * - ``fill_opacity``
         - float

@@ -264,7 +264,7 @@ Angle
         - 圆点距交点的比例位置
       * - ``dot_color``
         - :class:`manim.utils.color.core.ParsableManimColor`
-        - `WHITE <https://docs.manim.community/en/v0.21.0/reference/manim.utils.color.manim_colors.html>`__
+        - :class:`manim.utils.color.manim_colors.WHITE`
         - 圆点颜色
       * - ``elbow``
         - bool
@@ -528,7 +528,7 @@ ArrowTriangleTip
         - 箭头尖宽度
       * - ``start_angle``
         - float
-        - `PI <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.PI>`__
+        - :class:`manim.constants.PI`
         - 箭头尖自身旋转角
 
 

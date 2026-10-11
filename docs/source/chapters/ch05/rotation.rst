@@ -71,8 +71,8 @@ Rotate 与 Rotating 对比
         - `Transform </chapters/ch05/transforms.html#transform>`__ → `Animation </chapters/ch05/animation-mechanism.html#animation>`__
         - `Animation </chapters/ch05/animation-mechanism.html#animation>`__
       * - 默认角度
-        - `PI <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.PI>`__ （半圈）
-        - `TAU <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.TAU>`__ （整圈）
+        - :class:`manim.constants.PI` （半圈）
+        - :class:`manim.constants.TAU` （整圈）
       * - 默认 rate_func
         - ``smooth`` （缓入缓出）
         - ``linear`` （匀速）

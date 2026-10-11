@@ -54,7 +54,7 @@ MarkupText
         - 基础字号，可被标签内 ``size`` 覆盖
       * - ``font`` / ``slant`` / ``weight``
         - str
-        - "`NORMAL <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.NORMAL>`__"
+        - ":class:`manim.constants.NORMAL`"
         - 同 `Text </chapters/ch03/text-and-paragraph.html#text>`__ ，标签内的对应属性优先
       * - ``gradient``
         - Iterable[color] | None

@@ -306,7 +306,7 @@ PolarPlane
         - 方位角网格间隔（None 自动）
       * - ``azimuth_units``
         - str
-        - "`PI <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.PI>`__ radians"
+        - ":class:`manim.constants.PI` radians"
         - 方位角标签单位，可选 ``"PI radians"`` / ``"TAU radians"`` / ``"degrees"`` / ``"gradians"`` / None
       * - ``azimuth_compact_fraction``
         - bool

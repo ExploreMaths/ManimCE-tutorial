@@ -17,7 +17,7 @@ render 常用选项
       * - 选项
         - 作用
       * - ``-q, --quality [l|m|h|p|k]``
-        - 画质档位，对应 `QUALITIES <https://docs.manim.community/en/v0.21.0/reference/manim.constants.html#manim.constants.QUALITIES>`__ 五档
+        - 画质档位，对应 :class:`manim.constants.QUALITIES` 五档
       * - ``-r, --resolution "W,H"``
         - 自定义分辨率（覆盖画质档位）
       * - ``--fps, --frame_rate N``
