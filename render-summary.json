@@ -1,5 +1,7 @@
 {
-  "rendered": [],
+  "rendered": [
+    "ch03/paragraph_demo"
+  ],
   "reused": [
     "ch01/scene_basics",
     "ch01/sections_demo",
@@ -36,7 +38,6 @@
     "ch03/markup_text_demo",
     "ch03/mathtex_groups",
     "ch03/mathtypst_groups",
-    "ch03/paragraph_demo",
     "ch03/text_basics",
     "ch03/text_index_slice",
     "ch03/typst_demo",
